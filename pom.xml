@@ -1,0 +1,17 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.lingx</groupId>
+  <artifactId>lingx</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>lingx</name>
+  <modules>
+  	<module>lingx-core</module>
+  	<module>lingx-web</module>
+  	<module>lingx-plugin-aliyun-oss</module>
+  	<module>lingx-plugin-upload-ext</module>
+  	<module>lingx-plugin-email-send</module>
+  	<module>lingx-plugin-workflow-remind</module>
+  	<module>lingx-plugin-sso-cas</module>
+  </modules>
+</project>
