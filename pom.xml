@@ -2,16 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.lingx</groupId>
   <artifactId>lingx</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
   <name>lingx</name>
   <modules>
   	<module>lingx-core</module>
   	<module>lingx-web</module>
-  	<module>lingx-plugin-aliyun-oss</module>
-  	<module>lingx-plugin-upload-ext</module>
-  	<module>lingx-plugin-email-send</module>
-  	<module>lingx-plugin-workflow-remind</module>
-  	<module>lingx-plugin-sso-cas</module>
   </modules>
 </project>
