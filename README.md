@@ -1,7 +1,9 @@
-# æ¬¢è¿Žä½¿ç”¨ LINGX åŸºäºŽæ¨¡åž‹é©±åŠ¨å¼€å‘æ¡†æž¶
+# »¶Ó­Ê¹ÓÃ ÁúÑÛ¿ª·¢Æ½Ì¨
 
-æŠ€æœ¯æ–‡æ¡£ï¼šhttp://docs.lingx.com
+¼¼ÊõÎÄµµ£ºhttp://docs.lingx.com
 
-è”ç³»QQ:283853318
+ÁªÏµQQ:283853318
+
+¼¼ÊõÖ§³Ö:ÈªÖÝÊÐÁìÐÂÐÅÏ¢¿Æ¼¼ÓÐÏÞ¹«Ë¾
 
 
