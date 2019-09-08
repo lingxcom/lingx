@@ -33,16 +33,48 @@ var selarr = new Array();//刷新前选中数据的缓存区
 var toolbars=[];//工具栏，可多行
 var searchFieldCache=[];//查询字段ID缓存
 
+
+function fdate(date,xtype){
+	xtype=xtype||"datetimefield";
+	if(!date)return "";
+	var str="",temp;
+	str+= date.getFullYear();
+	temp="00"+(date.getMonth() + 1);
+	str+=temp.substring(temp.length-2);
+
+	temp="00"+date.getDate();
+	str+=temp.substring(temp.length-2);
+	if(xtype=="datetimefield"){
+	temp="00"+date.getHours();
+	str+=temp.substring(temp.length-2);
+
+	temp="00"+date.getMinutes();
+	str+=temp.substring(temp.length-2);
+
+	temp="00"+date.getSeconds();
+	str+=temp.substring(temp.length-2);
+	}
+	return str;
+}
 function search(){
 	var arr=[];
 	for(var i=0;i<searchFieldCache.length;i++){
 		var id=searchFieldCache[i],val;
 		var temp={};
 		val=Ext.getCmp("id-search-"+id).getValue();
-		
+		var xtype=Ext.getCmp("id-search-"+id).getXType();
+		if(typeof val =="object"){
+			val=""+fdate(val,xtype);
+
 			temp[id]=val||"";
 			arr.push(temp);
+		}else{
+
+			temp[id]=val||"";
+			arr.push(temp);
+		}
 		
+			
 	}
 	arr.push({isGridSearch:true});
 	lingxSearch(arr);
@@ -139,9 +171,10 @@ Ext.onReady(function(){
 		if(json.GridConfig.rownumbers){
 			json.columns.unshift({ xtype: 'rownumberer',width:26});
 		}
-		json.toolbar.push("->");
-		if(json.GridConfig.queryField){
-			var tool=[];
+		//json.toolbar.push("->");
+		var tool=[];
+		if(json.queryParams.length==0&&json.GridConfig.queryField){
+			
 			for(var i=0;i<json.fields.list.length;i++){
 				var field=json.fields.list[i];
 				if((","+json.GridConfig.queryField+",").indexOf(","+field.code+",")>=0){
@@ -207,19 +240,112 @@ Ext.onReady(function(){
 				}});
 			}
 				
-			toolbars.push({
+			/*toolbars.push({
 				 xtype: 'toolbar',
 			     items:tool,
 			     dock: 'top',
 			     displayInfo: true
+			});*/
+		}else if(json.queryParams.length>0){
+			var tool=[];
+			for(var i=0;i<json.queryParams.length;i++){
+				var obj=json.queryParams[i];
+				var w=100;
+				var store=new Ext.data.Store({proxy: ({ model:'TextValueModel',type:'ajax',url:obj.url,reader:{type:'json'}}),
+					autoLoad:false});
+				searchFieldCache.push(obj.code);
+				tool.push(obj.name+":");
+				var options111={
+						id:"id-search-"+obj.code,
+						xtype    : obj.xtype,
+			            name     : obj.code,
+			            emptyText: obj.name,
+			            store:store,
+			            displayField:"text",
+						valueField:"value",
+			           format:"Y-m-d H:i:s",
+						altFormats:'Y-m-d H:i:s|m.d.Y',
+			            width:w,listeners:{
+		                	specialkey: function(field, e){
+		                		if(e.getKey()== e.ENTER){
+		                			search();
+		                		}
+		                	}
+		                }
+
+					};
+				if(obj.xtype=="datetimefield"){
+					options111.width=180;
+				}else if(obj.xtype=="datefield"){
+					options111.width=120;
+					options111.format="Y-m-d";
+					options111.altFormats='Y-m-d';
+				}
+				tool.push(options111);
+			}
+			
+			tool.push({
+				text : fieldNames[0]||"查询",
+				iconCls:"icon-search",
+				handler : function() {
+					search();
+				}
+
 			});
+			
+/*			toolbars.push({
+				 xtype: 'toolbar',
+			     items:tool,
+			     dock: 'top',
+			     displayInfo: true
+			});*/
 		}
-		toolbars.push({
-	        xtype: 'toolbar',
-	        items:json.toolbar,
-	        dock: 'top',
-	        displayInfo: true
-	        });
+		if(json.GridConfig.toolbarSingle){
+			if(json.toolbar.length>0){
+				tool=tool.concat(json.toolbar);
+			}
+			if(tool.length>0){
+				tool.push({
+					text:"刷新",
+					iconCls:"Reload",
+					handler:function(){
+						window.location.reload();
+					}
+				});
+				
+				toolbars.push({
+			        xtype: 'toolbar',
+			        items:tool,//json.toolbar,
+			        dock: 'top',
+			        displayInfo: true
+			        });
+			}
+			
+		}else{
+			if(tool.length>0){
+				tool.push({
+					text:"刷新",
+					iconCls:"Reload",
+					handler:function(){
+						window.location.reload();
+					}
+				});
+				toolbars.push({
+					 xtype: 'toolbar',
+				     items:tool,
+				     dock: 'top',
+				     displayInfo: true
+				});
+			}
+			if(json.toolbar.length>0)
+			toolbars.push({
+		        xtype: 'toolbar',
+		        items:json.toolbar,
+		        dock: 'top',
+		        displayInfo: true
+		        });
+		}
+		/**/
 		/*json.toolbar.push({iconCls:'icon-search',text:"查询",handler:function(){
 			openSearchWindow(json.GridConfig.queryField,items);
 		}});//,xtype:"cycle"
@@ -239,6 +365,8 @@ Ext.onReady(function(){
 		/*
 		* Store
 		*/
+		var requestUrl= "e?e="+entityCode+"&m="+methodCode+"&lgxsn=1";
+		if(json.GridConfig.requestUrl){requestUrl=json.GridConfig.requestUrl;}
 		var store = Ext.create('Ext.data.Store', {
 		    pageSize: json.GridConfig.pageSize,
 		    model: entityCode,
@@ -252,7 +380,7 @@ Ext.onReady(function(){
 	                destroy: 'POST'
 	            },
 		    	type: 'ajax',
-		        url: "e?e="+entityCode+"&m="+methodCode+"&lgxsn=1",
+		        url: requestUrl,
 		        reader: {
 		        	type: 'json',
 		            root: 'rows',

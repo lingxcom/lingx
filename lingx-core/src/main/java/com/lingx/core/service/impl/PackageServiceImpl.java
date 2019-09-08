@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -81,25 +82,35 @@ public class PackageServiceImpl implements IPackageService {
 			for(String temp:bean.getFileList()){
 				if(Utils.isNull(temp))continue;
 				log.info("copy file:"+temp);
-				FileUtils.copyFile(new File(this.basePath+temp), new File(this.basePath+this.zipPath+temp));
-			}
-			
-			for(String temp:bean.getModelList()){
-				if(Utils.isNull(temp))continue;
-				log.info("copy model:"+temp);
-				IEntity e=this.modelService.get(temp);
-				ModelIO.writeDisk(this.basePath+this.zipPath+"/"+temp+".lingx", e);
+				File source=new File(this.basePath+temp);
+				if(source.isFile()){
+					FileUtils.copyFile(source, new File(this.basePath+this.zipPath+temp));
+				}else{
+					FileUtils.copyDirectory(source, new File(this.basePath+this.zipPath+temp));
+				}
 				
-				entitys.add(this.jdbcTemplate.queryForMap("select * from tlingx_entity where code=?",temp));
 			}
 			
+			if(bean.isSjmx()){
+				for(String temp:bean.getModelList()){
+					if(Utils.isNull(temp))continue;
+					log.info("copy model:"+temp);
+					IEntity e=this.modelService.get(temp);
+					ModelIO.writeDisk(this.basePath+this.zipPath+"/"+temp+".lingx", e);
+					
+					entitys.add(this.jdbcTemplate.queryForMap("select * from tlingx_entity where code=?",temp));
+				}
+			
+			}else{
+				bean.getModelList().clear();
+			}
 			if(bean.isOption()){
 				log.info("copy option:"+bean.getAppid());
 				String optionJSON=getOptionJSON(this.jdbcTemplate,bean.getAppid());
 				config.put("optionJSON", optionJSON);
 			}
 			config.put("entityJSON", JSON.toJSONString(entitys));
-			config.put("funcJSON", bean.getFuncJson());
+			//config.put("funcJSON", bean.getFuncJson());
 
 			config.put("model", bean.getModelList());
 			config.put("files", bean.getFileList());
@@ -132,6 +143,8 @@ public class PackageServiceImpl implements IPackageService {
 		}
 	}
 	public String uploadPackLingx(PackBean source,String basePath,String secret){
+		
+		
 		List<String> fileList=new ArrayList<String>();
 		List<String> modelList=new ArrayList<String>();
 		PackBean packBean=new PackBean();
@@ -155,15 +168,11 @@ public class PackageServiceImpl implements IPackageService {
 		packBean.setSecret(secret);
 		packBean.setSql(source.getSql());
 		packBean.setType(1);
-		packBean.setFuncJson(getAllFuncJSON());
 		return this.packAndUpload(packBean, basePath, secret);
 		
 	}
 	
-	public String getAllFuncJSON(){
-		
-		return JSON.toJSONString(this.jdbcTemplate.queryForList("select * from tlingx_func "));
-	}
+	
 	
 	public String packAndUpload(PackBean bean,String basePath,String secret){
 		try {
@@ -194,6 +203,7 @@ public class PackageServiceImpl implements IPackageService {
 			conn.setRequestProperty("filename",filename);
 			conn.setRequestProperty("Content-Length",String.valueOf(input.available()));
 			conn.setRequestProperty("Content-Type", "application/octet-stream");
+			conn.setRequestProperty("Lingx-Appid",bean.getAppid());
 			conn.setRequestProperty("Lingx-Secret",secret);
 			conn.setRequestProperty("Lingx-Content", URLEncoder.encode(bean.getContent(), "UTF-8"));
 			OutputStream out=conn.getOutputStream();
@@ -256,9 +266,17 @@ public class PackageServiceImpl implements IPackageService {
 		config.put("type", bean.getType());
 		config.put("isReboot", bean.isReboot());
 		config.put("sql", bean.getSql());
+
+		if(bean.isGncd()){
+		List<Map<String,Object>> menu=this.jdbcTemplate.queryForList("select * from tlingx_menu");
+		config.put("menu",menu);
+
+		List<Map<String,Object>> func=this.jdbcTemplate.queryForList("select * from tlingx_func");
+		config.put("func",func);
+		}
 		
 	}
-
+	
 	public String getBasePath() {
 		return basePath;
 	}

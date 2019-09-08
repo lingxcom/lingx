@@ -13,6 +13,11 @@ Ext.onReady(function(){
 			}
 			if(Ext.isObject(field.value)){
 				if(field.value.exists){
+					if(field.escape){//是否转义->是转义
+					
+					if(field.isEntityLink){//是否连接->要连接
+						
+					
 					if(field.refEntity=="tlingx_optionitem"){
 						field.value=field.value.text;
 					}else{
@@ -31,6 +36,14 @@ Ext.onReady(function(){
 							field.value=temp1;
 						}
 					}
+					
+					}else{//不要连接
+						field.value=field.value.text;
+					}
+					
+					}else{//不转义
+						field.value=field.value.value;
+					}//end 是否转义
 				}else{
 					field.value=field.value.text;
 				}

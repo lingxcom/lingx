@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.lingx</groupId>
     <artifactId>lingx</artifactId>
-    <version>1.0.0</version>
+    <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>lingx-web</artifactId>
   <packaging>war</packaging>
@@ -12,7 +12,7 @@
 		<dependency>
 			<groupId>com.lingx</groupId>
 			<artifactId>lingx-core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>1.0.0</version>
 		</dependency>
      <dependency>
         <groupId>org.springframework</groupId>

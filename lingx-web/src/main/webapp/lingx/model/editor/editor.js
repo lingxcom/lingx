@@ -210,6 +210,15 @@
 							 }
 						 }
 						 ,
+						 {
+							 text:'自定义查询',
+							 iconCls:'Magnifierzoomin',
+							 handler:function(){
+								 openWindow2("自定义查询","lingx/model/editor/query_editor.jsp?code="+currentEntityCode);
+								  
+							 }
+						 }
+						 ,
 						 '-',
                 	        // 使用右对齐容器
                 	        '->', // 等同 { xtype: 'tbfill' }
@@ -226,7 +235,8 @@
             	            	openWindow2("参数配置","e?e=tlingx_config&m=grid");
             	            },
             	            menu:new Ext.menu.Menu({
-            	            items:[ {iconCls:"Plugin",text: '插件管理',handler:function(){
+            	            items:[ 
+            	                    {iconCls:"Plugin",text: '插件管理',handler:function(){
                 	        	openWindow2("插件管理","e?e=tlingx_plugin&m=grid");
                 	        }}
                 	        ,{iconCls:"Outline",text: '参数配置',handler:function(){
@@ -247,6 +257,12 @@
 							 handler:function(){
 								 openWindow("执行SQL","lingx/model/editor/sql_editor.jsp?code="+currentEntityCode);
 								  
+							 }
+						 },{
+							 text:"上传对象",
+							 iconCls:'Tableadd',
+							 handler:function(){
+								 openWindow("上传对象","e?e=tlingx_tools&m=updateLingx");
 							 }
 						 },'-',{
 							 text:"导入",

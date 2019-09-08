@@ -120,7 +120,7 @@ Ext.onReady(function(){
 			xtype:"tree",
 			dockedItems: [{
 	    	        xtype: 'toolbar',
-	    	        items:json.toolbar,
+	    	        //items:json.toolbar,
 	    	        dock: 'top',
 	    	        displayInfo: true
 	    	}],

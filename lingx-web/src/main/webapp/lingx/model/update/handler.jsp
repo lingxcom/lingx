@@ -2,12 +2,14 @@
     pageEncoding="UTF-8"%><%@ page import="java.net.*,java.io.*,com.lingx.core.utils.Utils,com.lingx.core.model.bean.UserBean,com.lingx.core.service.*,com.lingx.core.Constants,com.lingx.core.service.*,com.lingx.core.model.*,java.util.*,com.alibaba.fastjson.JSON,org.springframework.context.ApplicationContext,org.springframework.web.context.support.WebApplicationContextUtils,org.springframework.jdbc.core.JdbcTemplate" %><%!
 
 public void findFile(File file,List<String> list,String filename){
-	if(file.isFile()){
+	{
 		boolean b=file.getName().equals(filename);
 		if(b&&list.size()<10){
 			list.add(file.getAbsolutePath());
 		}
-	}else{
+	}
+
+	if(file.isDirectory()){
 		File files[]=file.listFiles();
 		if(list.size()<10)
 		for(File f:files){
@@ -87,6 +89,10 @@ if("findAndAddFile".equals(cmd)){
 	//out.println(JSON.toJSONString(success));
 }else if("updatePakeage".equals(cmd)){
 	String file=request.getParameter("file");
+	String ts=request.getParameter("ts");
+	if(ts==null){
+		ts="20121221153030";
+	}
 	IUpdateService update=applicationContext.getBean(IUpdateService.class);
 	
 	if(file.charAt(0)=='['){
@@ -97,7 +103,7 @@ if("findAndAddFile".equals(cmd)){
 	if(file.startsWith("http:")){
 		String basePath=request.getServletContext().getRealPath("/");
 		
-		boolean b=update.update(new URL(file), basePath);
+		boolean b=update.update(new URL(file), basePath,ts);
 		if(b){
 			success.put("message", "更新成功");
 		}else{
@@ -106,7 +112,7 @@ if("findAndAddFile".equals(cmd)){
 		}
 	}else{
 		String basePath=request.getServletContext().getRealPath("/");
-		boolean b=update.update(new File(basePath+file), basePath);
+		boolean b=update.update(new File(basePath+file), basePath,ts);
 		if(b){
 			success.put("message", "更新成功");
 		}else{
@@ -120,12 +126,16 @@ if("findAndAddFile".equals(cmd)){
 	String path=request.getParameter("path");
 	out.println(JSON.toJSONString(success));
 }else if("upload".equals(cmd)){
+	String appid=request.getParameter("appid");
 	String entityids=request.getParameter("entityids");
 	String files=request.getParameter("files");
 	String sqltext=URLDecoder.decode(request.getParameter("sqltext"),"UTF-8"); //request.getParameter("sqltext");
 	String remark=URLDecoder.decode(request.getParameter("remark"),"UTF-8"); //request.getParameter("remark");
 	//type,reboot,isdata;
 	String type=request.getParameter("type") ;
+	String option=request.getParameter("option") ;
+	String gncd=request.getParameter("gncd") ;
+	String sjmx=request.getParameter("sjmx") ;
 	String reboot=request.getParameter("reboot") ;
 	String isdata=request.getParameter("isdata") ;
 	//设置打包信息
@@ -140,29 +150,38 @@ if("findAndAddFile".equals(cmd)){
 	}
 	bean.setFileList(fileList);
 	
+	/* List<String> modelList=new ArrayList<String>();
+	List<Map<String,Object>> listEntity=jdbc.queryForList("select code from tlingx_entity where app_id=?",appid);
+	for(Map<String,Object> temp:listEntity){
+		modelList.add(temp.get("code").toString());
+	}
+	bean.setModelList(modelList); */
 	List<String> modelList=new ArrayList<String>();
 	filesArray=entityids.split(",");
 	for(String temp:filesArray){
 		modelList.add(temp);
 	}
 	bean.setModelList(modelList);
+	
 	//URLDecoder.decode(request.getParameter("msg"),"UTF-8") 
 	bean.setName(URLDecoder.decode(request.getParameter("name"),"UTF-8") );
 	bean.setOption("1".equals(request.getParameter("isOption")));
 	bean.setReboot("1".equals(reboot));
+	bean.setGncd("1".equals(gncd));
+	bean.setSjmx("1".equals(sjmx));
 	bean.setSecret(URLDecoder.decode(request.getParameter("secret"),"UTF-8") );
 	bean.setType(Integer.parseInt(type));
 	bean.setSql(sqltext);
 	
 	IPackageService pack=applicationContext.getBean(IPackageService.class);
 	String ret="";
-	if("335ec1fc-1011-11e5-b7ab-74d02b6b5f61".equals(request.getParameter("appid"))){
-
-		ret=pack.uploadPackLingx(bean, request.getServletContext().getRealPath("/"), bean.getSecret());
-	}else{
+	//if("335ec1fc-1011-11e5-b7ab-74d02b6b5f61".equals(request.getParameter("appid"))){
+    //
+	//	ret=pack.uploadPackLingx(bean, request.getServletContext().getRealPath("/"), bean.getSecret());
+	//}else{
 
 		ret=pack.packAndUpload(bean, request.getServletContext().getRealPath("/"), bean.getSecret());
-	}
+	//}
 	out.println(ret);
 }else{//show create function func_name
 	System.out.println("NO CMD:"+request.getParameter("c"));

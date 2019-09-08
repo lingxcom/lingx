@@ -83,4 +83,9 @@ public class ConfigServiceImpl implements IConfigService {
 		return Integer.parseInt(getValue(key,String.valueOf(defaultValue),appid));
 	}
 
+	public void saveValue(String key,String value){
+		this.getValue(key, "1");
+		jdbcTemplate.update("update tlingx_config set config_value=? where config_key=?",key,value);
+		this.reset();
+	}
 }

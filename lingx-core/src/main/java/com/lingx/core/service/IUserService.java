@@ -62,6 +62,12 @@ public interface IUserService {
 	 * @return
 	 */
 	public RegexpBean getSqlinBean(Object id,UserBean userBean);
+	/**
+	 * 获取session中的userbean
+	 * @param userid 账号
+	 * @param ip
+	 * @return
+	 */
+	public UserBean getUserBean(String userid,String ip,String langage);
 	
-	public UserBean getUserBean(String userid,String ip);
 }

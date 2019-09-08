@@ -196,33 +196,35 @@ public class LingxServiceImpl implements ILingxService ,ApplicationContextAware{
 	}
 	@Override
 	public int countForeignKey(String entityCode, Object id) {
-		IEntity entity=modelService.getCacheEntity(entityCode);
-		String temp=entity.getCascade();
-		if(Utils.isNull(temp))return 0;
-		
-		int count=0;
-		List<CascaderBean> configs;
-		
-		if(temp.trim().charAt(0)=='[')
-			configs=JSON.parseArray(temp,CascaderBean.class);
-		else
-			configs=getCasCader(temp);
-		
-		for(CascaderBean bean:configs){
-			temp=bean.getEntity();
-			IEntity e=modelService.getCacheEntity(temp);
-			IField tempField=modelService.getFieldByEntity(e, entityCode);
-			if(tempField==null)continue;
-			String field=tempField.getCode();
-			if(field!=null){
-				count+=this.jdbcTemplate.queryForInt(String.format(countForeignKeySQL, e.getTableName(),field),id);
+		if("true".equals(this.getConfigValue("com.lingx.countforeignkey", "true"))){
+			IEntity entity=modelService.getCacheEntity(entityCode);
+			String temp=entity.getCascade();
+			if(Utils.isNull(temp))return 0;
+			
+			int count=0;
+			List<CascaderBean> configs;
+			
+			if(temp.trim().charAt(0)=='[')
+				configs=JSON.parseArray(temp,CascaderBean.class);
+			else
+				configs=getCasCader(temp);
+			
+			for(CascaderBean bean:configs){
+				temp=bean.getEntity();
+				IEntity e=modelService.getCacheEntity(temp);
+				IField tempField=modelService.getFieldByEntity(e, entityCode);
+				if(tempField==null)continue;
+				String field=tempField.getCode();
+				if(field!=null){
+					count+=this.jdbcTemplate.queryForInt(String.format(countForeignKeySQL, e.getTableName(),field),id);
+				}
 			}
-		}
-		
-		if("tree".equals(entity.getDisplayMode())){
-			count+=this.jdbcTemplate.queryForInt(String.format(countForeignKeySQL, entity.getTableName(),"fid"),id);
-		}
-		return count;
+			
+			if("tree".equals(entity.getDisplayMode())){
+				count+=this.jdbcTemplate.queryForInt(String.format(countForeignKeySQL, entity.getTableName(),"fid"),id);
+			}
+			return count;
+		}else return 0;
 	}
 
 	@Override

@@ -47,7 +47,7 @@ Ext.onReady(function() {
         }, {
             fieldLabel: '说明',
             xtype: 'displayfield',
-            value:"您当前的密码过于简单，存在数据安全、信息泄漏等隐患。需要修改密码后才能进入系统；<br>1、密码长度必须在六个字母。<br>2、密码必须同时包含字母与数字。"
+            value:"您当前的密码过于简单，存在数据安全、信息泄漏等隐患。需要修改密码后才能进入系统；<br>1、密码长度不小于六个字符。<br>2、密码必须同时包含字母与数字。"
           
         }]
     });
@@ -76,6 +76,10 @@ Ext.onReady(function() {
             	}
             	if(!check(p2)){
             		Ext.MessageBox.alert("系统消息","新密码必须同时包含字母和数字");
+            		return;
+            	}
+            	if(p2!=p3){
+            		Ext.MessageBox.alert("系统消息","密码确认有误！");
             		return;
             	}
             	Lingx.post("e?e=tlingx_user&m=editPassword",{lgxsn:1,oldpass:p1,password1:p2,password2:p3},function(json){

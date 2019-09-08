@@ -77,7 +77,7 @@ public class GetAction extends AbstractJsonAction {
 				modelService.setValueForFields(scriptMethod.getFields().getList(), performer);
 
 			for(IField field:scriptMethod.getFields().getList()){
-				field.setName(i18n.text(field.getName()));
+				field.setName(i18n.text(field.getName(),context.getUserBean().getI18n()));
 			}
 			return JSON.toJSONString(scriptMethod);
 		}

@@ -70,6 +70,12 @@ public interface IModelService {
 	public List<String> getTextField(IEntity scriptEntity);
 	public String getValueField(IEntity scriptEntity);
 	public String getRuleDataAuth(IEntity se,UserBean userBean);
+	/**
+	 * 2019-03-11增加查询条件自定义功能，通过查询条件设置JSON数据来实现条件组合；模板为:[{name,code,xtype,sql,url}]
+	 * @param entity
+	 * @param userBean
+	 * @return
+	 */
 	public  Map<String,Object> getExtJSGridParams(IEntity entity,UserBean userBean);
 	public  void setValueForDefaultValue(List<IField> listFields,IContext context,IHttpRequest request);
 	public  void setValueForRequest(List<IField> listFields,IHttpRequest request);
@@ -82,5 +88,7 @@ public interface IModelService {
 	
 	public String getEntityOrderField(IEntity entity);
 	public String getEntityOrderType(IEntity entity);
+	
+	public boolean updateLingx(String filePath,String appid);
 	
 }

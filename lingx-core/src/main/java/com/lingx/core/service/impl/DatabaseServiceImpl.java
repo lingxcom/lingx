@@ -66,7 +66,7 @@ public class DatabaseServiceImpl implements IDatabaseService {
 	public String getSelectSqlById(IEntity entity, IContext context,
 			IPerformer performer) {
 		StringBuilder sb=new StringBuilder();
-		sb.append(this.getSelectSql(entity, context, performer)).append(" and id=?");
+		sb.append(this.getSelectSql(entity, context, performer)).append(" and id=? limit 1");
 		return sb.toString();
 	}
 

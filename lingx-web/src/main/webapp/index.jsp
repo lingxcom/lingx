@@ -21,7 +21,7 @@
 		lanuage=lanuage.substring(0,lanuage.indexOf(","));
 		if(i18n.hasLanuage(lanuage)){
 			i18n.setLanuage(lanuage);
-			session.setAttribute(com.lingx.core.Constants.SESSION_LANUAGE, lanuage);
+			session.setAttribute(com.lingx.core.Constants.SESSION_LANGUAGE, lanuage);
 		}
 	}
 %>

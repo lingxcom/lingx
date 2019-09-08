@@ -41,7 +41,7 @@ Ext.onReady(function() {
         }, {
             fieldLabel: '说明',
             xtype: 'displayfield',
-            value:"您的系统需要授权后才能使用，授权请联系：<br/>service@lingx.com<br/>(注：发邮件时注明要授权码，并带上QQ号或手机号码)"
+            value:"您的系统需要授权后才能使用，<br/> <a href='http://www.lingx.com/bi/authcode.jsp' target='_blank'>点击前往->授权申请</a><br/>"//(注：发邮件时注明要授权码，并带上QQ号或手机号码)
           
         }]
     });

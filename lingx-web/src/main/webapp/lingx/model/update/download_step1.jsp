@@ -10,6 +10,8 @@ ApplicationContext applicationContext = WebApplicationContextUtils.getRequiredWe
 
 org.springframework.context.ApplicationContext spring = org.springframework.web.context.support.WebApplicationContextUtils.getRequiredWebApplicationContext(request.getSession().getServletContext());
 ILingxService lingx=spring.getBean(ILingxService.class);
+String ts=lingx.getConfigValue("lingx.update.version.ts", "20121221152030");
+request.setAttribute("ts", ts);
 if(!lingx.isSuperman(request))return;
 %>
 
@@ -34,9 +36,9 @@ function uploadPackage(){
 var model=avalon.define({
 	$id:"body",
 	list:[],
-	install:function(path){
+	install:function(path,ts){
 		if(!confirm("目前更新不能回退，确定下载并安装吗？"))return;
-		$.post(handlerJsp,{c:"updatePakeage",file:path},function(json){
+		$.post(handlerJsp,{c:"updatePakeage",file:path,ts:ts},function(json){
 			lgxInfo(json.message);
 		},"json");
 	}
@@ -48,7 +50,7 @@ $(function(){
 function reloadGrid(p,r){
 	p=p||1;
 	r=r||20;
-	$.getJSON(downloadUrl+"&page="+p+"&rows="+r,function(json){
+	$.getJSON(downloadUrl+"&page="+p+"&rows="+r+"&appid=${SESSION_USER.app.id}&ts=${ts}",function(json){
 		model.list=json.rows;
 		pager.getModel().reset({total:json.total});
 
@@ -87,8 +89,8 @@ function ft(time){
 <td width="160">{{ft(el.ts)}}</td>
 
 <td width="100">
-<a href="javascript:;" ms-click="install(el.path)">安装</a>  | 
-<a target="_blank" ms-attr-href="el.path">下载</a> 
+<a href="javascript:;" ms-click="install(el.path,el.ts)">安装</a>    |
+<a target="_blank" ms-attr-href="el.path">下载</a>  <!---->
 
 </td>
 </tr>

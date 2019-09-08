@@ -1,5 +1,6 @@
 package com.lingx.core.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -7,17 +8,14 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.fastjson.JSON;
 import com.lingx.core.model.bean.AppBean;
 import com.lingx.core.model.bean.RegexpBean;
 import com.lingx.core.model.bean.UserBean;
 import com.lingx.core.service.IUserService;
 import com.lingx.core.utils.Utils;
-import com.lingx.support.web.action.DefaultAction;
 
 /**
  * @author www.lingx.com
@@ -80,7 +78,16 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	public void superManagerAuthRefresh(){
-		String id="6e0362e8-100e-11e5-b7ab-74d02b6b5f61";
+		List<String> listID=new ArrayList<String>();
+
+		String id1="6e0362e8-100e-11e5-b7ab-74d02b6b5f61";
+
+		List<Map<String,Object>> list=this.jdbcTemplate.queryForList("select id from tlingx_role where code=?",id1);
+		for(Map<String,Object> map:list){
+			listID.add(map.get("id").toString());
+		}
+		listID.add(id1);
+		for(String id:listID){
 		this.jdbcTemplate.update("insert into tlingx_roleorg(id,role_id ,org_id) select uuid(),'"+id+"',id from tlingx_org t where  not EXISTS (select 1 from tlingx_roleorg a where a.role_id='"+id+"' and a.org_id=t.id)");
 	
 		this.jdbcTemplate.update("insert into tlingx_rolefunc(id,role_id ,func_id) select uuid(),'"+id+"',id from tlingx_func t where not EXISTS (select 1 from tlingx_rolefunc a where a.role_id='"+id+"' and a.func_id=t.id)");
@@ -90,6 +97,8 @@ public class UserServiceImpl implements IUserService {
 		this.jdbcTemplate.update("insert into tlingx_rolemenu(id,role_id ,menu_id) select uuid(),'"+id+"',id from tlingx_menu t where  not EXISTS (select 1 from tlingx_rolemenu a where a.role_id='"+id+"' and a.menu_id=t.id)");
 		
 		this.jdbcTemplate.update("update tlingx_app set org_root_id=?,role_root_id=?,func_root_id=?,menu_root_id=? where id=?","6689ae6a-140f-11e5-b650-74d02b6b5f61","6e0367dc-100e-11e5-b7ab-74d02b6b5f61","ae79f6c4-1019-11e5-b7ab-74d02b6b5f61","cc575f33-1301-11e5-b8aa-74d02b6b5f61","335ec1fc-1011-11e5-b7ab-74d02b6b5f61");
+		}
+	
 	}
 	
 	public String[] getEmailByUserId(String userid) {
@@ -266,7 +275,7 @@ public class UserServiceImpl implements IUserService {
 		return sb.toString();
 	}
 	
-	public UserBean getUserBean(String userid,String ip){
+	public UserBean getUserBean(String userid,String ip,String langage){
 		JdbcTemplate jdbc=this.jdbcTemplate;
 		Map<String,Object> map=jdbc.queryForMap("select * from tlingx_user where account=?",userid);
 		UserBean userBean = new UserBean();
@@ -283,6 +292,9 @@ public class UserServiceImpl implements IUserService {
 		userBean.setOrgId(map.get("org_id").toString());
 		userBean.setRegexp(this.getRegexpBean(map.get("id"),userBean));
 		userBean.setSqlin(this.getSqlinBean(map.get("id"), userBean));
+		userBean.setI18n(langage);
+		userBean.setTel(map.get("tel").toString());
+		userBean.setEmail(map.get("email").toString());
 		try {
 			userBean.setOrgName(jdbc.queryForObject("select name from tlingx_org where id=?", String.class,map.get("org_id")));
 		} catch (Exception e) {
@@ -307,6 +319,20 @@ public class UserServiceImpl implements IUserService {
 		bean.setRoleRootId(app.get("role_root_id").toString());
 		bean.setFuncRootId(app.get("func_root_id").toString());
 		bean.setMenuRootId(app.get("menu_root_id").toString());
+		
+		String page=getRoleDefaultPage(userBean.getId());
+		if(Utils.isNotNull(page)){
+			bean.setIndexPage(page);
+		}
 		return bean;
+	}
+	
+	private String getRoleDefaultPage(String userid){
+		String page="";
+		if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_role where id in(select role_id from tlingx_userrole where user_id=?)",userid)>0){
+			page=this.jdbcTemplate.queryForObject("select indexpage from tlingx_role where id in(select role_id from tlingx_userrole where user_id=?) limit 1", String.class,userid);
+		}
+		
+		return page;
 	}
 }

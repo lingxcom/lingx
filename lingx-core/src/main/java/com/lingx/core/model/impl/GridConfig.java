@@ -44,6 +44,11 @@ public class GridConfig  extends AbstractModel implements IConfig {
 	private String dblclickMethod;
 	@FieldModelConfig(sort="K",name="双击窗体样式",inputType="string",editor="new Ext.form.field.ComboBox({displayField: 'text',valueField: 'value',store: new Ext.data.Store({proxy:{ model:'Option',type:'ajax',url:'e?e=tlingx_option&m=items&lgxsn=1&code=CTYS',reader:{type:'json'}},autoLoad:true})})")
 	private String winStyle;
+	@FieldModelConfig(sort="L",name="单行工具栏")
+	private Boolean toolbarSingle=true;
+	@FieldModelConfig(sort="M",name="请求地址")
+	private String requestUrl="";
+	
 	public GridConfig(){
 		super();
 		this.setModelType("GridConfig");
@@ -52,6 +57,14 @@ public class GridConfig  extends AbstractModel implements IConfig {
 		this.setName("列表展示");
 		this.setLeaf(true);
 		this.setDblclickMethod("view");
+	}
+
+	public String getRequestUrl() {
+		return requestUrl;
+	}
+
+	public void setRequestUrl(String requestUrl) {
+		this.requestUrl = requestUrl;
 	}
 
 	public String getDblclickMethod() {
@@ -68,6 +81,15 @@ public class GridConfig  extends AbstractModel implements IConfig {
 
 	public void setIdField(String idField) {
 		this.idField = idField;
+	}
+
+	public Boolean getToolbarSingle() {
+		if(this.toolbarSingle==null)return true;
+		return toolbarSingle;
+	}
+
+	public void setToolbarSingle(Boolean toolbarSingle) {
+		this.toolbarSingle = toolbarSingle;
 	}
 
 	public Boolean getRownumbers() {

@@ -47,11 +47,11 @@ public class CascadeServiceImpl implements ICascadeService{
 		if(Utils.isNull(ecodes)){
 			context.getRequest().setAttribute(GRID_CASCADE, JSON.toJSON(new ArrayList()));
 			return ;}
-		list=this.getCascaderList(ecodes,entity);
+		list=this.getCascaderList(ecodes,entity,context);
 		context.getRequest().setAttribute(GRID_CASCADE, JSON.toJSON(list));
 		
 	}
-	private List<Map<String, Object>> getCascaderList(String text,IEntity entity){
+	private List<Map<String, Object>> getCascaderList(String text,IEntity entity,IContext context){
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		text=text.trim();
 		if(text==null||"".equals(text))return list;
@@ -72,7 +72,7 @@ public class CascadeServiceImpl implements ICascadeService{
 					
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("entity", code);
-						map.put("name", i18n.text(config.getName()!=null?config.getName():se.getName()));
+						map.put("name", i18n.text(config.getName()!=null?config.getName():se.getName(),context.getUserBean().getI18n()));
 						map.put("refField", refField);
 						map.put("method", config.getMethod()!=null?config.getMethod():"grid");
 						map.put("rule",config.getRule()!=null?config.getRule():"");
@@ -100,7 +100,7 @@ public class CascadeServiceImpl implements ICascadeService{
 						//b = true;
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("entity", code);
-						map.put("name", i18n.text(se.getName()));
+						map.put("name", i18n.text(se.getName(),context.getUserBean().getI18n()));
 						map.put("refField", refField);
 						map.put("method", "grid");
 						map.put("rule", "");

@@ -49,7 +49,7 @@ function getCenterHeight(){
  * @param eid 对象ID
  */
 function openViewWindow(ecode,ename,eid,type){
-	openWindow(ename+"-查看","e?e="+ecode+"&m=view&id="+eid,type);//原本是openWindow4
+	openWindow2(ename+"-查看","e?e="+ecode+"&m=view&id="+eid,type);//原本是openWindow4
 }
 /**
  * 得到当前工作区域的TAB窗口对象
@@ -91,8 +91,16 @@ function openWindow(title,url,type){
  * @param title
  * @param url
  */
-function openReadonlyWindow(title,url){
-	Lingx.getRootWindow().getApi().openReadonlyWindow(title,url,getPageID());
+function openReadonlyWindow(title,url,type){
+	type=type||"default";
+	switch(type){
+	case "default":
+		Lingx.getRootWindow().getApi().openReadonlyWindow(title,url,getPageID());
+		break;
+	case "full1":
+		Lingx.getRootWindow().getApi().openReadonlyWindowFull(title,url,getPageID());
+		break;
+	}
 }
 function openWindowFull(title,url){
 	Lingx.getRootWindow().getApi().openWindowFull(title,url,getPageID());

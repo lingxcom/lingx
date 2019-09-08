@@ -79,10 +79,13 @@ var RootApi=function(){
 	_this.openWindow=function(title,url,pageid){
 		var id=Lingx.getRandomString(16);
 		url=_this.urlAddParams(url,{pageid:pageid});
+		var h=_this.getHeight()*0.1;
 		var win=Ext.create("Ext.Window",{
 			title:title,
 			width:600,
 			height:400,
+			//x:10,
+			y:h,
 			iconCls:'Tablerow',
 			modal:true,
 	        autoScroll:false,
@@ -114,8 +117,10 @@ var RootApi=function(){
 	_this.openReadonlyWindow=function(title,url,pageid){
 		var id=Lingx.getRandomString(16);
 		url=_this.urlAddParams(url,{pageid:pageid});
+		var h=_this.getHeight()*0.1;
 		var win=Ext.create("Ext.Window",{
 			title:title,
+			y:h,
 			width:600,
 			height:400,
 			iconCls:'Tablerow',
@@ -175,11 +180,44 @@ var RootApi=function(){
 		_this.iframePool.push(id);
 		return win;
 	};
+	/**
+	 * openReadonlyWindow 打开全屏只读对话框
+	 */
+	_this.openReadonlyWindowFull=function(title,url,pageid){
+		var id=Lingx.getRandomString(16);
+		url=_this.urlAddParams(url,{pageid:pageid});
+		var h=_this.getHeight()*0.1;
+		var win=Ext.create("Ext.Window",{
+			title:title,
+			width:600,
+			height:400,
+			iconCls:'Tablerow',
+			modal:true,
+	        autoScroll:false,
+	        maximized:true,
+			//collapsible:true,
+			maximizable:true,
+			buttons:[{text:Ext.lingx.close||"关闭",handler:function(){closeWindow();}}],
+			html:'<iframe id="'+id+'" scrolling="no" frameborder="0" width="100%" height="100%" src="'+url+'"> </iframe>',
+			listeners:{
+				close:function(){
+					_this.windowPool.pop();
+					_this.iframePool.pop();
+				}
+			}
+		});
+		win.show();
+		_this.windowPool.push(win);
+		_this.iframePool.push(id);
+		return win;
+	};
 	_this.openWindow2=function(title,url,pageid){
 		var id=Lingx.getRandomString(16);
 		url=_this.urlAddParams(url,{pageid:pageid});
+		var h=_this.getHeight()*0.1;
 		var win=Ext.create("Ext.Window",{
 			title:title,
+			y:h,
 			width:600,
 			height:400,
 			iconCls:'Tablerow',
@@ -204,8 +242,10 @@ var RootApi=function(){
 	_this.openWindow3=function(title,url,pageid){
 		var id=Lingx.getRandomString(16);
 		url=_this.urlAddParams(url,{pageid:pageid});
+		var h=_this.getHeight()*0.1;
 		var win=Ext.create("Ext.Window",{
 			title:title,
+			y:h,
 			width:600,
 			height:400,
 			iconCls:'Tablerow',
@@ -242,8 +282,10 @@ var RootApi=function(){
 	_this.openWindow4=function(title,url,pageid){
 		var id=Lingx.getRandomString(16);
 		url=_this.urlAddParams(url,{pageid:pageid});
+		var h=_this.getHeight()*0.1;
 		var win=Ext.create("Ext.Window",{
 			title:title,
+			y:h,
 			width:600,
 			height:400,
 			iconCls:'Tablerow',
@@ -303,11 +345,13 @@ var RootApi=function(){
 			delete fields;
 			fields=newFields;
 		}
-		
+
+		var h=_this.getHeight()*0.1;
 		var win=Ext.create("Ext.Window",{
 			id:"lingx-search-dialog",
 			title:"查询框",
 			iconCls:'icon-search',
+			y:h,
 			width:400,
 			height:240,
 			buttons:[{iconCls:'icon-search',text:"查询",handler:function(){

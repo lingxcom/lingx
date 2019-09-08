@@ -14,7 +14,7 @@ public interface Constants {
 	public static final String IS_SUPER_MAN="IS_SUPER_MAN";
 	public static final String SESSION_YZM="SESSION_YZM";
 	public static final String SESSION_LAST_QUERY_SQL="SESSION_LAST_QUERY_SQL";
-	public static final String SESSION_LANUAGE="LINGX_LANUAGE";
+	public static final String SESSION_LANGUAGE="SESSION_LANGUAGE";
 
 	public static final String KEY_DATABASE_TYPE="database.type";
 	public static final String KEY_DATABASE_NAME="database.name";

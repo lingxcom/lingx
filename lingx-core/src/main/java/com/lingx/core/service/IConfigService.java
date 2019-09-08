@@ -28,4 +28,6 @@ public interface IConfigService {
 	 * 重置参数
 	 */
 	public void reset();
+	
+	public void saveValue(String key,String value);
 }

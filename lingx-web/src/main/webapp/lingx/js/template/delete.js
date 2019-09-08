@@ -48,6 +48,8 @@ Ext.onReady(function(){
 				maxWidth:400});
 			
 		}
+		var requestUrl="e?e="+entityCode+"&m="+methodCode;
+		if(json.requestUrl){requestUrl=json.requestUrl;}
 		Ext.create("Ext.Viewport",{
 			layout:'fit',
 	        border: false,
@@ -65,7 +67,7 @@ Ext.onReady(function(){
 			           , anchor: '100%'
 			        },
 				//layout: 'absolute',
-		        url: "e?e="+entityCode+"&m="+methodCode,
+		        url: requestUrl,
 		        defaultType: 'displayfield',
 		        border: false,
 		        items:items,

@@ -18,13 +18,13 @@
 	
 
 	String lanuage="";
-	if(session.getAttribute("LINGX_LANUAGE")!=null){
-		//lanuage=session.getAttribute("LINGX_LANUAGE").toString();
+	if(session.getAttribute("SESSION_LANGUAGE")!=null){
+		//lanuage=session.getAttribute("SESSION_LANGUAGE").toString();
 	}
 	II18NService i18n=spring.getBean(II18NService.class);
 	List<Map<String,Object>> list=i18n.getLanuages();
 	String select="<select style=\"border:0px;none;\" onchange=\"setLanuage(this.value)\">";
-	select+="<option  value=\"\">语言/lanuage</option>";
+	select+="<option  value=\"\">语言/language</option>";
 	for(Map<String,Object> map:list){
 		select+="<option "+(lanuage.equals(map.get("lanuage").toString())?"selected":"")+" value=\""+map.get("lanuage")+"\">"+map.get("name")+"</option>";
 	}
@@ -43,7 +43,7 @@
 <meta name="renderer" content="webkit" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="<%=basePath%>">
-<title>${SESSION_USER.app.name }</title>
+<title><%=i18n.text(userBean.getApp().getName(),session)%></title>
 <%@ include file="/lingx/include/include_JavaScriptAndCss.jsp"%> 
 <script type="text/javascript" src="lingx/js/rootApi.js"></script>
 <script type="text/javascript">
@@ -77,18 +77,18 @@ Ext.onReady(function(){
     			items:[{
         			border:false,
     				region:'center',
-    				bodyStyle: 'background:url(lingx/images/top.jpg) no-repeat left top #515cfc;',//89b9e1 images/obd/top.jpg 347cc6
-    				html:'<div style="position:absolute; left:0; bottom:0;color:#fff;font-size:14px;line-height:24px;height:24px;vertical-align:top;font:"Microsoft Yahei","Hiragino Sans GB","Helvetica Neue",Helvetica,tahoma,arial,"WenQuanYi Micro Hei",Verdana,sans-serif,"\5B8B\4F53"><div >&nbsp; ${SESSION_USER.app.name}</div></div>'// 
+    				bodyStyle: 'background: #004e98;',//89b9e1 images/obd/top.jpg 347cc6 url(lingx/images/top.jpg) no-repeat left top
+    				html:'<div style="position:absolute; left:0; bottom:0;color:#fff;font-size:14px;line-height:24px;height:24px;vertical-align:top;font:"Microsoft Yahei","Hiragino Sans GB","Helvetica Neue",Helvetica,tahoma,arial,"WenQuanYi Micro Hei",Verdana,sans-serif,"\5B8B\4F53"><div >&nbsp; <%=i18n.text(userBean.getApp().getName(),session)%></div></div>'// 
     				
     				+'<div style="position:absolute; right:0; bottom:0;color:#fff;font-size:12px;line-height:24px;height:24px;">'
     				+'${select}&nbsp;&nbsp;'
-    				+'<a style="color:#fff;font-size:12px;" href="javascript:;" onclick="openReadonlyWindow(\'消息中心\',\'e?e=tlingx_message&m=grid\');">消息(${msg_count})</a>&nbsp;|&nbsp;'
+    				//+'<a style="color:#fff;font-size:12px;" href="javascript:;" onclick="openReadonlyWindow(\'消息中心\',\'e?e=tlingx_message&m=grid\');">消息(${msg_count})</a>&nbsp;|&nbsp;'
     				
-    				+'<%=i18n.text("当前用户")%>：<a style="color:#fff;font-size:12px;" href="javascript:;" onclick="javascript:openWindow(\'<%=i18n.text("修改用户信息")%>\',\'e?e=tlingx_user&m=editSelf&id=${SESSION_USER.id}\');";>${SESSION_USER.name}</a>[${SESSION_USER.account}] '
+    				+'<%=i18n.text("当前用户",session)%>：<a style="color:#fff;font-size:12px;" href="javascript:;" onclick="javascript:openWindow(\'<%=i18n.text("修改用户信息",session)%>\',\'e?e=tlingx_user&m=editSelf&id=${SESSION_USER.id}\');";>${SESSION_USER.name}</a>[${SESSION_USER.account}] '
     				+'&nbsp;|&nbsp;'
-    				+'<a style="color:#fff;font-size:12px;" href="javascript:;" onclick="javascript:openWindow(\'<%=i18n.text("修改密码")%>\',\'e?e=tlingx_user&m=editPassword\');";><%=i18n.text("修改密码")%></a>'
+    				+'<a style="color:#fff;font-size:12px;" href="javascript:;" onclick="javascript:openWindow(\'<%=i18n.text("修改密码",session)%>\',\'e?e=tlingx_user&m=editPassword\');";><%=i18n.text("修改密码",session)%></a>'
     				+'&nbsp;|&nbsp;'
-    				+'<a style="color:#fff;font-size:12px;" href="${logoutUrl}"><%=i18n.text("退出系统")%></a>&nbsp;</div>'
+    				+'<a style="color:#fff;font-size:12px;" href="${logoutUrl}"><%=i18n.text("退出系统",session)%></a>&nbsp;</div>'
     				+'</div>'
     			},{
     				height:26,
@@ -111,10 +111,12 @@ Ext.onReady(function(){
                // deferredRender: false,
                 activeTab: 0,     // first tab initially active
                 items: [{
-                	id:"<%=i18n.text("首页")%>",
+                	id:"<%=i18n.text("首页",session)%>",
                 	html: '<iframe scrolling="auto" frameborder="0" width="100%" height="100%" src="${SESSION_USER.app.indexPage}"> </iframe>',
-                    title: '<%=i18n.text("首页")%>',
-                    autoScroll: true
+                    title: '<%=i18n.text("首页",session)%>',
+                    autoScroll: true,
+                    closable: true
+
                 }]
     		}]
        

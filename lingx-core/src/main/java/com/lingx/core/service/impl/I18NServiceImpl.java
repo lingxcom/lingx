@@ -9,11 +9,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
 
+import com.lingx.core.Constants;
 import com.lingx.core.service.II18NService;
+import com.lingx.core.utils.Utils;
 
 /** 
  * @author www.lingx.com
@@ -68,6 +72,31 @@ public class I18NServiceImpl implements II18NService {
 		return temp;
 	}
 
+	public String text(String text,String lanuage1) {
+		if(Utils.isNull(lanuage1)||DEFAULT_LANUAGE.equals(lanuage1))return text;
+		String temp="";
+		if(this.lanuages.get(lanuage1).containsKey(text)){
+			temp=this.lanuages.get(lanuage1).get(text);
+		}else{
+			temp=text;
+		}
+		return temp;
+	}
+	public String text(String text,HttpSession session) {
+		if(session.getAttribute(Constants.SESSION_LANGUAGE)==null)return text;
+		String lanuage1=session.getAttribute(Constants.SESSION_LANGUAGE).toString();
+		if(Utils.isNull(lanuage1)||DEFAULT_LANUAGE.equals(lanuage1))return text;
+		String temp="";
+		if(this.lanuages.get(lanuage1).containsKey(text)){
+			temp=this.lanuages.get(lanuage1).get(text);
+		}else{
+			temp=text;
+		}
+		return temp;
+	}
+	public String text(String text,HttpServletRequest request) {
+		return this.text(text,request.getSession());
+	}
 	@Override
 	public List<Map<String, Object>> getLanuages() {
 		List<Map<String, Object>>list=new ArrayList<Map<String, Object>>();
@@ -129,6 +158,18 @@ public class I18NServiceImpl implements II18NService {
 			String array[]=text.toString().split(",");
 			for(String str:array){
 				sb.append(this.text(str)).append(",");
+			}
+			if(sb.length()>1)sb.deleteCharAt(sb.length()-1);
+		}
+		return sb.toString();
+	}
+	@Override
+	public String textSplit(Object text, String language) {
+		StringBuilder sb=new StringBuilder();
+		if(text!=null){
+			String array[]=text.toString().split(",");
+			for(String str:array){
+				sb.append(this.text(str,language)).append(",");
 			}
 			if(sb.length()>1)sb.deleteCharAt(sb.length()-1);
 		}

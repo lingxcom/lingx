@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSON;
 import com.lingx.core.model.IEntity;
 import com.lingx.core.model.bean.ItemBean;
 import com.lingx.core.model.bean.OptionBean;
+import com.lingx.core.service.IConfigService;
 import com.lingx.core.service.IModelService;
 import com.lingx.core.service.IUpdateService;
 import com.lingx.core.service.IUserService;
@@ -47,7 +48,8 @@ public class UpdateServiceImpl implements IUpdateService {
 	private IModelService modelService;
 	@Resource
 	private IUserService userService;
-	
+	@Resource
+	private IConfigService configService;
 	//@PostConstruct
 	public void init(){
 		log.info("IUpdateService IMPL init ...");
@@ -76,20 +78,20 @@ public class UpdateServiceImpl implements IUpdateService {
 		}
 		return true;
 	}
-	public boolean update(URL url,String basePath){
+	public boolean update(URL url,String basePath,String ts){
 
 		try {
 			File file=new File(basePath+this.unZipPath+"/update_url.zip");
 			FileUtils.copyURLToFile(url, file);
 			
-			return this.update(file, basePath);
+			return this.update(file, basePath,ts);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
 	}
-	public boolean update(File file,String basePath){
+	public boolean update(File file,String basePath,String ts){
 		this.basePath=basePath;
 		try {
 			this.unzip(file);
@@ -100,15 +102,19 @@ public class UpdateServiceImpl implements IUpdateService {
 			if(config.get("entityJSON")!=null)
 			this.updateEntity(config.get("entityJSON").toString());
 
-			if(config.get("funcJSON")!=null)
-			this.updateFunc(config.get("funcJSON").toString());
-			
 			if(config.get("model")!=null)
 			this.updateModel((List<String>)config.get("model"));
 			if(config.get("files")!=null)
 			this.copyFiles((List<String>)config.get("files"));
 
+
+			if(config.get("menu")!=null)
+			this.updateMenu((List<Map<String,Object>>)config.get("menu"));
+
+			if(config.get("func")!=null)
+			this.updateFunc((List<Map<String,Object>>)config.get("func"));
 			FileUtils.cleanDirectory(new File(this.basePath+this.unZipPath));
+			this.configService.saveValue("lingx.update.version.ts", ts);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -204,13 +210,23 @@ public class UpdateServiceImpl implements IUpdateService {
 			
 	}
 	
-	private void updateFunc(String json){
-		if(Utils.isNull(json))return;
+	private void updateMenu(List<Map<String,Object>> list){
+		String sql="insert into tlingx_menu(id,name,short_name,type,iconcls,fid,orderindex,status,state,func_id,remark) values(?,?,?,?,?,?,?,?,?,?,?)";
+		for(Map<String,Object> map:list){
+			log.info("update menu:"+map.get("name"));
+			if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_menu where id=?",map.get("id"))==0){
+				this.jdbcTemplate.update(sql,map.get("id"),map.get("name"),map.get("short_name"),map.get("type"),map.get("iconcls"),map.get("fid"),
+						map.get("orderindex"),map.get("status"),map.get("state"),map.get("func_id"),map.get("remark"));
+			}
+		}
+		this.userService.superManagerAuthRefresh();
+	}
+	
+	private void updateFunc(List<Map<String,Object>> list){
 		String sql="insert into tlingx_func(id,name,module,func,type,fid)values(?,?,?,?,?,?)";
-		List<Map<String,Object>> list=(List<Map<String,Object>>)JSON.parse(json);
 		for(Map<String,Object> map:list){
 			log.info("update func:"+map.get("name"));
-			if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_func where id=?",map.get("id"))==0&&this.jdbcTemplate.queryForInt("select count(*) from tlingx_func where module=? and func=?",map.get("module"),map.get("func"))==0){
+			if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_func where id=?",map.get("id"))==0){
 				this.jdbcTemplate.update(sql,map.get("id"),map.get("name"),map.get("module"),map.get("func"),map.get("type"),map.get("fid"));
 			}
 		}

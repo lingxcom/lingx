@@ -16,8 +16,8 @@
 	
 
 	String lanuage="";
-	if(session.getAttribute("LINGX_LANUAGE")!=null){
-		lanuage=session.getAttribute("LINGX_LANUAGE").toString();
+	if(session.getAttribute("SESSION_LANGUAGE")!=null){
+		lanuage=session.getAttribute("SESSION_LANGUAGE").toString();
 	}
 	II18NService i18n=spring.getBean(II18NService.class);
 	List<Map<String,Object>> list=i18n.getLanuages();
@@ -106,7 +106,7 @@ Ext.onReady(function(){
     			//height:100,
     			height:60,
     			border:false,
-    			bodyStyle: 'background:url(lingx/images/top.jpg) no-repeat left top #515cfc;',//89b9e1 images/obd/top.jpg 347cc6
+    			bodyStyle: 'background:#004e98;',//89b9e1 images/obd/top.jpg 347cc6
 				html:'<div style="position:absolute;padding-left:10px; left:0; bottom:0;color:#fff;font-size:24px;line-height:60px;height:60px;vertical-align:top;font:"Microsoft Yahei","Hiragino Sans GB","Helvetica Neue",Helvetica,tahoma,arial,"WenQuanYi Micro Hei",Verdana,sans-serif,"\5B8B\4F53"><div style="height:60px;float:left;">'+logoIMG+'</div><div style="line-height:60px;height:60px;float:left;font-size:24px">${SESSION_USER.app.name}</div></div>'// 
 				
 				+'<div style="position:absolute; right:0; top:0;color:#fff;font-size:12px;line-height:24px;height:24px;">'

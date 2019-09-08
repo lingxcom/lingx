@@ -824,18 +824,20 @@ public class ModelServiceImpl implements IModelService {
 		List<Map<String,Object>> rightmenu=new ArrayList<Map<String,Object>>();
 		int roleNumber=this.jdbcTemplate.queryForInt("select count(*) from tlingx_role where id in(select role_id from tlingx_userrole where user_id=?)",userBean.getId());
 		int troleFieldNumber=0;
+		String ename=entity.getName();
+		entity.setName(this.i18n.text(ename, userBean.getI18n()));
 		//log.info("role number of current user:"+roleNumber);
 		for(IField field:entity.getFields().getList()){
 			if(!field.getVisible())continue;
 			troleFieldNumber=this.jdbcTemplate.queryForInt("select count(*) from tlingx_rolefield where role_id in(select role_id from tlingx_userrole where user_id=?) and entitycode=? and fieldcode=?",userBean.getId(),entity.getCode(),field.getCode());
 			if(troleFieldNumber>=roleNumber)continue;
-			field.setName(i18n.getText(field.getName()));
+			field.setName(i18n.text(field.getName(),userBean.getI18n()));
 			Map<String,Object> m=new HashMap<String,Object>();
 			m.put("name", field.getCode());
 			m.put("type", "string");
 			
 			Map<String,Object> c=new HashMap<String,Object>();
-			c.put("header",i18n.text( field.getName()));
+			c.put("header",i18n.text( field.getName(),userBean.getI18n()));
 			c.put("dataIndex", field.getCode());
 			if(Utils.isNotNull(field.getWidth())){
 				try{
@@ -844,11 +846,11 @@ public class ModelServiceImpl implements IModelService {
 			}
 			//c.put("flex", 1);
 			//c.put("width", 10);
-			if(field.getRefEntity()!=null&&!"".equals(field.getRefEntity())&&field.getEscape()&&!"tlingx_optionitem_NO".equals(field.getRefEntity())){//tlingx_optionitem_NO 这里本来的处理，是为了字典在界面上不能点击，但会导致，需要该字段字时，会取不到，所以取消
-				if(field.getIsEntityLink()){
+			if(field.getRefEntity()!=null&&!"".equals(field.getRefEntity())&&field.getEscape()){//tlingx_optionitem_NO 这里本来的处理，是为了字典在界面上不能点击，但会导致，需要该字段字时，会取不到，所以取消
+				if(field.getIsEntityLink()&&!"tlingx_optionitem".equals(field.getRefEntity())){
 					IEntity refEntity=getCacheEntity(field.getRefEntity());
 					m.put("type", "object");
-					c.put("renderer", new Function("function(value, p, record){	var temp='';	if(!value)return temp;	for(var i=0;i<value.length;i++){		temp=temp+'<a href=\"javascript:;\" onclick=\"openViewWindow(\\'"+refEntity.getCode()+"\\',\\'"+refEntity.getName()+"\\',\\''+value[i].id+'\\');\">'+value[i].text+'</a>,';	}	temp=temp.substring(0,temp.length-1); 	return temp;}"));
+					c.put("renderer", new Function("function(value, p, record){	var temp='';	if(!value)return temp;	for(var i=0;i<value.length;i++){		temp=temp+'<a href=\"javascript:;\" onclick=\"openViewWindow(\\'"+refEntity.getCode()+"\\',\\'"+i18n.text(refEntity.getName(),userBean.getI18n())+"\\',\\''+value[i].id+'\\');\">'+value[i].text+'</a>,';	}	temp=temp.substring(0,temp.length-1); 	return temp;}"));
 				
 				}else{
 					m.put("type", "object");
@@ -858,7 +860,7 @@ public class ModelServiceImpl implements IModelService {
 				}
 			if("file".equals(field.getInputType())){
 				//m.put("type", "object");
-				c.put("renderer", new Function("function(value, p, record){	if(!value)return '';  var temp=value; var fvalue=''; if(temp&&temp.length>1&&temp.charAt(0)=='['){ var tempText=\"\"; var tempArr=Ext.JSON.decode(temp); for(var ii=0;ii<tempArr.length;ii++){ tempText+=\"<a target='_blank' href='\"+tempArr[ii].value+\"' >\"+tempArr[ii].text+\"</a>,\"; } if(tempText.length>0){ tempText=tempText.substring(0,tempText.length-1); } fvalue=tempText; }else{ fvalue=\"<a target='_blank' href='\"+value+\"' >文件下载</a>\"; }return fvalue;}"));
+				c.put("renderer", new Function("function(value, p, record){	if(!value)return '';  var temp=value; var fvalue=''; if(temp&&temp.length>1&&temp.charAt(0)=='['){ var tempText=\"\"; var tempArr=Ext.JSON.decode(temp); for(var ii=0;ii<tempArr.length;ii++){ tempText+=\"<a target='_blank' href='\"+tempArr[ii].value+\"' >\"+tempArr[ii].text+\"</a>,\"; } if(tempText.length>0){ tempText=tempText.substring(0,tempText.length-1); } fvalue=tempText; }else{ fvalue=\"<a target='_blank' href='\"+value+\"' >"+i18n.text("下载",userBean.getI18n())+"</a>\"; }return fvalue;}"));
 			}
 			if("image".equals(field.getInputType())){
 				//m.put("type", "object");
@@ -879,7 +881,7 @@ public class ModelServiceImpl implements IModelService {
 			if(method.getVisible()){
 				Map<String,Object> m=new HashMap<String,Object>();
 				m.put("xtype", "button");
-				m.put("text", i18n.text(method.getName()));
+				m.put("text", i18n.text(method.getName(),userBean.getI18n()));
 				m.put("iconCls",method.getIconCls());
 				m.put("code", method.getCode());
 				if(!method.getEnabled())m.put("disabled", true); //disabled
@@ -889,7 +891,7 @@ public class ModelServiceImpl implements IModelService {
 			}
 			if(method.getRightmenu()!=null&&method.getRightmenu()){
 				Map<String,Object> m2=new HashMap<String,Object>();
-				m2.put("text", i18n.text(method.getName()));
+				m2.put("text", i18n.text(method.getName(),userBean.getI18n()));
 				m2.put("iconCls",method.getIconCls());
 				m2.put("code", method.getCode());
 				if(!method.getEnabled())m2.put("disabled", true); //disabled
@@ -899,7 +901,9 @@ public class ModelServiceImpl implements IModelService {
 			}
 			
 		}
-		params.put("isSearch", this.funcService.getAuth(userBean.getId(), entity.getCode(), "search"));
+		//params.put("isSearch", this.funcService.getAuth(userBean.getId(), entity.getCode(), "search"));//高级查询没人用，忽略
+		params.put("isSearch",false);//高级查询没人用，忽略
+		params.put("queryParams",getQueryParams(((GridConfig)entity.getConfigs().getList().get(0)).getQueryField()));
 		params.put("GridConfig", entity.getConfigs().getList().get(0));
 		params.put("model", model);
 		params.put("columns",columns);
@@ -907,14 +911,40 @@ public class ModelServiceImpl implements IModelService {
 		params.put("rightmenu",rightmenu);
 		params.put("fields", entity.getFields());
 		params.put("code", entity.getCode());
-		params.put("name", i18n.text(entity.getName()));
+		params.put("name", i18n.text(entity.getName(),userBean.getI18n()));
 		
 		if(entity instanceof QueryEntity){
 			QueryEntity qe=(QueryEntity)entity;
 			params.put("params", qe.getParams().getList());
 		}else{
 		}
+		
+		entity.setName(ename);
 		return params;
+	}
+	/**
+	 * 从配置中取出查询参数
+	 * 模板为:[{name,code,xtype,sql,url}]
+	 * @param json
+	 * @return
+	 */
+	private List<Map<String,Object>> getQueryParams(String json){
+		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+		json=json.trim();
+		if(Utils.isNull(json))return list;
+		if(json.charAt(0)=='['){
+			List<Map<String,Object>> listJSON=(List<Map<String,Object>>)JSON.parse(json);
+			for(Map<String,Object> mapJSON:listJSON){
+				Map<String,Object> map=new HashMap<String,Object>();
+				map.put("name", mapJSON.get("name"));
+				map.put("code", mapJSON.get("code"));
+				map.put("xtype", mapJSON.get("xtype"));
+				map.put("url", mapJSON.get("url"));
+				list.add(map);
+			}
+			
+		}
+		return list;
 	}
 	
 	public void removeDefaultValueTransformTag(List<IField> listFields){
@@ -1072,7 +1102,7 @@ public class ModelServiceImpl implements IModelService {
 							m.put("text", sb.toString());
 							m.put("value", m.get(value));
 							m.put("etype", entity.getCode());
-							m.put("ename", entity.getName());
+							m.put("ename", i18n.text(entity.getName(),context.getUserBean().getI18n()) );
 							m.put("exists", true);
 						}else{//多个值
 							//System.out.println(String.format(sql2, field.getRefEntity(),value,realValue));
@@ -1091,7 +1121,7 @@ public class ModelServiceImpl implements IModelService {
 							m.put("text", texts.toString());
 							m.put("value", values.toString());
 							m.put("etype", entity.getCode());
-							m.put("ename", entity.getName());
+							m.put("ename", i18n.text(entity.getName(),context.getUserBean().getI18n()) );
 							m.put("exists", true);
 						}
 					} catch (Exception e) {
@@ -1351,6 +1381,18 @@ public   void setValueForFields(List<IField> listFields,IPerformer performer){
 	}
 	public void setDefaultValueService(IDefaultValueService defaultValueService) {
 		this.defaultValueService = defaultValueService;
+	}
+	@Override
+	public boolean updateLingx(String filePath,String appid) {
+		System.out.println(appid);
+		System.out.println(filePath);
+		IEntity entity=UpdateServiceImpl.readFile(filePath);
+		this.save(entity);
+		String name=entity.getName(),code=entity.getCode();
+		if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_entity where code=?",code)==0){
+			this.jdbcTemplate.update("insert into tlingx_entity(id,name,code,type,status,app_id,create_time)values(uuid(),?,?,1,1,?,?)",name,code,appid,Utils.getTime());
+		}/**/
+		return true;
 	}
 
 	

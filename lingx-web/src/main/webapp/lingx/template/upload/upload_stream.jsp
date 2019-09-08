@@ -1,12 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%><%@ page import="java.io.*,java.net.URLDecoder,java.text.MessageFormat,com.lingx.core.utils.MD5Utils,com.lingx.core.action.IRequestAware,com.lingx.core.engine.*,com.lingx.core.utils.Utils,com.lingx.core.model.bean.UserBean,com.lingx.core.service.*,com.lingx.core.Constants,com.lingx.core.service.*,com.lingx.core.model.*,java.util.*,com.alibaba.fastjson.JSON,org.springframework.context.ApplicationContext,org.springframework.web.context.support.WebApplicationContextUtils,org.springframework.jdbc.core.JdbcTemplate" %>
 <%!
-public static String getDate() {
-	String dateTime = MessageFormat.format("{0,date,yyyy/MM/dd/}",
-			new Object[] { new java.sql.Date(System.currentTimeMillis()) });
-	return dateTime;
 
-}
 public static String getBasePath(HttpServletRequest request){
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()

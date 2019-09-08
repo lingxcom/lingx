@@ -57,7 +57,7 @@ public class LoginServiceImpl implements ILoginService {
 	@Override
 	public String after(String userid, IContext context) {
 		if("true".equals(this.lingxService.getConfigValue("lingx.login.password.zero6", "false"))){
-			String zeroPwd=this.lingxService.passwordEncode("000000", userid);
+			String zeroPwd=this.lingxService.passwordEncode(this.lingxService.getConfigValue("lingx.login.password.zero6.pwd", "000000"), userid);
 			if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_user where account=? and password=?",userid,zeroPwd)>0){
 				return this.lingxService.getConfigValue("lingx.login.password.edit", "d?c=password");
 			}

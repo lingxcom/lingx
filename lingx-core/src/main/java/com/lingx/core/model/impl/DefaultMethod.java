@@ -61,8 +61,10 @@ public class DefaultMethod  extends AbstractModel implements IMethod{
 	private String prompt;
 	@FieldModelConfig(sort="7",name="操作确认消息",inputType="string")
 	private String confirm;
-	@FieldModelConfig(sort="8",name="自定义界面",inputType="string")
+	@FieldModelConfig(sort="81",name="自定义界面",inputType="string")
 	private String viewUri;
+	@FieldModelConfig(sort="82",name="请求地址")
+	private String requestUrl="";
 	@FieldModelConfig(sort="91",name="扩展参数",inputType="string")
 	private String extParamJson;
 	@FieldModelConfig(sort="98",name="前置脚本",inputType="string")
@@ -76,6 +78,12 @@ public class DefaultMethod  extends AbstractModel implements IMethod{
 	@TreeNode
 	private INode<IExecutor> executors;
 
+	public String getRequestUrl() {
+		return requestUrl;
+	}
+	public void setRequestUrl(String requestUrl) {
+		this.requestUrl = requestUrl;
+	}
 	public Boolean getRightmenu() {
 		return rightmenu;
 	}

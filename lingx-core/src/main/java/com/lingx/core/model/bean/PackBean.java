@@ -37,6 +37,14 @@ public class PackBean {
 	 */
 	private boolean isReboot;
 	/**
+	 * 功能菜单
+	 */
+	private boolean isGncd;
+	/**
+	 * 数据模型
+	 */
+	private boolean isSjmx;
+	/**
 	 * 更新类型，1补丁，2功能包，3插件
 	 */
 	private int type;
@@ -52,10 +60,7 @@ public class PackBean {
 	 * 文件更新
 	 */
 	private List<String> fileList;
-	/**
-	 * 功能树的JSON
-	 */
-	private String funcJson;
+	
 	public String getSecret() {
 		return secret;
 	}
@@ -122,10 +127,17 @@ public class PackBean {
 	public void setType(int type) {
 		this.type = type;
 	}
-	public String getFuncJson() {
-		return funcJson;
+	public boolean isGncd() {
+		return isGncd;
 	}
-	public void setFuncJson(String funcJson) {
-		this.funcJson = funcJson;
+	public void setGncd(boolean isGncd) {
+		this.isGncd = isGncd;
 	}
+	public boolean isSjmx() {
+		return isSjmx;
+	}
+	public void setSjmx(boolean isSjmx) {
+		this.isSjmx = isSjmx;
+	}
+	
 }

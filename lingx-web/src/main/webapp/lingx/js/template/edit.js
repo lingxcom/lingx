@@ -167,6 +167,9 @@ Ext.onReady(function(){
 			
 		}
 		
+
+		var requestUrl="e?e="+entityCode+"&m="+methodCode;
+		if(json.requestUrl){requestUrl=json.requestUrl;}
 		Ext.create("Ext.Viewport",{
 			layout:'fit',
 	        border: false,
@@ -183,7 +186,7 @@ Ext.onReady(function(){
 			            labelWidth: 100,
 			            anchor: '100%'
 			        },
-		        url: "e?e="+entityCode+"&m="+methodCode,
+		        url: requestUrl,
 		        defaultType: 'textfield',
 		        border: false,
 		        items:items,

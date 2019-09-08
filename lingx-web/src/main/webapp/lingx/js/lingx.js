@@ -1,4 +1,4 @@
-var Lingx=Lingx||{};
+﻿var Lingx=Lingx||{};
 Lingx.html=Lingx.html||{};
 Lingx.html.template=Lingx.html.template||{};
 Lingx.html.template.message="";
@@ -345,9 +345,16 @@ function callbackFormSubmit(form, action) {
         }else{
         	var json=action.result;
         		if(json.messages){
-        			for(var i=0;i<json.messages.length;i++){
-        				lgxInfo(json.messages[i]);
+        			if(json.messages.length){
+        				for(var i=0;i<json.messages.length;i++){
+            				lgxInfo(json.messages[i]);
+            			}
+        			}else{
+        				for(var key in json.messages ){
+        					lgxInfo(json.messages[key]);
+        				}
         			}
+        			
         		}
         }
     }
@@ -361,4 +368,19 @@ String.prototype.format=function(param){
 String.prototype.getBytes = function() {
 	var cArr = this.match(/[^x00-xff]/ig);
 	return this.length + (cArr == null ? 0 : cArr.length);
+};
+Date.prototype.format = function (fmt) { //author: meizz 
+    var o = {
+        "M+": this.getMonth() + 1, //月份 
+        "d+": this.getDate(), //日 
+        "h+": this.getHours(), //小时 
+        "m+": this.getMinutes(), //分 
+        "s+": this.getSeconds(), //秒 
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+        "S": this.getMilliseconds() //毫秒 
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
 };

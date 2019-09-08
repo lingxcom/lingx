@@ -16,4 +16,6 @@ public interface IPageService {
 	public String getJsonPage(Map<String,Object> ret,IContext context);
 	public String getJsonNoRet();
 	public String getUrlPage();
+	
+	public void genExtStyle(String basePath);
 }

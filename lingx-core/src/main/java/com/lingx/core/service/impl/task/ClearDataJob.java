@@ -3,6 +3,7 @@ package com.lingx.core.service.impl.task;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -23,12 +24,19 @@ public class ClearDataJob {
 	}
 	@Scheduled(cron="0 30 4 * * ?")
 	public void execute() {
-		this.JdbcTemplate.update("delete from tlingx_userrole where user_id not in (select id from tlingx_user)");
-		this.JdbcTemplate.update("delete from tlingx_userrole where role_id not in (select id from tlingx_role)");
-		this.JdbcTemplate.update("delete from tlingx_rolefunc where role_id not in (select id from tlingx_role)");
-		this.JdbcTemplate.update("delete from tlingx_rolefunc where func_id not in (select id from tlingx_func)");
-		this.JdbcTemplate.update("delete from tlingx_userorg  where user_id not in (select id from tlingx_user)");
-		this.JdbcTemplate.update("delete from tlingx_userorg  where  org_id not in (select id from tlingx_org)");
+		try {
+			this.JdbcTemplate.update("delete from tlingx_userrole where user_id not in (select id from tlingx_user)");
+			this.JdbcTemplate.update("delete from tlingx_userrole where role_id not in (select id from tlingx_role)");
+			this.JdbcTemplate.update("delete from tlingx_rolefunc where role_id not in (select id from tlingx_role)");
+			this.JdbcTemplate.update("delete from tlingx_rolefunc where func_id not in (select id from tlingx_func)");
+			this.JdbcTemplate.update("delete from tlingx_userorg  where user_id not in (select id from tlingx_user)");
+			this.JdbcTemplate.update("delete from tlingx_userorg  where  org_id not in (select id from tlingx_org)");
+			this.JdbcTemplate.update("delete from tlingx_rolemenu where role_id not in (select id from tlingx_role)");
+			this.JdbcTemplate.update("delete from tlingx_rolemenu where menu_id not in (select id from tlingx_menu)");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 	

@@ -73,7 +73,12 @@ public class LingxFilter implements Filter{
 				try {
 					JdbcTemplate jdbc=this.applicationContext.getBean("jdbcTemplate",JdbcTemplate.class);
 					String userid=jdbc.queryForObject("select account from tlingx_user where token=?", String.class,request.getParameter("lingx_user_token"));
-					UserBean userBean=this.userService.getUserBean(userid, ContextServiceImpl.getRequestClientIP(request));
+					String language="zh_CN";
+					if(request.getSession().getAttribute(Constants.SESSION_LANGUAGE)!=null){
+						language=request.getSession().getAttribute(Constants.SESSION_LANGUAGE).toString();
+					}		
+							
+					UserBean userBean=this.userService.getUserBean(userid, ContextServiceImpl.getRequestClientIP(request),language);
 					request.getSession().setAttribute(Constants.SESSION_USER, userBean);
 				} catch (Exception e) {
 					//e.printStackTrace();
@@ -131,8 +136,12 @@ public class LingxFilter implements Filter{
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
 			FilterChain filterChain) throws IOException, ServletException {
 
+		ILingxService lingxService=this.applicationContext.getBean(ILingxService.class);
 		HttpServletRequest request=(HttpServletRequest)servletRequest;
 		HttpServletResponse response=(HttpServletResponse)servletResponse;
+		if("true".equals(lingxService.getConfigValue("lingx.filter.firewall", "false"))){
+			Firewall.fire(request);
+		}
 		this.doFilterEncode(servletRequest, servletResponse);//设置字符集，必须放在前面
 
 		if(request.getSession().getAttribute(Constants.SESSION_USER)==null){

@@ -110,30 +110,36 @@ public class DefaultAction implements IAction,ISessionAware {
 		context.getRequest().setAttribute("userid", userid);
 		if (Utils.isNull(userid) || Utils.isNull(password)) {
 			res.put("code", -1);
-			res.put("message", "账号或密码不可为空");
+			res.put("message",i18n.text("账号或密码不可为空",session));
 			return res;
 		}
 		userid=userid.trim();
 		password=password.trim();
 		if(!this.verifyCodeService.verify(context)){
 			res.put("code", -1);
-			res.put("message", "验证码无效");
+			res.put("message", i18n.text("验证码无效",session));
+			session.setAttribute(Constants.SESSION_YZM, "");
 			return res;
 		}
-		
+		session.setAttribute(Constants.SESSION_YZM, "");
 		if(this.loginService.before(userid, context)){
 			if(this.loginService.login(userid, password, context)){
-				UserBean userBean=this.userService.getUserBean(userid,context.getRequest().getAttribute(IContext.CLIENT_IP).toString());
+				String language="zh_CN";
+				if(context.getSession().get(Constants.SESSION_LANGUAGE)!=null){
+					language=context.getSession().get(Constants.SESSION_LANGUAGE).toString();
+				}		
+						
+				UserBean userBean=this.userService.getUserBean(userid,context.getRequest().getAttribute(IContext.CLIENT_IP).toString(),language);
 				if (userBean.getStatus() != 1) {
 
 					res.put("code", -1);
-					res.put("message", "禁止登录");
+					res.put("message", i18n.text("禁止登录",session));
 					return res;
 				}
 				session.setAttribute(Constants.SESSION_USER, userBean);
 				//context.getSession().put(Constants.SESSION_USER, userBean);
 				res.put("code", 1);
-				res.put("message", "登录成功");
+				res.put("message", i18n.text("登录成功",session));
 				String afterUrl=this.loginService.after(userid, context);
 				if(Utils.isNotNull(afterUrl)){
 					res.put("page", afterUrl);
@@ -145,12 +151,12 @@ public class DefaultAction implements IAction,ISessionAware {
 				return res;
 			}else{
 				res.put("code", -1);
-				res.put("message", "账号或密码无效");
+				res.put("message", i18n.text("账号或密码无效",session));
 				return res;
 			}
 		}else{
 			res.put("code", -1);
-			res.put("message", "登录前置条件验证失败");
+			res.put("message", i18n.text("登录前置条件验证失败",session));
 			return res;
 		}
 	}
@@ -168,7 +174,7 @@ public class DefaultAction implements IAction,ISessionAware {
 			String id = map.get("id").toString();
 			List<Object> sub = subMenu(id, jdbcTemplate, menuLinkFunc, userid,context);
 			map.put("menu", sub);
-			map.put("text", i18n.text(map.get("text")));
+			map.put("text", i18n.text(map.get("text").toString(),userBean.getI18n()));
 			if (sub.size() == 0) {
 				map.put("disabled", true);
 			}
@@ -199,13 +205,13 @@ public class DefaultAction implements IAction,ISessionAware {
 			Map<String, Object> temp = new HashMap<String, Object>();
 			String id = map.get("id").toString();
 			temp.put("itemId",map.get("id"));
-			temp.put("text", i18n.text(map.get("name")));
+			temp.put("text", i18n.text(map.get("name").toString(),context.getUserBean().getI18n()));
 			temp.put(
 					"handler",
 					new Function("function(){ addTab('"
 							+ id
 							+ "','"
-							+ i18n.text(map.get("name"))
+							+ i18n.text(map.get("name").toString(),context.getUserBean().getI18n())
 							+ "','"
 							+ String.format("e?e=%s&m=%s"+getExtWhere(map.get("remark").toString(),context),
 									map.get("module"), map.get("func")) + "')}"));

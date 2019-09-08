@@ -83,11 +83,11 @@ public class DefaultField extends AbstractModel implements IField{
 	@FieldModelConfig(sort="F",name="列表宽度",inputType="string")
 	private String width="";
 	
-	@JSONField(serialize=false)
+	//@JSONField(serialize=false)
 	@FieldModelConfig(sort="G",name="是否转义",inputType="string")
 	private Boolean escape;
 	
-	@JSONField(serialize=false)
+	//@JSONField(serialize=false)
 	@FieldModelConfig(sort="H",name="是否连接",inputType="string")
 	private Boolean isEntityLink;
 	

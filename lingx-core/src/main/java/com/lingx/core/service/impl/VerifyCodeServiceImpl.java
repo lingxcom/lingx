@@ -16,6 +16,7 @@ import com.lingx.core.Constants;
 import com.lingx.core.engine.IContext;
 import com.lingx.core.service.ILingxService;
 import com.lingx.core.service.IVerifyCodeService;
+import com.lingx.core.utils.Utils;
 
 /** 
  * @author www.lingx.com
@@ -84,7 +85,7 @@ public class VerifyCodeServiceImpl implements IVerifyCodeService {
 			try {
 				String reqYzm=context.getRequest().getParameter("verifycode");
 				String sesYzm=context.getSession().get(Constants.SESSION_YZM).toString();
-				return sesYzm.equals(reqYzm);
+				return Utils.isNotNull(sesYzm)&&sesYzm.equals(reqYzm);
 			} catch (Exception e) {
 				return false;
 			}

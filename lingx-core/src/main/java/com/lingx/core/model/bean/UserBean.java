@@ -27,6 +27,7 @@ public class UserBean {
 	private String loginCount;
 	private Integer status;
 	private String token;
+	private String i18n;
 	private AppBean app;
 	private RegexpBean regexp;
 	private RegexpBean sqlin;//由于  in的执行效率远远高于regexp所以实现该功能，值包括()
@@ -135,6 +136,12 @@ public class UserBean {
 	}
 	public void setSqlin(RegexpBean sqlin) {
 		this.sqlin = sqlin;
+	}
+	public String getI18n() {
+		return i18n;
+	}
+	public void setI18n(String i18n) {
+		this.i18n = i18n;
 	}
 	
 }

@@ -16,8 +16,8 @@
 	
 
 	String lanuage="";
-	if(session.getAttribute("LINGX_LANUAGE")!=null){
-		lanuage=session.getAttribute("LINGX_LANUAGE").toString();
+	if(session.getAttribute("SESSION_LANGUAGE")!=null){
+		lanuage=session.getAttribute("SESSION_LANGUAGE").toString();
 	}
 	II18NService i18n=spring.getBean(II18NService.class);
 	List<Map<String,Object>> list=i18n.getLanuages();

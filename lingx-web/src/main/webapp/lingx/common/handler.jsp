@@ -75,10 +75,11 @@ if("orgtree".equals(cmd)){
 }else if("lanuage".equals(cmd)){
 	II18NService i18n=applicationContext.getBean(II18NService.class);
 	String lanuage=request.getParameter("lanuage");
-	session.setAttribute("LINGX_LANUAGE", lanuage);
+	session.setAttribute("SESSION_LANGUAGE", lanuage);
 	i18n.setLanuage(lanuage);
+	userBean.setI18n(lanuage);
 	String appName=jdbc.queryForObject("select name from tlingx_app where id=?",String.class,userBean.getApp().getId());
-	userBean.getApp().setName(i18n.text(appName));
+	//userBean.getApp().setName(i18n.text(appName));
 	out.print(JSON.toJSONString(ret));
 }else if("listUserByOrgId".equals(cmd)){
 	String id=request.getParameter("id");

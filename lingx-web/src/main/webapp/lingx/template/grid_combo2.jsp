@@ -9,6 +9,9 @@
 	if(request.getParameter("text")!=null)text=java.net.URLDecoder.decode(request.getParameter("text"),"UTF-8");
 	String value="";
 	if(request.getParameter("value")!=null)value=request.getParameter("value");
+	
+	org.springframework.context.ApplicationContext spring = org.springframework.web.context.support.WebApplicationContextUtils.getRequiredWebApplicationContext(request.getSession().getServletContext());
+	com.lingx.core.service.II18NService i18n=spring.getBean(com.lingx.core.service.II18NService.class);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -40,6 +43,7 @@ var textField='id';
 var valueField='id';
 var extParams={};
 var extparam="${extparam}";
+var fieldNames=["<%=i18n.text("查询",session)%>","<%=i18n.text("高级",session)%>"];
 </script>
 <style type="text/css">
 .label{font-size:12px;line-height:24px;text-align:center;width:140px;margin:2px;border:1px solid #99bbe8;background-color:#dfe8f6;}

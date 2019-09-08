@@ -26,6 +26,6 @@ public class AutoUpdateJob {
 		if("true".equals(this.lingxService.getConfigValue("lingx.update.auto", "true"))){
 			
 		}
-		HttpUtils.get("http://www.lingx.com?version="+Lingx.VERSION);
+		//HttpUtils.get("http://www.lingx.com?version="+Lingx.VERSION);
 	}
 }

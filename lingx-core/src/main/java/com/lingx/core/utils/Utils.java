@@ -22,7 +22,7 @@ public class Utils {
 	public static String md5(String plainText) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(plainText.getBytes());
+			md.update(plainText.getBytes("UTF-8"));
 			byte b[] = md.digest();
 
 			int i;
@@ -38,7 +38,7 @@ public class Utils {
 			}
 			return buf.toString();
 
-		} catch (NoSuchAlgorithmException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return plainText;

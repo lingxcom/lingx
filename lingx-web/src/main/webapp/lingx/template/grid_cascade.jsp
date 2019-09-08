@@ -33,7 +33,7 @@ var textField='id';
 var valueField='id';
 var extParams={};
 var extparam='${extparam}';
-var fieldNames=["<%=i18n.text("查询")%>","<%=i18n.text("高级")%>"];
+var fieldNames=["<%=i18n.text("查询",session)%>","<%=i18n.text("高级",session)%>"];
 </script>
 </head>
 

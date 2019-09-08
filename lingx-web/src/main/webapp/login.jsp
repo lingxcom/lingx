@@ -14,7 +14,7 @@
 <meta name="renderer" content="webkit" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="<%=basePath%>">
-<title>系统登录</title>
+<title>LINGX模型驱动设计平台-系统登录</title>
 <script type="text/javascript" src="<%=basePath %>js/jquery.js"></script>
 <script type="text/javascript" src="<%=basePath %>js/md5-min.js"></script>
 <script type="text/javascript" src="<%=basePath %>lingx/js/lingx.js"></script>
@@ -27,6 +27,7 @@ function login(){
 			window.location.href=json.page;
 		}else{
 			alert(json.message);
+			$("#yzm")[0].src='verifyCodeImage?random='+Math.random();
 		}
 	},"json");
 }
@@ -133,28 +134,29 @@ padding-left:5px;
 <tr>
 <td style="" align="center">
 <div style="width:1000px;height:80px;line-height:80px;text-align:left;">
-<h1>LINGX领域驱动设计</h1>
+<h1>
+<img alt="" src="lingx/images/longyan.png" height="50" style="margin-bottom:-12px;" > 龙眼模型驱动开发平台</h1>
 </div>
 
 </td>
 
 </tr>
 <tr>
-<td style="background-color:#39bff2;" align="center" valign="middle">
+<td style="background-color:#252a2f;" align="center" valign="middle">
 <div style="width:1000px;height:400px;">
 
 <table width="100%" border="0" cellSpacing="0" cellPadding="0">
 <tr>
 <td>
 <ul>
-<li>超管账号：lingx，密码:000000</li>
-<li>模型驱动：对象、配置、属性、方法、验证器、解释器、执行器。</li>
-<li>在线开发：WEB在线配置开发、在线预览、在线部署、立即使用。</li>
-<li>基于配置：用简单的配置可完成系统80%的开发，快速便捷。</li>
-<li>工作流程：在线流程、表单设计，在线部署应用、审批、管理。</li>
-<li>分级授权：组织、角色、功能、菜单，通过数据权限实现分级授权。</li>
+<li>模型驱动：基于数据库表直接生成数据的增删改查，非源代码生成。</li>
 <li>控件丰富：数据输入控件丰富，无需二次开发整合，一键配置。</li>
+<li>数据查询：重新定义数据查询方式，可动态配置、简化多重关连。</li>
+<li>基于配置：用简单的配置可完成系统80%的开发，快速便捷。</li>
+<li>权限管理：强大的、可动态配置数据权限及细粒度的功能权限。</li>
 <li>级联展示：列表级联、树型联级、最多支持三重级联。</li>
+<li>在线开发：WEB在线配置开发、在线预览、在线部署、立即使用。</li>
+<li>工作流程：在线流程、表单设计，在线部署应用、审批、管理。</li>
 </ul>
 </td>
 <td width="400" valign="middle">
@@ -171,7 +173,7 @@ padding-left:5px;
 <td height="50"  class="field-label">密&nbsp;码：</td><td align="left"><input id="password" class="ipt" type="password" name="password"></td>
 </tr>
 <tr>
-<td height="50"  class="field-label">验证码：</td><td align="left"><input id="code" class="ipt" type="text" name="code" style="width:80px;"> <img align="absmiddle" title="看不清，请单击" style="cursor:pointer" src="verifyCodeImage" onclick="javascript:this.src='verifyCodeImage?random='+Math.random()"> </td>
+<td height="50"  class="field-label">验证码：</td><td align="left"><input id="code" class="ipt" type="text" name="code" style="width:80px;"> <img id="yzm" align="absmiddle" title="看不清，请单击" style="cursor:pointer" src="verifyCodeImage" onclick="javascript:this.src='verifyCodeImage?random='+Math.random()"> </td>
 </tr>
 <tr>
 <td height="30" colspan="2" align="right"> <input id="checkbox" type="checkbox" /><label for="checkbox" style="font-size:14px;color:#999"> 记住账号和密码</label>
@@ -180,7 +182,7 @@ padding-left:5px;
 </tr>
 <tr>
 <td height="50" colspan="2" align="center" valign="middle">
-<button onclick="login();" style="width:260px;height:40px;line-height:40px;background-color:#69ca3d;color:#fff;font-size:20px;cursor:pointer;" class="yj05">登  录</button>
+<button onclick="login();" style="width:260px;height:40px;line-height:40px;background-color:#00c1de;color:#fff;font-size:20px;cursor:pointer;" class="yj05">登  录</button>
  </td>
 </tr>
 <tr>

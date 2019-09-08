@@ -1,9 +1,16 @@
 package com.lingx.core.service.impl;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
@@ -20,6 +27,8 @@ import com.lingx.core.service.IPageService;
  */
 @Component(value="lingxPageService")
 public class PageServiceImpl implements IPageService {
+	@Resource(name="jdbcTemplate")
+	private JdbcTemplate jdbcTemplate;
 	private Map<String,IPage> pages;
 	private boolean sn=false;
 	public int c=0;
@@ -72,5 +81,20 @@ public class PageServiceImpl implements IPageService {
 	public String getJsonPage(Map<String,Object> ret, IContext context) {
 		context.getRequest().setAttribute(Constants.REQUEST_JSON, JSON.toJSONString(ret));
 		return Page.PAGE_JSON;
+	}
+	@Override
+	public void genExtStyle(String basePath) {
+		String template=".%s{ background:url('../%s') no-repeat !important;}";
+		List<Map<String,Object>> list=this.jdbcTemplate.queryForList("select path,code from tlingx_icon");
+		StringBuilder sb =new StringBuilder();
+		for(Map<String,Object> map:list){
+			sb.append(String.format(template, map.get("code"), map.get("path"))).append("\r\n");
+		}
+		try {
+			FileUtils.write(new File(basePath+"/js/lingx-ext-icon.css"), sb.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

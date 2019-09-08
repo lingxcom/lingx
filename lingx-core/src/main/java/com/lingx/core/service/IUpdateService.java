@@ -11,6 +11,6 @@ import java.util.Map;
  */
 public interface IUpdateService {
 	
-	public boolean update(File file,String basePath);
-	public boolean update(URL url,String basePath);
+	public boolean update(File file,String basePath,String ts);
+	public boolean update(URL url,String basePath,String ts);
 }

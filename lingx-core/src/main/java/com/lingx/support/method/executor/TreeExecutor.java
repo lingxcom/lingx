@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.alibaba.fastjson.JSON;
 import com.lingx.core.SpringContext;
 import com.lingx.core.engine.IContext;
 import com.lingx.core.engine.IPerformer;
@@ -62,11 +63,14 @@ public class TreeExecutor extends AbstractModel implements IExecutor {
 			}else{
 				//智能取ID
 				id=getRootID(tableName, id,subCondition.toString(),context);
+				//System.out.println("智能取ID："+id);
 				if("0".equals(id)){
 					list = jdbcTemplate.queryForList(LingxUtils.sqlInjection(String
 							.format("select * from %s where fid='%s' %s ",tableName, id,subCondition)));
 				}else{
+					//System.out.println(LingxUtils.sqlInjection(String.format("select * from %s where id='%s' %s ",tableName, id,subCondition)));
 					list= this.jdbcTemplate.queryForList(LingxUtils.sqlInjection(String.format("select * from %s where id='%s' %s ",tableName, id,subCondition)));
+					//System.out.println(JSON.toJSONString(list));
 				}
 			}
 		}else{
@@ -124,12 +128,17 @@ public class TreeExecutor extends AbstractModel implements IExecutor {
 			}else if("tlingx_func".equals(tableName)){
 				tmp=context.getUserBean().getApp().getFuncRootId();
 			}
+
+			int c= this.jdbcTemplate.queryForInt(LingxUtils.sqlInjection(String.format("select count(*) from %s where id='%s' %s ",tableName, tmp,condition)));
+			//System.out.println("c:"+c);
+			if(c>0)
 			return tmp;
 			
 		}
 		//特殊处理结束
 		String temp=id;
 		String sql="select id,fid from %s where 1=1 %s";
+		//System.out.println("ZN:"+LingxUtils.sqlInjection(String.format(sql, tableName,condition)));
 		List<Map<String,Object>> list=jdbcTemplate.queryForList(LingxUtils.sqlInjection(String.format(sql, tableName,condition)));
 		Set<String> set=new HashSet<String>();
 		for(Map<String,Object> map:list){
@@ -137,10 +146,10 @@ public class TreeExecutor extends AbstractModel implements IExecutor {
 		}
 		
 		for(Map<String,Object> map:list){
-			if(set.contains(map.get("fid"))){
+			if(set.contains(map.get("fid").toString())){
 				
 			}else{
-				temp=map.get("fid").toString();
+				temp=map.get("id").toString();
 				break;
 			}
 		}

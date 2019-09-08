@@ -9,6 +9,10 @@ String basePath = request.getScheme() + "://"
 org.springframework.context.ApplicationContext spring = org.springframework.web.context.support.WebApplicationContextUtils.getRequiredWebApplicationContext(request.getSession().getServletContext());
 ILingxService lingx=spring.getBean(ILingxService.class);
 if(!lingx.isSuperman(request))return;
+java.io.File f=new java.io.File(request.getRealPath("temp"));
+if(f.exists()){
+org.apache.commons.io.FileUtils.cleanDirectory(f);
+}
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -24,7 +28,7 @@ var handler="<%=basePath %>lingx/model/update/handler.jsp";
 var idsArray=new Array();
 var textsArray=new Array();
 
-var appid="";
+var appid="${SESSION_USER.app.id}";
 $(function(){
 	$('#filename').bind('keyup', function(event){
 		   if (event.keyCode=="13"){
@@ -32,14 +36,14 @@ $(function(){
 		   }
 		});
 
-	$.post("e?e=tlingx_app&m=combo&t=3",{},function(json){
+ 	$.post("e?e=tlingx_app&m=combo&t=3",{},function(json){
 		$.each(json,function(index,obj){
 			$("#appid").append("<option value='"+obj.value+"' >"+obj.text+"</option>");// "+(obj.value==rule_id?" selected=selected ":"")+"
 		});
 	},"JSON");
 	$("#appid").bind("change",function(){
 		appid=$("#appid").val();
-	});
+	}); 
 });
 
 function addObject(etype){
@@ -76,7 +80,7 @@ function replayEntity(){
 //end
 function findAndAddFile(){
 	var filename=$("#filename").val();
-	if(!filename||filename.indexOf(".")==-1){lgxInfo("文件名不可为空"); return;}
+	if(!filename){lgxInfo("文件名不可为空"); return;}
 	$.post(handler,{c:"findAndAddFile",filename:filename},function(json){
 		for(var i=0;i<json.list.length;i++){
 			$("#list2").append("<li>[<a onclick='delLi(this);' href='javascript:;'>删除</a>] <span>"+json.list[i]+"</span></li>");
@@ -112,15 +116,19 @@ function next(){
 		lgxInfo("更新应用不可为空");
 		return;
 	}
-	type=$('input[name="xjlx"]:checked').val();
+	type=2;
 	reboot=$('input[name="sfcq"]:checked').val();
 	option=$('input[name="option"]:checked').val();
+	var gncd=$('input[name="gncd"]:checked').val();
+	var sjmx=$('input[name="sjmx"]:checked').val();
 	entityids=$("#entity_value").val();
 	$.post(handler,{c:"upload",
-		appid:$("#appid").val(),
+		appid:appid,
 		entityids:entityids,
 		files:files,
 		sqltext:sqltext,
+		gncd:gncd,
+		sjmx:sjmx,
 		remark:remark,
 		type:type,
 		reboot:reboot,
@@ -139,7 +147,7 @@ function next(){
 
 }
 
-function download(){
+function download1(){
 	if(!confirm("确认是否打包并下载到本地吗？"))return;
 	var entityids="",files="",sqltext,remark,type,reboot,isdata;
 	/* var temp1=$("#list1").find("span");
@@ -160,9 +168,9 @@ function download(){
 		lgxInfo("更新应用不可为空");
 		return;
 	}
-	type=$('input[name="xjlx"]:checked').val();
+	type=2;
 	reboot=$('input[name="sfcq"]:checked').val();
-	option=$('input[name="option"]:checked').val();
+	option=1;
 	entityids=$("#entity_value").val();
 	var url=Lingx.urlAddParams(handler,{c:"packAndDownload",
 		appid:$("#appid").val(),
@@ -200,30 +208,40 @@ button{padding-left:10px;padding-right:10px;}
 <tr><td  align="right"><span style="color:red">*</span>上传密钥：</td><td><input id="secret" style="width:600px;" value="none"> 密钥只为作为能不能上传到服务器的标志，不影响下载与更新</td></tr>
 <tr style="display:none;"><td  align="right"><span style="color:red">*</span>更新名称：</td><td><input id="name" type="hidden" style="width:600px;" value="LINGX平台更新包"> </td></tr>
 
-<tr><td align="right"><span style="color:red">*</span>更新描述：</td><td><textarea id="remark" style="width:600px;height:100px;"></textarea></td></tr>
+<tr><td align="right"><span style="color:red">*</span>更新描述：</td><td><input id="remark" style="width:600px;"></input></td></tr>
 
 <tr><td  align="right"><span style="color:red">*</span>选择应用：</td><td><select id="appid" name="appid"><option value="0">--请选择打包应用--</option>
-</select> </td></tr>
-<tr><td width="120" align="right"><span style="color:red">*</span>数据类型：</td><td>
+</select> </td></tr> 
+<!-- <tr><td width="120" align="right"><span style="color:red">*</span>数据类型：</td><td>
 <input id="id1" type="radio" name="xjlx" value="1" checked/><label for="id1">系统补丁</label>
 <input id="id2" type="radio" name="xjlx" value="2"/><label for="id2">应用更新</label>
 <input id="id3" type="radio" name="xjlx" value="3"/><label for="id3">功能插件</label>
- </td></tr>
-<tr><td width="120" align="right"><span style="color:red">*</span>是否重启：</td><td>
-<input id="ida3" type="radio" name="sfcq" value="1"/><label for="ida3">需要重启</label>
-<input id="ida4" type="radio" name="sfcq" value="0" checked/><label for="ida4">不需要重启</label>
+ </td></tr> -->
+<tr><td width="200" align="right"><span style="color:red">*</span>是否需要重启：</td><td>
+<input id="ida3" type="radio" name="sfcq" value="1"/><label for="ida3">需要</label>
+<input id="ida4" type="radio" name="sfcq" value="0" checked/><label for="ida4">不需要</label>
 </td></tr>
+
 <tr><td width="120" align="right"><span style="color:red">*</span>是否需要字典：</td><td>
 <input id="idb3" type="radio" name="option" value="1"/><label for="idb3">需要</label>
 <input id="idb4" type="radio" name="option" value="0" checked/><label for="idb4">不需要</label>
 </td></tr>
 
+<tr><td  align="right"><span style="color:red">*</span>是否需要功能菜单：</td><td>
+<input id="idc3" type="radio" name="gncd" value="1"/><label for="idc3">需要</label>
+<input id="idc4" type="radio" name="gncd" value="0" checked/><label for="idc4">不需要</label>
+</td></tr>
 
+<tr style="display:none;"><td  align="right"><span style="color:red">*</span>是否需要数据模型：</td><td>
+<input id="idd3" type="radio" name="sjmx" value="1" checked/><label for="idd3">需要</label>
+<input id="idd4" type="radio" name="sjmx" value="0" /><label for="idd4">不需要</label>
+</td></tr>
+
+
+<!--  -->
 <tr><td width="120"  align="right">实体对象：</td><td>
 <input type="hidden" id="entity_value" /><input id="entity_text" style="width:600px;" readonly="readonly"/>
 <button onclick="addObject('tlingx_entity');">选择</button>
-<!--  <button onclick="addToList();">添加到列表中</button> 
-<span style="color:red;">输入框的对象，不提交,需要添加到更新对象列表中</span> 更新对象列表 -->
 <div>
 <hr/>
 <ul id="list1">
@@ -242,7 +260,7 @@ button{padding-left:10px;padding-right:10px;}
 </div>
 </td></tr>
 <tr><td align="right">SQL脚本：</td><td><textarea id="sqltext" style="width:600px;height:100px;"></textarea> </td></tr>
-<tr><td colspan="2" align="center"><button onclick="download()">打包并下载到本地</button> 
+<tr><td colspan="2" align="center"><button onclick="download()">打包并下载到本地</button>  <!-- -->
 <button onclick="next()" >打包并上传到服务器</button> 
 
 </td></tr>

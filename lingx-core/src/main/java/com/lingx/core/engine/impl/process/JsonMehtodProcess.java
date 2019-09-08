@@ -15,6 +15,7 @@ import com.lingx.core.exception.LingxProcessException;
 import com.lingx.core.exception.LingxScriptException;
 import com.lingx.core.model.IExecutor;
 import com.lingx.core.model.IMethod;
+import com.lingx.core.service.II18NService;
 import com.lingx.core.service.IPageService;
 import com.lingx.core.utils.LingxUtils;
 
@@ -27,6 +28,8 @@ import com.lingx.core.utils.LingxUtils;
 public class JsonMehtodProcess implements IMethodProcess {
 	@Resource
 	private IPageService pageService;
+	@Resource
+	private II18NService i18nService;
 	@Override
 	public String methodProcess(IMethod method, Map<String, String> params,
 			IContext context,IPerformer performer) throws LingxProcessException {
@@ -35,7 +38,9 @@ public class JsonMehtodProcess implements IMethodProcess {
 			for(IExecutor exe:method.getExecutors().getList()){
 				performer.addParam("ExeRet", ret);
 				ret=exe.execute(context,performer);
-				
+				if(ret instanceof String){
+					ret=this.i18nService.text(ret.toString(), context.getUserBean().getI18n());
+				}
 			}
 			context.getRequest().setAttribute(Constants.REQUEST_JSON, JSON.toJSONString(LingxUtils.format(ret)));
 		} catch (LingxScriptException e) {

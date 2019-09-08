@@ -24,9 +24,9 @@ private static synchronized boolean insertFunc(JdbcTemplate jdbc,String module, 
 			}
 			String fid=getFuncFid(jdbc,module,func);
 			String name = String.format("%s-%s", se.getName(), methodName);
-			sql = "insert into tlingx_func(id,name,module,func,type,fid)values(uuid(),?,?,?,2,?)";
+			sql = "insert into tlingx_func(id,name,module,func,type,fid)values(?,?,?,?,2,?)";
 			jdbc.update(sql,
-					new Object[] { name, module, func,fid });
+					new Object[] {String.format("%s-%s", module, func), name, module, func,fid });
 		}
 		return false;
 	} else {

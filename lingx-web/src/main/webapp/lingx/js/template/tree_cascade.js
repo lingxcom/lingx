@@ -48,6 +48,14 @@ Ext.onReady(function(){
 			if(obj.comboType=='ref-value')valueField=obj.code;
 		});
 		//加入刷新按钮
+		if(json.toolbar.length>0)
+		json.toolbar.push({
+			text:"刷新",
+			iconCls:"Reload",
+			handler:function(){
+				window.location.reload();
+			}
+		});
 		//json.toolbar.push({iconCls:"icon-reload",text:"刷新",handler:reloadMethod});
 	Ext.create("Ext.Viewport",{
 		id:'viewport',
