@@ -29,7 +29,7 @@ var handlerJsp="<%=basePath%>lingx/model/editor/handler.jsp";
 CUser 当前用户<br/>
 JDBC 数据库操作<br/>
 LINGX 综合API<br/>
-I18N 多语言类<br/>
+LANGUAGE 多语言类<br/>
 REQUEST 客户端请求<br/>
 ENTITY_CODE 当前的实体代码<br/>
 <a href="js/icon_summary.png" target="_blank">ICON图标</a>
