@@ -12,13 +12,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.fastjson.JSON;
 import com.lingx.core.engine.IContext;
 import com.lingx.core.engine.IPerformer;
 import com.lingx.core.exception.LingxScriptException;
 import com.lingx.core.model.IEntity;
 import com.lingx.core.model.IField;
 import com.lingx.core.model.IInterpreter;
+import com.lingx.core.service.II18NService;
 import com.lingx.core.service.IInterpretService;
 import com.lingx.core.service.IModelService;
 import com.lingx.core.utils.Utils;
@@ -38,6 +38,9 @@ public class InterpretServiceImpl implements IInterpretService {
 	private IModelService modelService;
 	@Resource(name="jdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
+	@Resource
+	private II18NService i18n;
+	
 	private List<Map<String,Object>> comboData;
 	@Override
 	public Map<String, String> inputFormat(Map<String, String> map,List<IField> fields, IEntity entity, IContext context,
@@ -101,7 +104,7 @@ public class InterpretServiceImpl implements IInterpretService {
 			listMap=null;subEntity=null;etype=null;vField=null;params=null;tableName=null; listField=null;
 			 params = new StringBuilder();
 			 etype = field.getRefEntity();
-			 if(!field.getEscape())continue;
+			// if(!field.getEscape())continue;
 			if (Utils.isNotNull(etype)) {
 				 subEntity = modelService.getCacheEntity(etype);
 				if (subEntity == null)
@@ -146,7 +149,7 @@ public class InterpretServiceImpl implements IInterpretService {
 					m.put(field.getCode(), sb.toString());
 					//field.setValue(sb.toString());
 				}else{
-						
+					String text="";
 					if(listMap==null)listMap=new ArrayList<Map<String,Object>>();
 					if (listMap.size()==0){//listMap == null
 						
@@ -156,6 +159,9 @@ public class InterpretServiceImpl implements IInterpretService {
 						map.put("id", m.get(field.getCode()));
 						map.put("etype", etype);
 						//continue;
+						if("tlingx_optionitem".equals(etype)){
+							map.put("text", i18n.text(map.get("text").toString(), context.getUserBean().getI18n()));
+						}
 						listMap.add(map);
 					}else{
 						for(Map<String,Object> map:listMap){
@@ -164,13 +170,43 @@ public class InterpretServiceImpl implements IInterpretService {
 								sb.append(map.get(s.toUpperCase())).append("-");
 							}
 							sb.deleteCharAt(sb.length() - 1);
+							text=sb.toString();
+							
 							map.put("text", sb.toString());
 							map.put("value", m.get(field.getCode()));
 							map.put("etype", etype);
+							
+							if("tlingx_optionitem".equals(etype)){
+								map.put("text", i18n.text(map.get("text").toString(), context.getUserBean().getI18n()));
+							}
 						}
 					}
 					// m.put(field.getCode(), map);
-					m.put(field.getCode(), listMap);
+					if(field.getIsEntityLink()){
+						m.put(field.getCode(), listMap);
+					}else{
+						m.put(field.getCode(), text);
+						//当etype==null时，不处理引用显示，反做解释器，跟下面一样
+						if(field.getInterpreters()!=null&&field.getInterpreters().getList().size()>0){
+							List<IInterpreter> list=field.getInterpreters().getList();
+							Object val=m.get(field.getCode());
+							for(IInterpreter temp:list){
+								try {
+									if(IInterpreter.TYPE_EXPRESSION.equals(temp.getType())){
+										val=temp.output(val, context,performer);
+									}else{
+										IInterpreter obj=getInterpreterTemplate(temp.getType());//defaultInterpreter.get(temp.getType());
+										val=obj.output(val, context,performer);
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+							//field.setValue(val);
+							m.put(field.getCode(), val);
+						}
+						//field.setValue(m.get(field.getCode()));
+					}
 				}
 			}else{
 				//当etype==null时，不处理引用显示，反做解释器
@@ -192,7 +228,7 @@ public class InterpretServiceImpl implements IInterpretService {
 					//field.setValue(val);
 					m.put(field.getCode(), val);
 				}
-				field.setValue(m.get(field.getCode()));
+				//field.setValue(m.get(field.getCode()));
 				//m.put(field.getCode(), interpreter.interpret(performer, field, null));
 				
 			}

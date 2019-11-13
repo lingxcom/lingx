@@ -846,7 +846,7 @@ public class ModelServiceImpl implements IModelService {
 			}
 			//c.put("flex", 1);
 			//c.put("width", 10);
-			if(field.getRefEntity()!=null&&!"".equals(field.getRefEntity())&&field.getEscape()){//tlingx_optionitem_NO 这里本来的处理，是为了字典在界面上不能点击，但会导致，需要该字段字时，会取不到，所以取消
+			if(field.getRefEntity()!=null&&!"".equals(field.getRefEntity())&&field.getEscape()&&field.getIsEntityLink()){//tlingx_optionitem_NO 这里本来的处理，是为了字典在界面上不能点击，但会导致，需要该字段字时，会取不到，所以取消
 				if(field.getIsEntityLink()&&!"tlingx_optionitem".equals(field.getRefEntity())){
 					IEntity refEntity=getCacheEntity(field.getRefEntity());
 					m.put("type", "object");
@@ -1074,7 +1074,7 @@ public class ModelServiceImpl implements IModelService {
 				}
 				//20151222 end
 				if(!map.containsKey(field.getCode()))continue;
-				if(Utils.isNull(field.getRefEntity())){
+				if(Utils.isNull(field.getRefEntity())||!field.getEscape()){
 					field.setValue(map.get(field.getCode()));
 				}else{
 					String sql="select * from %s where %s=?";
@@ -1088,6 +1088,7 @@ public class ModelServiceImpl implements IModelService {
 					List<String> text=getTextField(entity);
 					String value=getValueField(entity);
 					Map<String,Object> m=null;
+					String realText="";
 					try {
 						String realValue=map.get(field.getCode())==null?field.getValue().toString():map.get(field.getCode()).toString();
 						if(realValue.indexOf(",")==-1){//一个值
@@ -1099,6 +1100,7 @@ public class ModelServiceImpl implements IModelService {
 								sb.append(m.get(s)).append("-");
 							}
 							sb.deleteCharAt(sb.length()-1);
+							realText=sb.toString();
 							m.put("text", sb.toString());
 							m.put("value", m.get(value));
 							m.put("etype", entity.getCode());
@@ -1116,6 +1118,7 @@ public class ModelServiceImpl implements IModelService {
 							}
 							texts.deleteCharAt(texts.length()-1);
 							values.deleteCharAt(values.length()-1);
+							realText=texts.toString();
 							m=new HashMap<String,Object>();
 							m.put("id", values.toString());
 							m.put("text", texts.toString());
@@ -1134,7 +1137,12 @@ public class ModelServiceImpl implements IModelService {
 						m.put("ename", "");
 						m.put("exists", false);
 					}
-					field.setValue(m);
+					if(field.getIsEntityLink()){
+						field.setValue(m);
+					}else{
+						field.setValue(realText);
+					}
+					
 				}
 			}
 			
@@ -1144,7 +1152,7 @@ public class ModelServiceImpl implements IModelService {
 			
 			for(IField field:listFields){
 				
-				field.setValue(this.interpretService.outputFormat(field, null,performer));
+				field.setValue(this.interpretService.outputFormat(field, context,performer));
 			}
 		} catch (Exception e) {
 			//e.printStackTrace();
@@ -1198,13 +1206,7 @@ public class ModelServiceImpl implements IModelService {
         return mac;  
     }  
       
-    /** 
-    * @MethodName: getUnixMACAddress  
-    * @description : 获取Unix网卡的mac地址 
-    * @author：liming 
-    * @date： 2013-5-5 下午04:49:59 
-    * @return String 
-    */  
+  
 	private static String getUnixMACAddress() {  
         String mac = null;  
         BufferedReader bufferedReader = null;  

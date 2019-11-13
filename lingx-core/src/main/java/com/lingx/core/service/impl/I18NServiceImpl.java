@@ -123,10 +123,21 @@ public class I18NServiceImpl implements II18NService {
 			for(String temp:list){
 				temp=temp.trim();
 				if(temp.startsWith("#"))continue;//注释
+
+				index=temp.indexOf(">=<");//支持HTML标签翻译
+				if(index>0){
+
+					key=temp.substring(0,index+1);
+					value=temp.substring(index+2);
+					//System.out.println(key +" VS "+value);
+					map.put(key, value);
+					continue;
+				}
 				index=temp.indexOf("=");
 				if(index==-1)continue;
 				key=temp.substring(0,index);
 				value=temp.substring(index+1);
+				//System.out.println(key +" VS "+value);
 				map.put(key, value);
 			}
 		} catch (IOException e) {

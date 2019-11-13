@@ -52,5 +52,12 @@ public class ApiConfig {
 		return i18n;
 		
 	}
+	@Bean(name="LANGUAGE")
+	public IScriptApi getI18N2(){
+		DefaultScriptApi i18n=new DefaultScriptApi();
+		i18n.setBean(this.i18n);
+		return i18n;
+		
+	}
 	
 }

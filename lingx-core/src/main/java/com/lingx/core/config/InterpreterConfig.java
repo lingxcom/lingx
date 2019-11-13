@@ -7,6 +7,7 @@ import com.lingx.core.model.IInterpreter;
 import com.lingx.core.model.impl.ExpressionInterpreter;
 import com.lingx.support.model.interpreter.DateTime14Interpreter;
 import com.lingx.support.model.interpreter.DateTimeToDateInterpreter;
+import com.lingx.support.model.interpreter.I18nInterpreter;
 import com.lingx.support.model.interpreter.Time4Interpreter;
 
 /** 
@@ -49,6 +50,14 @@ public class InterpreterConfig {
 		Time4Interpreter ei=new Time4Interpreter();
 		ei.setName("智能输出DT14");
 		ei.setType("DT14BI");
+		return ei;
+	}
+	
+	@Bean
+	public IInterpreter getI18NInterpreter(){
+		I18nInterpreter ei=new I18nInterpreter();
+		ei.setName("国际化输出");
+		ei.setType("I18N");
 		return ei;
 	}
 }
