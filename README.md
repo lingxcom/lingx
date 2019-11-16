@@ -1,4 +1,4 @@
-# 欢迎使用 灵犀PaaS平台
+# 免费开源的轻量级PaaS平台  - **灵犀**
 
 技术文档：http://docs.lingx.com
 
