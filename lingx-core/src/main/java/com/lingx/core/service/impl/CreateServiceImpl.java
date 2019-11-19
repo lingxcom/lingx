@@ -7,11 +7,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import net.sourceforge.pinyin4j.PinyinHelper;
-import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
-import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
-import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
-import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -42,7 +37,7 @@ public class CreateServiceImpl implements ICreateService {
 	private ILingxService lingxService;
 	@Override
 	public boolean create(String name, String options,String appid,UserBean userBean) {
-		int appSN=this.jdbcTemplate.queryForInt("select sn from tlingx_app where id=?",appid);
+		/*int appSN=this.jdbcTemplate.queryForInt("select sn from tlingx_app where id=?",appid);
 		String tableName="a"+appSN+"_"+lingxService.getPinyin(name);
 		List<Map<String,String>> jsons=(List<Map<String,String>>)JSON.parse(options);
 		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
@@ -72,7 +67,7 @@ public class CreateServiceImpl implements ICreateService {
 		modelService.save(entity);
 		if(jdbcTemplate.queryForInt("select count(*) from tlingx_entity where code=?",tableName)==0){
 			jdbcTemplate.update("insert into tlingx_entity(id,name,code,type,status,app_id,create_time)values(uuid(),?,?,1,1,?,?)",name,tableName,appid,Utils.getTime());
-		}
+		}*/
 		return true;
 	}
 	/**

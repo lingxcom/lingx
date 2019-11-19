@@ -85,9 +85,13 @@
                 	                	 	Lingx.getRootWindow().getApi().openWindow("创建视图对象","lingx/model/editor/create/view_entity.jsp?pageid="+pageId);
                             	            
                 	                   }},
+                	                   
+                	                   /*
                 	                   {text:'创建查询对象',handler:function(e){
                 	            		openWindow("创建查询对象","lingx/model/editor/create/query_entity.jsp?pageid="+pageId);
                 	                   }},
+                	                   */
+                	                   
                 	                   {text:'创建克隆对象',handler:function(e){
                 	                	   openWindow("创建克隆对象","lingx/model/editor/create/clone.jsp?code="+currentEntityCode);
                 	                   }}]
@@ -98,7 +102,7 @@
                 	            text: '删除',
                 	            iconCls:'Delete',
                 	            handler:function(){
-                	            	if(!confirm("将同时删除["+currentEntityCode+"]的对象、配置、权限、表与数据，确定删除吗？"))return;
+                	            	if(!confirm("删除["+currentEntityCode+"]的对象与权限，确定删除吗？"))return;
                 	            	
                 	            	Lingx.post(handlerJsp,{c:'deleteEntity',code:currentEntityCode},function(json){
    									 lgxInfo(json.message);
@@ -220,6 +224,12 @@
 						 }
 						 ,
 						 '-',
+						 {	text:"刷新",
+							 iconCls:"Reload",
+							 handler:function(){
+								 window.location.reload();
+							 }
+							 },
                 	        // 使用右对齐容器
                 	        '->', // 等同 { xtype: 'tbfill' }
                 	        /*{

@@ -116,7 +116,7 @@ public interface ILingxService {
 	 * @param temp
 	 * @return
 	 */
-	public String getPinyin(String temp);
+	//public String getPinyin(String temp);
 	/**
 	 * 基于MD5算法加密
 	 * @param temp

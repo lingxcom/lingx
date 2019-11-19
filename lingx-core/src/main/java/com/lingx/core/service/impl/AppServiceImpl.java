@@ -47,7 +47,7 @@ public class AppServiceImpl implements IAppService {
 	@Override
 	public boolean createApp(String name) {
 		String time=Utils.getTime();
-		String pinyin=this.lingxService.getPinyin(name);
+		String pinyin=this.lingxService.uuid();//this.lingxService.getPinyin(name);
 		String appId=this.lingxService.uuid();
 		int appSN=this.jdbcTemplate.queryForInt("select nextval('APP_SN')");
 		String sql="insert into tlingx_app(id,sn,name,logo,company,tel,email,indexpage,viewmodel,status,org_root_id,role_root_id,func_root_id,menu_root_id) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -150,7 +150,7 @@ public class AppServiceImpl implements IAppService {
 		this.jdbcTemplate.update(sql,id,name,String.format(template1, appSN,pinyin),ORG_ROOT_ID,"open",1);
 		id=this.lingxService.uuid();
 		ret[1]=id;
-		this.jdbcTemplate.update(sql,id,"办公室",String.format(template1, appSN,this.lingxService.getPinyin("办公室")),ret[0],"open",1);
+		this.jdbcTemplate.update(sql,id,"办公室",String.format(template1, appSN,this.lingxService.uuid()),ret[0],"open",1);
 		sql="insert into tlingx_roleorg(id,org_id,role_id) select uuid(),t.id,a.role_id from tlingx_org t,tlingx_roleorg a where a.org_id=t.fid and fid=? and not exists (select 1 from tlingx_roleorg where org_id=t.id)";
 		this.jdbcTemplate.update(sql,ORG_ROOT_ID);
 		this.jdbcTemplate.update(sql,ret[0]);
@@ -164,7 +164,7 @@ public class AppServiceImpl implements IAppService {
 		this.jdbcTemplate.update(sql,id,name,String.format(template1, appSN,pinyin),ROLE_ROOT_ID,"open",1);
 		id=this.lingxService.uuid();
 		ret[1]=id;
-		this.jdbcTemplate.update(sql,id,"管理员",String.format(template1, appSN,this.lingxService.getPinyin("管理员")),ret[0],"open",1);
+		this.jdbcTemplate.update(sql,id,"管理员",String.format(template1, appSN,this.lingxService.uuid()),ret[0],"open",1);
 		sql = "insert into tlingx_rolerole(id,refrole_id,role_id) select uuid(),t.id,a.role_id from tlingx_role t,tlingx_rolerole a where a.refrole_id=t.fid and fid=? and not exists (select 1 from tlingx_rolerole where refrole_id=t.id)";
 		this.jdbcTemplate.update(sql, ROLE_ROOT_ID);
 		this.jdbcTemplate.update(sql, ret[0]);

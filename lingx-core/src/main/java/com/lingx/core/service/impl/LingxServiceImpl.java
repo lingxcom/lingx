@@ -10,11 +10,6 @@ import java.util.UUID;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import net.sourceforge.pinyin4j.PinyinHelper;
-import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
-import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
-import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
-import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.BeansException;
@@ -354,7 +349,7 @@ public class LingxServiceImpl implements ILingxService ,ApplicationContextAware{
 	 * @param temp
 	 * @return
 	 */
-	public String getPinyin(String temp){
+	/*public String getPinyin(String temp){
 		HanyuPinyinOutputFormat format=new HanyuPinyinOutputFormat();
 		format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
 		format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
@@ -388,7 +383,7 @@ public class LingxServiceImpl implements ILingxService ,ApplicationContextAware{
 		}
 		
 		return sb.toString();
-	}
+	}*/
 	public void setQueryService(IQueryService queryService) {
 		this.queryService = queryService;
 	}

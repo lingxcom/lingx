@@ -14,7 +14,7 @@
 <meta name="renderer" content="webkit" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="<%=basePath%>">
-<title>LINGX模型驱动设计平台-系统登录</title>
+<title>灵犀 - 免费开源的轻量级PaaS平台</title>
 <script type="text/javascript" src="<%=basePath %>js/jquery.js"></script>
 <script type="text/javascript" src="<%=basePath %>js/md5-min.js"></script>
 <script type="text/javascript" src="<%=basePath %>lingx/js/lingx.js"></script>
@@ -135,7 +135,7 @@ padding-left:5px;
 <td style="" align="center">
 <div style="width:1000px;height:80px;line-height:80px;text-align:left;">
 <h1>
-<img alt="" src="lingx/images/longyan.png" height="50" style="margin-bottom:-12px;" > 龙眼模型驱动开发平台</h1>
+灵犀 - 免费开源的轻量级PaaS平台</h1>
 </div>
 
 </td>
@@ -156,7 +156,6 @@ padding-left:5px;
 <li>权限管理：强大的、可动态配置数据权限及细粒度的功能权限。</li>
 <li>级联展示：列表级联、树型联级、最多支持三重级联。</li>
 <li>在线开发：WEB在线配置开发、在线预览、在线部署、立即使用。</li>
-<li>工作流程：在线流程、表单设计，在线部署应用、审批、管理。</li>
 </ul>
 </td>
 <td width="400" valign="middle">
@@ -207,8 +206,8 @@ padding-left:5px;
 <div style="width:1000px;height:100px;font-size:12px;color:#aaa"><br/>
 为了得到最佳的体验效果，建议使用谷歌浏览器(chrome)。<br/><br/>
 
-声明：LINGX版权属于作者，受法律保护。没有作者书面许可不得用于商业活动。<br/><br/>
-© 2012-2016 lingx.com All rights reserved. 
+<br/>
+© 2012-2019 lingx.com All rights reserved. 
 </div>
 </td>
 </tr>

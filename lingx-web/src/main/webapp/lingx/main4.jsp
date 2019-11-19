@@ -7,6 +7,7 @@
 			+ path + "/";
 	org.springframework.context.ApplicationContext spring = org.springframework.web.context.support.WebApplicationContextUtils.getRequiredWebApplicationContext(request.getSession().getServletContext());
 	II18NService i18n=spring.getBean(II18NService.class);
+	UserBean userBean=(UserBean)session.getAttribute(Constants.SESSION_USER);
 %>
 <!DOCTYPE>
 <html style="height:100%">
@@ -149,8 +150,8 @@ var tabs = Ext.widget('tabpanel', {
     	id:"<%=i18n.text("首页",session)%>",
     	html: '<iframe scrolling="auto" frameborder="0" width="100%" height="100%" src="${SESSION_USER.app.indexPage}"> </iframe>',
         title: '<%=i18n.text("首页",session)%>',
-        autoScroll: true,
-        closable: true
+        autoScroll: true
+       // ,closable: true
 
     }]
 });
@@ -225,7 +226,11 @@ setInterval("keepSession()", 5*60*1000); //隔5分钟访问一次
 <div id="vp">
 <!-- 头部工具栏 -->
 <div style="background-color:#252a2f;height:50px;line-height:50px;position:fixed;top:0px;width:100%" onclick="removeMenu()">
-<div style="width:50px;height:50px;float:left;"><img width="50" height="50" src="${SESSION_USER.app.logo }"></div>
+<div style="width:50px;height:50px;float:left;">
+<%if(Utils.isNotNull(userBean.getApp().getLogo()) ){ %>
+<img width="50" height="50" src="${SESSION_USER.app.logo }">
+<%} %>
+</div>
 
 <div style="color:#fff;font-size:14px;height:50px;line-height:50px;float:left;">${SESSION_USER.app.name }</div>
 

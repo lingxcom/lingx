@@ -6,7 +6,7 @@ package com.lingx;
  */
 public class Lingx {
 
-	public static final String VERSION="0.0.12";
+	public static final String VERSION="1.0.0";
 	
 	public static final String HOME="http://www.lingx.com/";
 	

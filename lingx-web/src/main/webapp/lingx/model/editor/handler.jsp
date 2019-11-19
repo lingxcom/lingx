@@ -665,7 +665,7 @@ String databaseName=databaseService.getDatabaseName();
 	out.println(JSON.toJSONString(res));
 }else if("deleteEntity".equals(cmd)){
 	String code=request.getParameter("code");
-	if(code.indexOf("lingx")!=-1){
+	if(code.indexOf("lingx")!=-1&&code.indexOf("clone")==-1){
 		Map<String,Object> res=new HashMap<String,Object>();
 		res.put("code", 1);
 		res.put("message", "操作失败，不可删除平台对象");
@@ -676,7 +676,7 @@ String databaseName=databaseService.getDatabaseName();
 	jdbc.update("delete from tlingx_model where id=?",code);
 	jdbc.update("delete from tlingx_func where module=?",code);
 	jdbc.update("delete from tlingx_func where module=?",code+"_object");
-	jdbc.update("DROP TABLE "+code);
+	//jdbc.update("DROP TABLE "+code);
 	Map<String,Object> res=new HashMap<String,Object>();
 	res.put("code", 1);
 	res.put("message", "操作成功");
