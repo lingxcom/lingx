@@ -1,54 +1,56 @@
-# ÁéÏ¬ - Ãâ·Ñ¿ªÔ´µÄÇáÁ¿¼¶PaaSÆ½Ì¨
+# çµçŠ€ - å¼€æºçš„è½»é‡çº§æ¨¡åž‹é©±åŠ¨å¼€å‘å¹³å°
 
-¼¼ÊõÎÄµµ£ºhttp://docs.lingx.com
+æŠ€æœ¯æ–‡æ¡£ï¼šhttp://docs.lingx.com
 
-ÁªÏµQQ£º283853318
+è”ç³»QQï¼š283853318
 
-¼¼ÊõÖ§³Ö£ºÈªÖÝÊÐÁìÐÂÐÅÏ¢¿Æ¼¼ÓÐÏÞ¹«Ë¾
+æŠ€æœ¯æ”¯æŒï¼šæ³‰å·žå¸‚é¢†æ–°ä¿¡æ¯ç§‘æŠ€æœ‰é™å…¬å¸
 
-Ê¾ÀýµØÖ·£ºhttp://www.longyaniot.com
-ÕËºÅ:admin,ÃÜÂë:123456
+ç¤ºä¾‹åœ°å€ï¼šhttp://www.longyaniot.com
+è´¦å·:admin,å¯†ç :123456
 
-## ¿ìËÙÈëÃÅ
-### Ò». °²×°»·¾³
+## å¿«é€Ÿå…¥é—¨
+### ä¸€. å®‰è£…çŽ¯å¢ƒ
 1. JDK 1.8
 
 2. Tomcat 8.5
 
 3. MySQL 5.7
 
-4. Eclipse JEE°æ
+4. Eclipse JEEç‰ˆ
 
-### ¶þ. ´´½¨ÏîÄ¿
-1. ´´½¨WebÏîÄ¿£¬Ñ¡ÔñSevlet 2.5°æ
+5. lingx-web.war
 
-2. ½âÎölingx-web.war,²¢¸´ÖÆµ½ÏîÄ¿¸ùÄ¿Â¼ÏÂ¡£Èç£ºwebapp
+### äºŒ. åˆ›å»ºé¡¹ç›®
+1. åˆ›å»ºWebé¡¹ç›®ï¼Œé€‰æ‹©Sevlet 2.5ç‰ˆ
 
-3. ½«resouresÎÄ¼þÒÆµ½ÏîÄ¿µÄÅäÖÃÄ¿Â¼ÏÂ
+2. è§£æžlingx-web.war,å¹¶å¤åˆ¶åˆ°é¡¹ç›®æ ¹ç›®å½•ä¸‹ã€‚å¦‚ï¼šwebapp
 
-4. ´´½¨Êý¾Ý¿â²¢µ¼Èë³õÊ¼»¯½Å±¾lingx.sql
+3. å°†resouresæ–‡ä»¶ç§»åˆ°é¡¹ç›®çš„é…ç½®ç›®å½•ä¸‹
 
-5. ÐÞ¸ÄÅäÖÃÄ¿Â¼ÏÂµÄdb.proptiesÎÄ¼þ
+4. åˆ›å»ºæ•°æ®åº“å¹¶å¯¼å…¥åˆå§‹åŒ–è„šæœ¬lingx.sql
 
-6. ÅäÖÃWebÈÝÆ÷²¢Æô¶¯£»Èç£ºTomcat
+5. ä¿®æ”¹é…ç½®ç›®å½•ä¸‹çš„db.proptiesæ–‡ä»¶
 
-### Èý. ½øÈëºóÌ¨
+6. é…ç½®Webå®¹å™¨å¹¶å¯åŠ¨ï¼›å¦‚ï¼šTomcat
 
-1. ´ò¿ªWebä¯ÀÀÆ÷£¬ÕâÀï½¨ÒéÓÃchrome¡£ÒòÎªjavascript´úÂë±È½Ï¶à
+### ä¸‰. è¿›å…¥åŽå°
 
-2. ÔÚä¯ÀÀÆ÷ÖÐÊäÈë±¾»úµØÖ·+¶Ë¿Ú+ÏîÄ¿Ãû³Æ
+1. æ‰“å¼€Webæµè§ˆå™¨ï¼Œè¿™é‡Œå»ºè®®ç”¨chromeã€‚å› ä¸ºjavascriptä»£ç æ¯”è¾ƒå¤š
 
-3. ½øÈëµÇÂ¼½çÃæ£¬ÕËºÅ:lingx£¬ÃÜÂë£º123456
+2. åœ¨æµè§ˆå™¨ä¸­è¾“å…¥æœ¬æœºåœ°å€+ç«¯å£+é¡¹ç›®åç§°
 
-### ËÄ. ÔÚÏß¿ª·¢
-1. ½øÈë²Ëµ¥£º¿ª·¢ -> ¿ª·¢¹¤¾ß
+3. è¿›å…¥ç™»å½•ç•Œé¢ï¼Œè´¦å·:lingxï¼Œå¯†ç ï¼š123456
 
-2. µã»÷×óÉÏ½ÇµÄ¡°´´½¨¡±°´Å¥
+### å››. åœ¨çº¿å¼€å‘
+1. è¿›å…¥èœå•ï¼šå¼€å‘ -> å¼€å‘å·¥å…·
 
-3. ÔÚ¶Ô»°¿òÖÐÑ¡ÔñÊý¾Ý¿â±í¡°ttest¡±£¬µã»÷¡°È·¶¨¡±£¬ÊäÈë¶ÔÏóÃû³ÆÓëÁ¥ÊôÓ¦ÓÃ£¬ÔÙµã¡°È·¶¨¡±
+2. ç‚¹å‡»å·¦ä¸Šè§’çš„â€œåˆ›å»ºâ€æŒ‰é’®
 
-4. µã»÷¹¤¾ßÀ¸µÄ¡°Ë¢ÐÂ¡±£¬ÔÚ×ó²àÑ¡ÖÐ¡°ttest¡±
+3. åœ¨å¯¹è¯æ¡†ä¸­é€‰æ‹©æ•°æ®åº“è¡¨â€œttestâ€ï¼Œç‚¹å‡»â€œç¡®å®šâ€ï¼Œè¾“å…¥å¯¹è±¡åç§°ä¸Žéš¶å±žåº”ç”¨ï¼Œå†ç‚¹â€œç¡®å®šâ€
 
-5. µã»÷¹¤¾ßÀ¸µÄ¡°Ð´Èë¹¦ÄÜÊ÷¡±£¬´ò¹´¡°Ìí¼Ó¡±¡¢¡°ÐÞ¸Ä¡±¡¢¡°É¾³ý¡±¡¢¡°²é¿´¡±¡¢¡°ÁÐ±í²é¿´¡±
+4. ç‚¹å‡»å·¥å…·æ çš„â€œåˆ·æ–°â€ï¼Œåœ¨å·¦ä¾§é€‰ä¸­â€œttestâ€
 
-6. µã»÷¹¤¾ßÀ¸µÄ¡°¶ÔÏóÔ¤ÀÀ¡±
+5. ç‚¹å‡»å·¥å…·æ çš„â€œå†™å…¥åŠŸèƒ½æ ‘â€ï¼Œæ‰“å‹¾â€œæ·»åŠ â€ã€â€œä¿®æ”¹â€ã€â€œåˆ é™¤â€ã€â€œæŸ¥çœ‹â€ã€â€œåˆ—è¡¨æŸ¥çœ‹â€
+
+6. ç‚¹å‡»å·¥å…·æ çš„â€œå¯¹è±¡é¢„è§ˆâ€

@@ -14,7 +14,7 @@
 <meta name="renderer" content="webkit" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="<%=basePath%>">
-<title>灵犀 - 免费开源的轻量级PaaS平台</title>
+<title>灵犀 - 开源的轻量级模型驱动开发平台</title>
 <script type="text/javascript" src="<%=basePath %>js/jquery.js"></script>
 <script type="text/javascript" src="<%=basePath %>js/md5-min.js"></script>
 <script type="text/javascript" src="<%=basePath %>lingx/js/lingx.js"></script>
@@ -135,7 +135,7 @@ padding-left:5px;
 <td style="" align="center">
 <div style="width:1000px;height:80px;line-height:80px;text-align:left;">
 <h1>
-灵犀 - 免费开源的轻量级PaaS平台</h1>
+灵犀 - 开源的轻量级模型驱动开发平台</h1>
 </div>
 
 </td>
