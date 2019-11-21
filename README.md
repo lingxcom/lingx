@@ -2,6 +2,8 @@
 
 技术文档：http://docs.lingx.com
 
+视频教程：https://space.bilibili.com/482658194
+
 联系QQ：283853318
 
 技术支持：泉州市领新信息科技有限公司
@@ -24,11 +26,11 @@
 ### 二. 创建项目
 1. 创建Web项目，选择Sevlet 2.5版
 
-2. 解析lingx-web.war,并复制到项目根目录下。如：webapp
+2. 解压lingx-web.war,并复制到项目根目录下。如：webapp
 
 3. 将resoures文件移到项目的配置目录下
 
-4. 创建数据库并导入初始化脚本lingx.sql
+4. 创建数据库并导入初始化脚本lingx.sql(该脚本在lingx-web-1.0.0\WEB-INF\classes\db)
 
 5. 修改配置目录下的db.propties文件
 
