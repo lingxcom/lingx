@@ -26,6 +26,7 @@ String basePath = request.getScheme() + "://"
   </div>
   <div class="panel-body" style="line-height:30px;font-size:14px;">
 技术文档：<a href="http://docs.lingx.com" target="_blank">http://docs.lingx.com</a> <br>
+视频教程：<a href="https://space.bilibili.com/482658194" target="_blank">https://space.bilibili.com/482658194</a> <br>
 源码地址：<a href="https://github.com/lingxcom/lingx" target="_blank">https://github.com/lingxcom/lingx</a> <br>
     <br>
   </div>

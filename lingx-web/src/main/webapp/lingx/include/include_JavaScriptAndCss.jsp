@@ -1,5 +1,5 @@
 
-<link rel="stylesheet" type="text/css" href="js/ext-theme-gray/ext-theme-gray-all.css">
+<link rel="stylesheet" type="text/css" href="js/ext-theme-classic/ext-theme-classic-all.css">
 <link rel="stylesheet" type="text/css" href="js/ext-theme-classic/icon.css">
 <link rel="stylesheet" type="text/css" href="js/lingx-ext-icon.css">
 <script type="text/javascript" src="js/ext-all.gzjs"></script>

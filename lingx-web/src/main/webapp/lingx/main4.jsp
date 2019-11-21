@@ -57,12 +57,12 @@ cursor:pointer;
 }
 
 .li_1:hover{
-background-color:#eaedf1;
+background-color:#dbe6f4;
 color:#333333;
 }
 
 .li_1_hover{
-background-color:#fafafa;
+background-color:#fff;
 color:#333333;
 }
 
@@ -85,8 +85,8 @@ left:50px;
 width:170px;
 height:100%;
 color:#333333;
-background-color:#fafafa;
-border-right:1px solid #252a2f;
+background-color:#fff;
+border-right:1px solid #01316e;
 }
 
 .closeBtn{
@@ -225,7 +225,7 @@ setInterval("keepSession()", 5*60*1000); //隔5分钟访问一次
 
 <div id="vp">
 <!-- 头部工具栏 -->
-<div style="background-color:#252a2f;height:50px;line-height:50px;position:fixed;top:0px;width:100%" onclick="removeMenu()">
+<div style="background-color:#01316e;height:50px;line-height:50px;position:fixed;top:0px;width:100%" onclick="removeMenu()">
 <div style="width:50px;height:50px;float:left;">
 <%if(Utils.isNotNull(userBean.getApp().getLogo()) ){ %>
 <img width="50" height="50" src="${SESSION_USER.app.logo }">
@@ -244,7 +244,7 @@ setInterval("keepSession()", 5*60*1000); //隔5分钟访问一次
 </div>
 </div>
 <!-- 左侧菜单栏 -->
-<div id="menu" style="background-color:#252a2f;height:100%;position:fixed;top:50px;left:0px;width:50px;;z-index:9999;" onclick="removeMenu()">
+<div id="menu" style="background-color:#01316e;height:100%;position:fixed;top:50px;left:0px;width:50px;;z-index:9999;" onclick="removeMenu()">
 <div class="div_1">
 <ul class="ul_1" onclick="return false;" style="margin-top:10px;">
 
@@ -252,7 +252,7 @@ setInterval("keepSession()", 5*60*1000); //隔5分钟访问一次
 </div>
 </div>
 <!-- 工作区 -->
-<div id="workArea" style="background-color:#dad9d9;height:100%;position:fixed;top:50px;left:50px;width:100%;padding-top:5px;padding-left:5px;" onclick="removeMenu()">
+<div id="workArea" style="background-color:#dbe6f4;height:100%;position:fixed;top:50px;left:50px;width:100%;padding-top:5px;padding-left:5px;" onclick="removeMenu()">
 
 </div>
 </div>

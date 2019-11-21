@@ -142,7 +142,7 @@ padding-left:5px;
 
 </tr>
 <tr>
-<td style="background-color:#252a2f;" align="center" valign="middle">
+<td style="background-color:#01316e;" align="center" valign="middle">
 <div style="width:1000px;height:400px;">
 
 <table width="100%" border="0" cellSpacing="0" cellPadding="0">
@@ -181,7 +181,7 @@ padding-left:5px;
 </tr>
 <tr>
 <td height="50" colspan="2" align="center" valign="middle">
-<button onclick="login();" style="width:260px;height:40px;line-height:40px;background-color:#00c1de;color:#fff;font-size:20px;cursor:pointer;" class="yj05">登  录</button>
+<button onclick="login();" style="width:260px;height:40px;line-height:40px;background-color:#01316e;color:#fff;font-size:20px;cursor:pointer;" class="yj05">登  录</button>
  </td>
 </tr>
 <tr>
