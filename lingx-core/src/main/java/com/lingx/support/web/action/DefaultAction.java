@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.lingx.core.Constants;
 import com.lingx.core.Page;
 import com.lingx.core.SpringContext;
@@ -38,6 +41,14 @@ import com.lingx.core.utils.LingxUtils;
 import com.lingx.core.utils.Utils;
 
 public class DefaultAction implements IAction,ISessionAware {
+	/**
+	 * 无效登陆5次，锁定账号
+	 */
+	public static Cache<String,Integer> LOCK_ACCOUNT=CacheBuilder.newBuilder().maximumSize(20000).expireAfterWrite(5, TimeUnit.MINUTES).build();
+	/**
+	 * 无效登陆统计
+	 */
+	public static Cache<String,Integer> LOGIN_FAIL_COUNT=CacheBuilder.newBuilder().maximumSize(20000).expireAfterWrite(5, TimeUnit.MINUTES).build();
 	@Resource
 	private JdbcTemplate jdbcTemplate;
 	@Resource
@@ -72,7 +83,8 @@ public class DefaultAction implements IAction,ISessionAware {
 			return Page.PAGE_JSON;
 		}else if("login".equals(cmd)){
 			Map<String,Object> res=login(context);
-			jdbcTemplate.update("insert into tlingx_login_log(userid,ip,message,ts) values(?,?,?,?)",context.getRequest().getParameter("userid"), context.getRequest().getAttribute(IContext.CLIENT_IP), res.get("message"), Utils.getTime());
+			if(context.getRequest().getParameter("userid")!=null)
+			jdbcTemplate.update("insert into tlingx_login_log(userid,ip,message,ts) values(?,?,?,?)",context.getRequest().getParameter("userid").replace("%", ""), context.getRequest().getAttribute(IContext.CLIENT_IP), res.get("message"), Utils.getTime());
 			context.getRequest().setAttribute(Constants.REQUEST_JSON,JSON.toJSONString(res));
 			return Page.PAGE_JSON;
 		}else if("i".equals(cmd)){
@@ -110,18 +122,25 @@ public class DefaultAction implements IAction,ISessionAware {
 		context.getRequest().setAttribute("userid", userid);
 		if (Utils.isNull(userid) || Utils.isNull(password)) {
 			res.put("code", -1);
-			res.put("message",i18n.text("账号或密码不可为空",session));
+			res.put("message",i18n.text("登陆失败，账号或密码不可为空",session));
 			return res;
 		}
 		userid=userid.trim();
+		userid=userid.replace("%", "");
 		password=password.trim();
 		if(!this.verifyCodeService.verify(context)){
 			res.put("code", -1);
-			res.put("message", i18n.text("验证码无效",session));
+			res.put("message", i18n.text("登陆失败，验证码无效",session));
 			session.setAttribute(Constants.SESSION_YZM, "");
 			return res;
 		}
 		session.setAttribute(Constants.SESSION_YZM, "");
+		
+		if(LOCK_ACCOUNT.getIfPresent(userid)!=null){
+			res.put("code", -1);
+			res.put("message",i18n.text("登陆失败，该账号由于多次无效登陆已暂时锁定",session));
+			return res;
+		}
 		if(this.loginService.before(userid, context)){
 			if(this.loginService.login(userid, password, context)){
 				String language="zh_CN";
@@ -150,8 +169,22 @@ public class DefaultAction implements IAction,ISessionAware {
 				SpringContext.getApplicationContext().publishEvent(new LoginEvent(this,userBean));
 				return res;
 			}else{
-				res.put("code", -1);
-				res.put("message", i18n.text("账号或密码无效",session));
+				if(LOGIN_FAIL_COUNT.getIfPresent(userid)==null){
+					res.put("code", -1);
+					res.put("message", i18n.text("登陆失败，账号或密码无效第1次,5次后锁定账号",session));
+					LOGIN_FAIL_COUNT.put(userid, 1);
+				}else{
+					int count=LOGIN_FAIL_COUNT.getIfPresent(userid);
+					count++;
+					res.put("code", -1);
+					res.put("message", i18n.text("登陆失败，账号或密码无效第"+count+"次,5次后锁定账号",session));
+					LOGIN_FAIL_COUNT.put(userid, count);
+					if(count>=5){
+						LOCK_ACCOUNT.put(userid, 1);
+					}
+				}
+				
+				
 				return res;
 			}
 		}else{

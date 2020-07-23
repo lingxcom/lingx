@@ -138,6 +138,7 @@ public class UserBean {
 		this.sqlin = sqlin;
 	}
 	public String getI18n() {
+		if(i18n==null)i18n="zh_CN";
 		return i18n;
 	}
 	public void setI18n(String i18n) {

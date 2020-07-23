@@ -199,7 +199,7 @@ Ext.onReady(function(){
 		if(json.queryParams.length==0&&json.GridConfig.queryField){
 			var tool=[];
 			for(var i=0;i<json.fields.list.length;i++){
-				if(i==2)break;//选择框宽度不够，只显示两项
+				if(i==4)break;//选择框宽度不够，只显示两项
 				var field=json.fields.list[i];
 				if((","+json.GridConfig.queryField+",").indexOf(","+field.code+",")>=0){
 					searchFieldCache.push(field.code);

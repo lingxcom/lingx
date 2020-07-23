@@ -59,3 +59,6 @@ LINGX模型驱动=LINGX MDD
 隶属角色=Roles
 功能授权=Fun Auth
 菜单授权=Menu Auth
+
+
+<span style='color:red'>否</span>=<span style='color:red'>N</span>

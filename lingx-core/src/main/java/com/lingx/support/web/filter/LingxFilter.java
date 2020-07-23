@@ -139,9 +139,19 @@ public class LingxFilter implements Filter{
 		ILingxService lingxService=this.applicationContext.getBean(ILingxService.class);
 		HttpServletRequest request=(HttpServletRequest)servletRequest;
 		HttpServletResponse response=(HttpServletResponse)servletResponse;
-		if("true".equals(lingxService.getConfigValue("lingx.filter.firewall", "false"))){
-			Firewall.fire(request);
+		if("true".equals(lingxService.getConfigValue("lingx.security.referer", "false"))){
+			String referer = request.getHeader("Referer");
+			String baseDomain = lingxService.getConfigValue("lingx.security.referer.domain", "http://127.0.0.1");
+			//System.out.println("referer:"+referer+"     domain:"+baseDomain);
+			if(referer != null && (!(referer.trim().startsWith(baseDomain)))){
+			//System.out.println("请求伪造，回登录页");
+			response.sendRedirect(request.getContextPath()+"/login.jsp");
+			return;
+			}
 		}
+		/*if("true".equals(lingxService.getConfigValue("lingx.filter.firewall", "false"))){
+			Firewall.fire(request);
+		}*/
 		this.doFilterEncode(servletRequest, servletResponse);//设置字符集，必须放在前面
 
 		if(request.getSession().getAttribute(Constants.SESSION_USER)==null){

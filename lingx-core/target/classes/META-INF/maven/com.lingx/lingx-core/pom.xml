@@ -125,11 +125,7 @@
 		<artifactId>guava</artifactId>
 		<version>18.0</version>
 	</dependency>
-	<dependency>
-	<groupId>com.belerweb</groupId>
-	<artifactId>pinyin4j</artifactId>
-	<version>2.5.0</version>
-</dependency>
+	
   </dependencies>
   
 
@@ -137,7 +133,6 @@
   <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
-		<spring.version>4.2.0.RELEASE</spring.version>
 	</properties>
 	<!-- 国内阿里云maven仓库 -->
 	<repositories>

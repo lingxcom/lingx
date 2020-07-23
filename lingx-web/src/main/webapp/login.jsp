@@ -207,7 +207,7 @@ padding-left:5px;
 为了得到最佳的体验效果，建议使用谷歌浏览器(chrome)。<br/><br/>
 
 <br/>
-© 2012-2019 lingx.com All rights reserved. 
+© 2012-2020 lingx.com All rights reserved. 
 </div>
 </td>
 </tr>

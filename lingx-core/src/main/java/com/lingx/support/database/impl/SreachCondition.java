@@ -1,7 +1,9 @@
 package com.lingx.support.database.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -29,8 +31,10 @@ public class SreachCondition implements ICondition {
 		if("_true".equals(context.getRequest().getParameter("isGridSearch"))&&params.trim().charAt(0)=='['){
 			//自定义扩展的列表查询 2019-03-12
 			List<Map<String,Object>> listJSON=(List<Map<String,Object>>)JSON.parse(params);
+			Set<String>keys=new HashSet<>();
 			for(Map<String,Object> mapJSON:listJSON){
 				String pparam=mapJSON.get("code").toString();
+				keys.add(pparam);
 				String pvalue=context.getRequest().getParameter(pparam);
 				if(pvalue==null||"_".equals(pvalue))continue;
 				pvalue=pvalue.trim();
@@ -42,6 +46,33 @@ public class SreachCondition implements ICondition {
 					sb.append(" and ").append(pparam).append("='").append(pvalue).append("' ");
 				}
 			}
+			
+			for(IField field:context.getEntity().getFields().getList()){
+				if(keys.contains(field.getCode()))continue;
+				field.setValue(context.getRequest().getParameter(field.getCode()));
+				if(field.getValue()==null)continue;
+				String fieldValue=String.valueOf(field.getValue()).trim();
+				if(Utils.isNotNull(fieldValue)&&fieldValue.startsWith("__")){//高级查询处理
+					sb.append(analyze(field.getCode(),fieldValue));
+				}else if(Utils.isNotNull(fieldValue)&&!"_".equals(fieldValue)&&NOT_COND.indexOf(","+field.getCode()+",")==-1){
+					//if("id".equals(field.getCode())){continue;}
+					if(Utils.isNotNull(field.getRefEntity())&&fieldValue.charAt(0)=='_'&&!"_true".equals(context.getRequest().getParameter("isGridSearch"))){//&&!"true".equals(context.getRequest().getParameter("isGridSearch"))不是在列表中查询的
+						IEntity ref=modelService.getCacheEntity(field.getRefEntity());
+						if("id".equals(modelService.getTextField(ref).get(0))){continue;}
+						sb.append(" and ").append(field.getCode()).append(" in (select ").append(modelService.getValueField(ref)).append(" from ").append(field.getRefEntity()).append(" where ").append(modelService.getTextField(ref).get(0)).append(" like '%").append(fieldValue.substring(1)).append("%')");
+					}else if(!field.getCode().endsWith("_id")&&("varchar2".equalsIgnoreCase(field.getType())||"varchar".equalsIgnoreCase(field.getType())||"char".equalsIgnoreCase(field.getType()))){
+						if(fieldValue.charAt(0)=='_'){field.setValue(fieldValue.substring(1));}
+						sb.append(" and ").append(field.getCode()).append(" like '%").append(field.getValue().toString().trim()).append("%' ");
+						
+					}else{
+						
+						if(fieldValue.charAt(0)=='_'){field.setValue(fieldValue.substring(1));}
+						sb.append(" and ").append(field.getCode()).append("='").append(field.getValue().toString().trim()).append("' ");
+					}
+				}
+			}
+			
+			
 		}else{
 			//常规处理
 		for(IField field:context.getEntity().getFields().getList()){
