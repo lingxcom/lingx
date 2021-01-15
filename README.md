@@ -17,7 +17,7 @@
 
 下载地址：
 
-http://mdd.lingx.com/20210115/lingx-root.zip
+http://mdd.lingx.com/20210115/lingx-boot.zip
 
 下载后解压到路径*没有中文且没有空格*的文件夹下
 
