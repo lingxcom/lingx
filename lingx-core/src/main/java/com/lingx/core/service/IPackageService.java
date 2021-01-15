@@ -16,4 +16,13 @@ public interface IPackageService {
 	public String packAndUpload(PackBean bean,String basePath,String secret);
 	
 	public String uploadPackLingx(PackBean bean,String basePath,String secret);
+	/**
+	 * 打包并提交到其他平台
+	 * @param targetUrl
+	 * @param targetSecret
+	 * @param ecodes
+	 */
+	public String packAndSubmit(String targetUrl,String targetSecret,String ecodes,String basePath);
+	
+	public String packAndSubmitFMO(String targetUrl,String targetSecret,int type,String basePath);
 }

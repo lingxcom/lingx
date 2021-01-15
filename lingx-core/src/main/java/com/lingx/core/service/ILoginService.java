@@ -12,7 +12,7 @@ public interface ILoginService {
 	 * 登录之前的一些特殊操作，不影响认证流程
 	 * @param userid
 	 */
-	public boolean before(String userid,IContext context);
+	public boolean before(String userid,String password,IContext context);
 	/**
 	 * 
 	 * @param userid
@@ -26,5 +26,5 @@ public interface ILoginService {
 	 * @param userid
 	 * @return
 	 */
-	public String after(String userid,IContext context);
+	public String after(String userid,String password,IContext context);
 }

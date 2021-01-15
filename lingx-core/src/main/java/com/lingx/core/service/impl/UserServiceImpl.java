@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.lingx.core.model.bean.AppBean;
 import com.lingx.core.model.bean.RegexpBean;
 import com.lingx.core.model.bean.UserBean;
+import com.lingx.core.service.ILingxService;
 import com.lingx.core.service.IUserService;
 import com.lingx.core.utils.Utils;
 
@@ -27,6 +28,8 @@ public class UserServiceImpl implements IUserService {
 	@Resource(name = "jdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
 
+	@Resource
+	private ILingxService lingxService;
 	@Override
 	public void addUserOrg(Object userId, Object orgId) {
 		try {
@@ -80,8 +83,8 @@ public class UserServiceImpl implements IUserService {
 	public void superManagerAuthRefresh(){
 		List<String> listID=new ArrayList<String>();
 
-		String id1="6e0362e8-100e-11e5-b7ab-74d02b6b5f61";
-
+		String id1=this.lingxService.getConfigValue("lingx.super.role.code", "6e0362e8-100e-11e5-b7ab-74d02b6b5f61");//"6e0362e8-100e-11e5-b7ab-74d02b6b5f61"
+		
 		List<Map<String,Object>> list=this.jdbcTemplate.queryForList("select id from tlingx_role where code=?",id1);
 		for(Map<String,Object> map:list){
 			listID.add(map.get("id").toString());

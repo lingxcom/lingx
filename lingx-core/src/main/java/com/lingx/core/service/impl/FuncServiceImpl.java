@@ -61,6 +61,7 @@ public class FuncServiceImpl implements IFuncService {
 	private boolean get(String userId,String entityCode,String methodCode){
 		String sql = "select type from tlingx_func where module=? and func=?";
 		boolean isAuth=false;
+		if(this.jdbcTemplate.queryForInt("select count(1) from tlingx_func where module=? and func=?", entityCode, methodCode)==0)return false;
 		try {
 			int c = this.jdbcTemplate.queryForInt(sql, entityCode, methodCode );
 			switch (c) {
@@ -79,7 +80,7 @@ public class FuncServiceImpl implements IFuncService {
 				break;
 			}
 		} catch (Exception e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		return isAuth;
 	}

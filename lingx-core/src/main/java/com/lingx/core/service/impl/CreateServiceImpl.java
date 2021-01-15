@@ -37,15 +37,17 @@ public class CreateServiceImpl implements ICreateService {
 	private ILingxService lingxService;
 	@Override
 	public boolean create(String name, String options,String appid,UserBean userBean) {
-		/*int appSN=this.jdbcTemplate.queryForInt("select sn from tlingx_app where id=?",appid);
-		String tableName="a"+appSN+"_"+lingxService.getPinyin(name);
+		int appSN=this.jdbcTemplate.queryForInt("select sn from tlingx_app where id=?",appid);
+		String tableName="ta_"+Utils.getRandomNumber(4);
 		List<Map<String,String>> jsons=(List<Map<String,String>>)JSON.parse(options);
 		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
 		String pinyin,type="",key,val;
+		int index=1;
 		for(Map<String,String> map:jsons){
 			key=map.get("name");
 			val=map.get("type");
-			pinyin=lingxService.getPinyin(key);
+			pinyin="f"+index++;
+			
 			if("数字".equals(val)){
 				type="int(11)";
 			}else if("金额".equals(val)){
@@ -53,7 +55,36 @@ public class CreateServiceImpl implements ICreateService {
 			}else{
 				type="varchar(2000)";
 			}
-			
+			switch(key){
+			case "树型上级":
+				pinyin="fid";
+				type="int(11)";
+				break;
+			case "树型状态":
+				pinyin="state";
+				type="varchar(32)";
+				break;
+			case "树型图标":
+				pinyin="icon_cls";
+				type="varchar(64)";
+				break;
+			case "创建时间":
+				pinyin="create_time";
+				type="char(14)";
+				break;
+			case "修改时间":
+				pinyin="modify_time";
+				type="char(14)";
+				break;
+			case "隶属组织":
+				pinyin="org_id";
+				type="char(36)";
+				break;
+			case "隶属用户":
+				pinyin="user_id";
+				type="char(36)";
+				break;
+			}
 			Map<String,Object> m=new HashMap<String,Object>();
 			m.put("name", pinyin);
 			m.put("type", type);
@@ -67,7 +98,7 @@ public class CreateServiceImpl implements ICreateService {
 		modelService.save(entity);
 		if(jdbcTemplate.queryForInt("select count(*) from tlingx_entity where code=?",tableName)==0){
 			jdbcTemplate.update("insert into tlingx_entity(id,name,code,type,status,app_id,create_time)values(uuid(),?,?,1,1,?,?)",name,tableName,appid,Utils.getTime());
-		}*/
+		}
 		return true;
 	}
 	/**

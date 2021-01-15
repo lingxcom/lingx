@@ -28,7 +28,7 @@ public class JspMehtodProcess implements IMethodProcess {
 			IContext context,IPerformer performer) throws LingxProcessException {
 		String jsp=null;
 		try {
-			jsp = method.getExecutors().getList().get(a).execute(context,performer).toString();
+			jsp = method.getExecutors().getList().get(0).execute(context,performer).toString();
 		} catch (Exception e) {
 			jsp=this.pageService.getPage(Page.PAGE_NO_PERMISSION);
 		}
@@ -37,8 +37,5 @@ public class JspMehtodProcess implements IMethodProcess {
 
 	@Resource
 	private IPageService pageService;
-	public void init(int p1){
-		this.a=p1;
-	}
-	private int a=-1;
+	
 }

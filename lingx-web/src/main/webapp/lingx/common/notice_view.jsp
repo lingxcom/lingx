@@ -24,7 +24,7 @@ if(!lingx.isSuperman(request))return;
 <%@ include file="/lingx/include/include_JavaScriptAndCss2.jsp"%> 
 <script type="text/javascript" src="lingx/model/update/pager.js"></script>
 <SCRIPT type="text/javascript">
-var targetUrl="<%="http://www.lingx.com/bi/action/notice_get.jsp" %>"+"?callback=?";
+var targetUrl="<%="http://mdd.lingx.com/bi/action/notice_get.jsp" %>"+"?callback=?";
 $(function(){
 	$.getJSON(targetUrl+"&id=${param.id}",function(json){
 		$("#content").val(json.notice.content);

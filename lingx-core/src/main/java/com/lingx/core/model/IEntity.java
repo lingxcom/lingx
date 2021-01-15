@@ -13,7 +13,7 @@ public interface IEntity extends IModel {
 	public String getCascade();
 	public String getDisplayMode();
 	public String getScript();
-	
+	public String getPages();
 	public INode<IConfig> getConfigs();
 	public INode<IField> getFields();
 	public INode<IMethod> getMethods();

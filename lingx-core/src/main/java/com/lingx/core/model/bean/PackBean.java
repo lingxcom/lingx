@@ -1,6 +1,7 @@
 package com.lingx.core.model.bean;
 
 import java.util.List;
+import java.util.Map;
 
 /** 
  * @author www.lingx.com
@@ -40,6 +41,8 @@ public class PackBean {
 	 * 功能菜单
 	 */
 	private boolean isGncd;
+	private boolean isFunc;
+	private boolean isMenu;
 	/**
 	 * 数据模型
 	 */
@@ -61,6 +64,41 @@ public class PackBean {
 	 */
 	private List<String> fileList;
 	
+	private List<Map<String,Object>> menuList;
+	private List<Map<String,Object>> funcList;
+	private String optionJSON;
+	
+	public boolean isFunc() {
+		return isFunc;
+	}
+	public void setFunc(boolean isFunc) {
+		this.isFunc = isFunc;
+	}
+	public boolean isMenu() {
+		return isMenu;
+	}
+	public void setMenu(boolean isMenu) {
+		this.isMenu = isMenu;
+	}
+	
+	public List<Map<String, Object>> getMenuList() {
+		return menuList;
+	}
+	public void setMenuList(List<Map<String, Object>> menuList) {
+		this.menuList = menuList;
+	}
+	public List<Map<String, Object>> getFuncList() {
+		return funcList;
+	}
+	public void setFuncList(List<Map<String, Object>> funcList) {
+		this.funcList = funcList;
+	}
+	public String getOptionJSON() {
+		return optionJSON;
+	}
+	public void setOptionJSON(String optionJSON) {
+		this.optionJSON = optionJSON;
+	}
 	public String getSecret() {
 		return secret;
 	}
@@ -139,5 +177,7 @@ public class PackBean {
 	public void setSjmx(boolean isSjmx) {
 		this.isSjmx = isSjmx;
 	}
+	
+	
 	
 }

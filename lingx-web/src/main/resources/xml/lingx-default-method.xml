@@ -234,6 +234,7 @@
  		<property name="visible" value="true"></property>
  		<property name="code" value="excel"></property>
 		<property name="name" value="导出"></property>
+		<property name="winStyle" value="readonly"></property>
 		<property name="type" value="JSON"></property>
 		<property name="iconCls" value="Pageexcel"></property>
 		<property name="validation" value="false"></property>

@@ -68,7 +68,7 @@ Ext.onReady(function(){
 		items:[{
 			id:"tree",
 			region:"west",
-			title: '功能模块',
+			title: '功能分类',
             iconCls:"Database",
             split: true,
             width: 240,
@@ -118,14 +118,14 @@ Ext.onReady(function(){
             columns: [{ xtype: 'rownumberer',width:26}, 
                 { header: '名称',width:200, dataIndex: 'name' },
                 { header: '图片',width:200, dataIndex: 'image' ,renderer:function(value,p,record){
-                	var url="http://www.lingx.com/"+eval(value)[0].value;
+                	var url="http://mdd.lingx.com/"+eval(value)[0].value;
 	            	return "<a target='_blank' href='"+url+"'><image width='80' src='"+url+"' /></a>";
 	            }},
                 { header: '价格(元)', dataIndex: 'price' ,renderer:function(value,p,record){
                 	return "¥ "+parseFloat(value).toFixed(2);
                 }},//
                 { header: '描述',width:200, dataIndex: 'content' },
-                { header: '时间',width:200, dataIndex: 'create_time',renderer:function(value,p,record){
+                { header: '发布时间',width:200, dataIndex: 'create_time',renderer:function(value,p,record){
                 	return ft(value);
                 } },
                 { header: '操作', dataIndex: 'name',renderer:function(value,p,record){

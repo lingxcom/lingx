@@ -23,7 +23,7 @@ public class DefaultEntity extends AbstractModel implements IEntity{
 		this.setTableName("");
 		this.setModelType("Entity");
 		this.setIconCls("icon-1");
-		this.setType("DefaultEntity");//普通对象
+		this.setType("DefaultEntity");//普通模型
 		this.setCascade("");
 		this.setDisplayMode("grid");
 		//this.setSynchro(false);
@@ -35,21 +35,21 @@ public class DefaultEntity extends AbstractModel implements IEntity{
 		this.setMethods(new DefaultNode<IMethod>("方法"));
 	}
 	
-	@FieldModelConfig(sort="1",name="对象代码",inputType="string")
+	@FieldModelConfig(sort="1",name="模型代码",inputType="string")
 	private String code;
-	@FieldModelConfig(sort="2",name="对象名称",inputType="string")
+	@FieldModelConfig(sort="2",name="模型名称",inputType="string")
 	private String name;
 	@JSONField(serialize=false)
-	@FieldModelConfig(sort="3",name="对象类型",inputType="string",editor="new Ext.form.field.Display()")
+	@FieldModelConfig(sort="3",name="模型类型",inputType="string",editor="new Ext.form.field.Display()")
 	private String type;
 	@JSONField(serialize=false)
 	@FieldModelConfig(sort="4",name="数据表名",inputType="string")
 	private String tableName;
 	@JSONField(serialize=false)
-	@FieldModelConfig(sort="5",name="级联对象",inputType="string")
+	@FieldModelConfig(sort="5",name="级联模型",inputType="string")
 	private String cascade;//editor="{\"type\":\"combobox\",\"options\":{\"multiple\":true,\"url\":\"e?e=tsysentity&m=combo\"}}"
 	
-	//@FieldModelConfig(sort="6",name="父级对象",inputType="string")
+	//@FieldModelConfig(sort="6",name="父级模型",inputType="string")
 	//private String fcode;
 	@JSONField(serialize=false)
 	@FieldModelConfig(sort="7",name="查询条件",inputType="string")
@@ -58,10 +58,13 @@ public class DefaultEntity extends AbstractModel implements IEntity{
 	@FieldModelConfig(sort="9",name="显示模式",inputType="string",editor="new Ext.form.field.ComboBox({displayField: 'text',valueField: 'value',store: new Ext.data.Store({proxy:{ model:'Option',type:'ajax',url:'e?e=tlingx_option&m=items&lgxsn=1&code=XSMS',reader:{type:'json'}},autoLoad:true})}) ")//,{\"text\":\"无\",\"value\":\"\"},
 	private String displayMode;
 	
+	@JSONField(serialize=false)
+	@FieldModelConfig(sort="A",name="关联资源",inputType="string")
+	private String pages;
 /*	@FieldModelConfig(sort="A",name="左栏宽度",inputType="string")
 	private Integer leftWidth;
 
-	@FieldModelConfig(sort="D",name="对象同步",inputType="string")
+	@FieldModelConfig(sort="D",name="模型同步",inputType="string")
 	private Boolean synchro;*/
 
 	///@FieldModelConfig(sort="A",name="分组字段",inputType="string")
@@ -136,6 +139,13 @@ public class DefaultEntity extends AbstractModel implements IEntity{
 	}
 	public void setMethods(INode<IMethod> methods) {
 		this.methods = methods;
+	}
+	public String getPages() {
+		if(pages==null)pages="";
+		return pages;
+	}
+	public void setPages(String pages) {
+		this.pages = pages;
 	}
 	
 }

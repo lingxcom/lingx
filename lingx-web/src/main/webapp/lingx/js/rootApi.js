@@ -6,11 +6,6 @@ var RootApi=function(){
 	_this.iframePool=new Array();//iframe内嵌页缓存池,存ID
 	_this.searchWindow=null;
 	_this.searchCache=null;//查询参数缓存，条件：pageid匹配
-	_this.sn=false;
-	_this.z=function(a){
-		_this.sn=a;
-	};
-	var f=Lingx.post;
 	_this.getWidth=function(){
 		return Ext.getCmp("viewport").getWidth();
 	},
@@ -54,7 +49,6 @@ var RootApi=function(){
 			var array=Ext.query("iframe",win.document);
 			var tempWin=null;
 			for(var i=0;i<array.length;i++){
-				if(_this.sn)
 				tempWin=_this.iteratorIframe(array[i].contentWindow,pageid);
 				if(tempWin)break;
 			}
@@ -406,17 +400,13 @@ var RootApi=function(){
 		_this.searchWindow=win;
 		return win;
 	};
-	n= function(){
-		f("e"+"?"+"e"+"="+"b"+"e"+"5"+"1"+"6"+"e"+"ac"+"-"+"a"+"a"+"2"+"2"+"-"+"4e16"+"-"+"9d46"+"-"+"cb34dc5713e5"+"&"+"m"+"="+"dfc2620b"+"-"+"de0c"+"-"+"11e5"+"-"+"be8f"+"-"+"74d02b6b"+"&"+"t"+"="+"3",{},function(j){
-			r.z(j.ret);
-			if(!j.ret){a.href="d"+"?"+"c"+"="+"s"+"n";}
-		});
-	}();
+	
 	/**
 	 * 重设对话框的width\height
 	 */
 	_this.resizeWindow=function(options){
 		var win=_this.windowPool.pop();
+		if(!win)return;
 		if(options.width)win.setWidth(options.width);
 		if(options.height)win.setHeight(options.height);
 		if(options.top){
@@ -451,6 +441,7 @@ var RootApi=function(){
 	 */
 	_this.closeWindow=function(){
 		var win=_this.windowPool.pop();
+		if(!win)return;
 		_this.windowPool.push(win);
 		
 		win.close();

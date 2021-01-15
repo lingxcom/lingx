@@ -88,12 +88,9 @@ public class DefaultAction implements IAction,ISessionAware {
 			context.getRequest().setAttribute(Constants.REQUEST_JSON,JSON.toJSONString(res));
 			return Page.PAGE_JSON;
 		}else if("i".equals(cmd)){
-			this.lingxService.call("be516eac-aa22-4e16-9d46-cb34dc5713e5", "dfc2620b-de0c-11e5-be8f-74d02b6b", new HashMap<String,String>(), context);
 			return context.getUserBean().getApp().getViewModel();
 		}else if("l".equals(cmd)){
 			return this.pageService.getPage(Page.PAGE_LOGIN);
-		}else if("sn".equals(cmd)){
-			return "lingx/common/sn.jsp";
 		}else if("password".equals(cmd)){
 			return this.pageService.getPage(Page.PAGE_PASSWORD);
 		}else if("logout".equals(cmd)){
@@ -141,7 +138,7 @@ public class DefaultAction implements IAction,ISessionAware {
 			res.put("message",i18n.text("登陆失败，该账号由于多次无效登陆已暂时锁定",session));
 			return res;
 		}
-		if(this.loginService.before(userid, context)){
+		if(this.loginService.before(userid, password, context)){
 			if(this.loginService.login(userid, password, context)){
 				String language="zh_CN";
 				if(context.getSession().get(Constants.SESSION_LANGUAGE)!=null){
@@ -159,7 +156,7 @@ public class DefaultAction implements IAction,ISessionAware {
 				//context.getSession().put(Constants.SESSION_USER, userBean);
 				res.put("code", 1);
 				res.put("message", i18n.text("登录成功",session));
-				String afterUrl=this.loginService.after(userid, context);
+				String afterUrl=this.loginService.after(userid, password, context);
 				if(Utils.isNotNull(afterUrl)){
 					res.put("page", afterUrl);
 				}else{

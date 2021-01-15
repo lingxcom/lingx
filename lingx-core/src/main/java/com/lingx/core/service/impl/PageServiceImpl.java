@@ -30,25 +30,14 @@ public class PageServiceImpl implements IPageService {
 	@Resource(name="jdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
 	private Map<String,IPage> pages;
-	private boolean sn=false;
-	public int c=0;
-	public void init(boolean b){
-		this.sn=b;
-	}
+	
 	public String getUri(String key) {
 		return this.pages.get(key).getUri();
 	}
 
 	@Override
 	public String getJsonPage() {
-		if(sn)
-			return Page.PAGE_JSON;
-		else {
-			if((c++)<100){
-				return Page.PAGE_JSON;
-			}else{
-		return getUri(Page.PAGE_NO_PERMISSION);}}
-		
+		return Page.PAGE_JSON;
 	}
 	@Override
 	public String getUrlPage() {

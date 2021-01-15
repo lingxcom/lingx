@@ -25,7 +25,7 @@ public class LoginServiceImpl implements ILoginService {
 	@Resource
 	private ILingxService lingxService;
 	@Override
-	public boolean before(String userid, IContext context) {
+	public boolean before(String userid, String password, IContext context) {
 		
 		return true;
 	}
@@ -55,11 +55,17 @@ public class LoginServiceImpl implements ILoginService {
 	}
 
 	@Override
-	public String after(String userid, IContext context) {
+	public String after(String userid, String password, IContext context) {
+		String array[]=new String[]{"000000","111111","222222","333333","444444","555555","666666","777777","888888","999999","123456","123123"};
 		if("true".equals(this.lingxService.getConfigValue("lingx.login.password.zero6", "false"))){
-			String zeroPwd=this.lingxService.passwordEncode(this.lingxService.getConfigValue("lingx.login.password.zero6.pwd", "000000"), userid);
-			if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_user where account=? and password=?",userid,zeroPwd)>0){
+			for(String p:array){
+			String zeroPwd=this.lingxService.passwordEncode(p, userid);
+		
+			String r = zeroPwd.substring(32);
+			String temp = Utils.md5(password)+r;
+			if(temp.equals(zeroPwd)){
 				return this.lingxService.getConfigValue("lingx.login.password.edit", "d?c=password");
+			}
 			}
 		}
 		return null;

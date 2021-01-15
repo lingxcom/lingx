@@ -2,6 +2,7 @@ package com.lingx.core.service.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -9,6 +10,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.lingx.core.model.IEntity;
+import com.lingx.core.model.IMethod;
 import com.lingx.core.model.bean.ItemBean;
 import com.lingx.core.model.bean.OptionBean;
 import com.lingx.core.model.bean.PackBean;
@@ -41,7 +44,7 @@ import com.lingx.core.utils.ZipUtils;
 public class PackageServiceImpl implements IPackageService {
 	public static final Logger log=LogManager.getLogger(PackageServiceImpl.class);
 	private String basePath;
-	private String uploadURL="http://www.lingx.com/us";
+	private String uploadURL="http://mdd.lingx.com/us";
 	//private String uploadURL="http://127.0.0.1:8080/site/us";
 	//private String uploadURL="http://192.168.1.252:8090/us";
 	private String zipPath="/temp/package/";
@@ -50,6 +53,117 @@ public class PackageServiceImpl implements IPackageService {
 	private JdbcTemplate jdbcTemplate;
 	@Resource
 	private IModelService modelService;
+	
+	public String packAndSubmit(String targetUrl,String targetSecret,String ecodes,String basePath){
+		this.basePath=basePath;
+		String ret="";
+		PackBean bean=new PackBean();
+		List<String> listEntiey=new ArrayList<>();
+		List<String> listPage=new ArrayList<>();
+		String array[]=ecodes.split(",");
+		for(String temp:array){
+			if(Utils.isNotNull(temp))
+			listEntiey.add(temp);
+			
+			
+			IEntity e=this.modelService.getEntity(temp);
+			String pages=e.getPages();
+			if(Utils.isNotNull(pages)){
+				String arr[]=pages.split(",");
+				for(String page:arr){
+					listPage.add(page);
+				}
+			}
+			for(IMethod m:e.getMethods().getList()){
+				listPage.add(m.getViewUri());
+			}
+		}
+		
+		bean.setSjmx(true);
+		bean.setModelList(listEntiey);
+		bean.setFileList(listPage);
+		bean.setAppid("335ec1fc-1011-11e5-b7ab-74d02b6b5f61");
+		bean.setAuthor("WWW.LINGX.COM");
+		bean.setContent("开发工具提交："+ecodes);
+		FileInputStream fis=null;
+		try {
+			//System.out.println("初始化完成，正在打包。。。");
+			String zipFile=this.pack(bean, basePath);
+			//System.out.println("打包完成，正在上传。。。");
+			fis=new FileInputStream(new File(zipFile)); 
+			ret=stream(fis,System.currentTimeMillis()+".zip",targetUrl.trim()+"/us",targetSecret.trim(),bean);
+			//System.out.println(ret);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			try {
+				if(fis!=null)fis.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return ret;
+	}
+	
+	/**
+	 * 
+	 * @param targetUrl
+	 * @param targetSecret
+	 * @param type 1功能，2菜单，3字典
+	 * @param basePath
+	 * @return
+	 */
+	public String packAndSubmitFMO(String targetUrl,String targetSecret,int type,String basePath){
+		this.basePath=basePath;
+		String ret="";
+		PackBean bean=new PackBean();
+		switch(type){
+		case 1:
+			List<Map<String,Object>> func=this.jdbcTemplate.queryForList("select * from tlingx_func");
+			bean.setFuncList(func);
+			bean.setFunc(true);
+			break;
+		case 2:
+			List<Map<String,Object>> menu=this.jdbcTemplate.queryForList("select * from tlingx_menu");
+			bean.setMenuList(menu);
+			bean.setMenu(true);
+			break;
+		case 3:
+			String optionJSON=getOptionJSON(this.jdbcTemplate);
+			bean.setOptionJSON(optionJSON);
+			bean.setOption(true);
+			break;
+		default:
+			return "ERROR:"+type;
+		}
+		
+		bean.setSjmx(false);
+		bean.setAppid("335ec1fc-1011-11e5-b7ab-74d02b6b5f61");
+		bean.setAuthor("WWW.LINGX.COM");
+		bean.setContent("开发工具提交："+type);
+		FileInputStream fis=null;
+		try {
+			//System.out.println("初始化完成，正在打包。。。");
+			String zipFile=this.pack(bean, basePath);
+			//System.out.println("打包完成，正在上传。。。");
+			fis=new FileInputStream(new File(zipFile)); 
+			ret=stream(fis,System.currentTimeMillis()+".zip",targetUrl.trim()+"/us",targetSecret.trim(),bean);
+			//System.out.println(ret);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			try {
+				if(fis!=null)fis.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return ret;
+	}
 	
 	public void packAndDownload(PackBean bean,String basePath,OutputStream outputStream){
 		try {
@@ -73,22 +187,35 @@ public class PackageServiceImpl implements IPackageService {
 		this.basePath=basePath;
 		Map<String,Object> config=new HashMap<String,Object>();
 		List<Map<String,Object>> entitys=new ArrayList<Map<String,Object>>();
+		Set<String> alreadyFile=new HashSet<String>();
 		this.init(config, bean);
 		try {
 			File zipPath=new File(this.basePath+this.zipPath);
 			if(!zipPath.exists())zipPath.mkdirs();
 			
 			FileUtils.cleanDirectory(zipPath);
+			if(bean.getFileList()!=null)
 			for(String temp:bean.getFileList()){
 				if(Utils.isNull(temp))continue;
+				if(alreadyFile.contains(temp))continue;
 				log.info("copy file:"+temp);
 				File source=new File(this.basePath+temp);
 				if(source.isFile()){
-					FileUtils.copyFile(source, new File(this.basePath+this.zipPath+temp));
+					try {
+						FileUtils.copyFile(source, new File(this.basePath+this.zipPath+temp));
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else{
-					FileUtils.copyDirectory(source, new File(this.basePath+this.zipPath+temp));
+					try {
+						FileUtils.copyDirectory(source, new File(this.basePath+this.zipPath+temp));
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-				
+				alreadyFile.add(temp);
 			}
 			
 			if(bean.isSjmx()){
@@ -102,12 +229,23 @@ public class PackageServiceImpl implements IPackageService {
 				}
 			
 			}else{
+				if(bean.getModelList()!=null)
 				bean.getModelList().clear();
 			}
 			if(bean.isOption()){
-				log.info("copy option:"+bean.getAppid());
-				String optionJSON=getOptionJSON(this.jdbcTemplate,bean.getAppid());
-				config.put("optionJSON", optionJSON);
+				if(Utils.isNotNull(bean.getOptionJSON())){
+					config.put("optionJSON", bean.getOptionJSON());
+				}else{
+					log.info("copy option:"+bean.getAppid());
+					String optionJSON=getOptionJSON(this.jdbcTemplate,bean.getAppid());
+					config.put("optionJSON", optionJSON);
+				}
+			}
+			if(bean.isFunc()){
+				config.put("func", bean.getFuncList());
+			}
+			if(bean.isMenu()){
+				config.put("menu", bean.getMenuList());
 			}
 			config.put("entityJSON", JSON.toJSONString(entitys));
 			//config.put("funcJSON", bean.getFuncJson());
@@ -180,7 +318,7 @@ public class PackageServiceImpl implements IPackageService {
 			//this.upload(new URL(this.uploadURL), new File(file),secret);
 			FileInputStream fis=new FileInputStream(new File(file)); 
 			String ret=stream(fis,System.currentTimeMillis()+".zip",this.uploadURL,secret,bean);
-			System.out.println(ret);
+			//System.out.println(ret);
 			return ret;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -217,7 +355,7 @@ public class PackageServiceImpl implements IPackageService {
 	        out.close();
 	        input.close();
 	        InputStream in=conn.getInputStream();
-	        while((len=in.read(buff))!=-1){//System.out.println(len);
+	        while((len=in.read(buff))!=-1){////System.out.println(len);
 	        	sb.append(new String(buff,0,len));
 	        }
 	        in.close();
@@ -235,6 +373,31 @@ public class PackageServiceImpl implements IPackageService {
 	private String getOptionJSON(JdbcTemplate jdbc,String appid){
 		List<OptionBean> options=new ArrayList<OptionBean>();
 		List<Map<String,Object>> list=jdbc.queryForList("select * from tlingx_option where app_id=?",appid);
+		for(Map<String,Object> map:list){
+			OptionBean bean=new OptionBean();
+			bean.setName(map.get("name").toString());
+			bean.setCode(map.get("code").toString());
+			bean.setAppid(map.get("app_id").toString());
+
+			List<Map<String,Object>> list2=jdbc.queryForList("select * from tlingx_optionitem where option_id=?",map.get("id"));
+			List<ItemBean> items=new ArrayList<ItemBean>();
+			for(Map<String,Object> m:list2){
+				ItemBean item=new ItemBean();
+				item.setName(m.get("name").toString());
+				item.setValue(m.get("value")!=null?m.get("value").toString():"");
+				item.setOrderindex(m.get("orderindex").toString());
+				item.setEnabled(m.get("enabled").toString());
+				items.add(item);
+			}
+			bean.setItems(items);
+			options.add(bean);
+		}
+		return JSON.toJSONString(options);
+	}
+	
+	private String getOptionJSON(JdbcTemplate jdbc){
+		List<OptionBean> options=new ArrayList<OptionBean>();
+		List<Map<String,Object>> list=jdbc.queryForList("select * from tlingx_option ");
 		for(Map<String,Object> map:list){
 			OptionBean bean=new OptionBean();
 			bean.setName(map.get("name").toString());

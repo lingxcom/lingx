@@ -52,6 +52,18 @@
     <servlet-name>DruidStatView</servlet-name>
     <url-pattern>/druid/*</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UploadStreamServlet</display-name>
+    <servlet-name>UploadStreamServlet</servlet-name>
+    <servlet-class>com.lingx.support.web.servlet.UploadStreamServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UploadStreamServlet</servlet-name>
+    <url-pattern>/UploadStreamServlet</url-pattern>
+    <url-pattern>/uploadStream</url-pattern>
+    <url-pattern>/us</url-pattern>
+  </servlet-mapping>
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>

@@ -384,3 +384,20 @@ Date.prototype.format = function (fmt) { //author: meizz
     if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 };
+
+$(function(){
+	$(window).bind("click",function(){
+		if(window.parent&&window.parent.removeMenu){
+		window.parent.removeMenu();
+		}else if(window.parent.window.parent&&window.parent.window.parent.removeMenu){
+			window.parent.window.parent.removeMenu();
+		}
+	});
+});
+
+function blockContextmen(){
+if(window.event){
+window.event.returnValue=false;
+}
+}
+document.oncontextmenu=blockContextmen;

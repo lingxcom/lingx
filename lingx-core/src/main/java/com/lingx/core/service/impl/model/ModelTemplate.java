@@ -18,6 +18,7 @@ import com.lingx.core.model.impl.DefaultField;
 import com.lingx.core.model.impl.DefaultMethod;
 import com.lingx.core.model.impl.DefaultNode;
 import com.lingx.core.model.impl.ExpressionExecutor;
+import com.lingx.core.model.impl.ExpressionInterpreter;
 import com.lingx.core.model.impl.GridConfig;
 import com.lingx.core.model.impl.QueryEntity;
 import com.lingx.core.model.impl.RuleConfig;
@@ -269,6 +270,34 @@ public class ModelTemplate {
 				f2.setInputType("hidden");
 				f2.setIsNotNull(false);
 				f2.setVisible(false);
+			}else if(type.indexOf("int")>=0||type.indexOf("decimal")>=0){
+				f2.setIsNotNull(true);
+			}
+			if("name".equalsIgnoreCase(code)){
+				f2.setIsNotNull(true);
+			}
+			if("create_time".equals(code)||"modify_time".equals(code)){
+				f2.setDefaultValue("${CDateTime}");
+				f2.setWidth("180");
+				f2.setEnabled(false);
+				ExpressionInterpreter aa=new ExpressionInterpreter();
+				aa.setType("datetime");
+				f2.getInterpreters().getList().add(aa);
+			}
+			
+			
+			
+			if("orderindex".equalsIgnoreCase(code)){
+				f2.setDefaultValue("100");
+			}
+			
+			if("user_id".equalsIgnoreCase(code)){
+				f2.setInputType("dialogoption");
+				f2.setRefEntity("tlingx_user");
+			}
+			if("org_id".equalsIgnoreCase(code)){
+				f2.setInputType("dialogtree");
+				f2.setRefEntity("tlingx_org");
 			}
 			list.add(f2);
 		}

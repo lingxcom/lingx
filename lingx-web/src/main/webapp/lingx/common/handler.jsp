@@ -159,6 +159,10 @@ if("orgtree".equals(cmd)){
 	}
 	ret.put("message", "授权码已保存，请重新登录！");
 	out.println(JSON.toJSONString(ret));
+}else if("server".equals(cmd)){
+	com.lingx.support.local.Server server=new com.lingx.support.local.Server();
+	server.copyTo();
+	out.println(JSON.toJSONString(server));
 }else{
 	System.out.println("参数c的值["+cmd+"]有误,system/workflow/manager/handler.jsp");
 }

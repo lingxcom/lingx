@@ -10,13 +10,13 @@ String c=request.getParameter("c");
 if("tree".equals(c)){
 	
 	String node=request.getParameter("node");
-	String ret=HttpUtils.get("http://www.lingx.com/bi/action/tree.jsp?node="+node);
+	String ret=HttpUtils.get("http://mdd.lingx.com/bi/action/tree.jsp?node="+node);
 	out.print(ret);
 }else if("grid".equals(c)){
 	String page1=request.getParameter("page");
 	String rows=request.getParameter("limit");
 	String node=request.getParameter("node");
-	String ret=HttpUtils.get("http://www.lingx.com/bi/action/grid.jsp?node="+node+"&page="+page1+"&rows="+rows);
+	String ret=HttpUtils.get("http://mdd.lingx.com/bi/action/grid.jsp?node="+node+"&page="+page1+"&rows="+rows);
 	out.print(ret);
 }else if("inst".equals(c)){
 	String no=request.getParameter("no");
@@ -24,13 +24,13 @@ if("tree".equals(c)){
 	IUpdateService update=spring.getBean(IUpdateService.class);
 	String basePath=request.getServletContext().getRealPath("/");
 	String ts=Utils.getTime();
-	boolean b=update.update(new URL("http://www.lingx.com/downloadCode?no="+no), basePath,ts);
+	boolean b=update.update(new URL("http://mdd.lingx.com/downloadCode?no="+no), basePath,ts);
 	if(b){
 		ret.put("code", 1);
-		ret.put("message", "更新成功");
+		ret.put("message", "安装成功");
 	}else{
 		ret.put("code", -1);
-		ret.put("message", "更新失败");
+		ret.put("message", "安装失败");
 		
 	}
 	out.print(JSON.toJSONString(ret));

@@ -43,8 +43,8 @@ tr{height:30px;}
 </head>
 <body>
 <table width="100%" border="0" cellSpacing="0" cellPadding="0">
-<tr><td><span style="color:#999">说明：对象名称是将要对某个事物管理的名称，例如：客户、通讯录、商品。</span> </td></tr>
-<tr><td><span style="color:red;">*</span>对象名称：<input id="name" /></td></tr>
+<tr><td><span style="color:#999">说明：名称是将要对某个事物管理的名称，例如：客户、通讯录、商品。</span> </td></tr>
+<tr><td><span style="color:red;">*</span>模型名称：<input id="name" /></td></tr>
 
 <tr><td><span style="color:#999"> 点击“确定”进入下一步。</span> </td></tr>
 </table>

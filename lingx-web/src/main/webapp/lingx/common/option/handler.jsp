@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%><%@ page import="com.lingx.core.utils.Utils,com.lingx.core.model.bean.UserBean,com.lingx.core.service.*,com.lingx.core.Constants,com.lingx.core.service.*,com.lingx.core.model.*,java.util.*,com.alibaba.fastjson.JSON,org.springframework.context.ApplicationContext,org.springframework.web.context.support.WebApplicationContextUtils,org.springframework.jdbc.core.JdbcTemplate" %>
 
 <%
@@ -17,7 +17,7 @@ if("put".equals(cmd)){
 	String json=request.getParameter("json");
 	Map<String,Object> map=(Map<String,Object>)JSON.parseObject(json);
 	List<Map<String,Object>> items=(List<Map<String,Object>>)map.get("items");
-	if(jdbc.queryForInt("select count(*) from tlingx_option where id=?",item.get("id"))==0){
+	if(jdbc.queryForInt("select count(*) from tlingx_option where id=?",map.get("id"))==0){
 		jdbc.update("insert into tlingx_option(id,name,code,app_id,create_time) values(?,?,?,?,?)",
 			map.get("id"),map.get("name"),map.get("code"),map.get("app_id"),map.get("create_time"));
 	}

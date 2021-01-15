@@ -23,13 +23,20 @@ com.lingx.core.service.II18NService i18n=spring.getBean(com.lingx.core.service.I
 <script type="text/javascript">
 var no='';
 $(function(){
-	$.getJSON("http://www.lingx.com/bi/action/buy.jsp?callback=?&id=${param.id}",function(json){
+	$.getJSON("http://mdd.lingx.com/bi/action/buy.jsp?callback=?&id=${param.id}",function(json){
 		//console.log(json);
+		
 		no=json.no;
+		if("none"!=json.payCode){
 		var url="http://tool.oschina.net/action/qrcode/generate?data="+json.payCode+"&output=image%2Fpng&error=L&type=5&margin=10&size=4&1538981680504";
 		var div=$("#div");
 		div.empty();
 		div.append("<img src='"+url+"'/>");
+		}else{
+			clearInterval(ip1);
+			alert("无需支付");
+			window.location.href="lingx/common/store_inst.jsp?no="+no;
+		}
 	});
 
 });
@@ -38,7 +45,7 @@ function ft(time){
 }
 function check(){
 	if(no){
-		$.getJSON("http://www.lingx.com/bi/action/check.jsp?callback=?&no="+no,function(json){
+		$.getJSON("http://mdd.lingx.com/bi/action/check.jsp?callback=?&no="+no,function(json){
 			if(json.status==2){
 				clearInterval(ip1);
 				alert("支付成功");

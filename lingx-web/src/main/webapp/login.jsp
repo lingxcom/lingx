@@ -1,11 +1,15 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%><%@ page import="com.lingx.core.utils.Utils,com.lingx.core.model.bean.UserBean,com.lingx.core.service.*,com.lingx.core.Constants,com.lingx.core.service.*,com.lingx.core.model.*,java.util.*,com.alibaba.fastjson.JSON,org.springframework.context.ApplicationContext,org.springframework.web.context.support.WebApplicationContextUtils,org.springframework.jdbc.core.JdbcTemplate,com.lingx.gps.service.*" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	
+	ApplicationContext spring = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getSession().getServletContext());
+	JdbcTemplate jdbc=spring.getBean(JdbcTemplate.class);
+	Map<String,Object> map=jdbc.queryForMap("select id,name from tlingx_app limit 1");
+	request.setAttribute("app", map);
+
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -14,7 +18,7 @@
 <meta name="renderer" content="webkit" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="<%=basePath%>">
-<title>灵犀 - 开源的轻量级模型驱动开发平台</title>
+<title>${app.name }</title>
 <script type="text/javascript" src="<%=basePath %>js/jquery.js"></script>
 <script type="text/javascript" src="<%=basePath %>js/md5-min.js"></script>
 <script type="text/javascript" src="<%=basePath %>lingx/js/lingx.js"></script>
@@ -135,27 +139,20 @@ padding-left:5px;
 <td style="" align="center">
 <div style="width:1000px;height:80px;line-height:80px;text-align:left;">
 <h1>
-灵犀 - 开源的轻量级模型驱动开发平台</h1>
+${app.name }</h1>
 </div>
 
 </td>
 
 </tr>
 <tr>
-<td style="background-color:#01316e;" align="center" valign="middle">
-<div style="width:1000px;height:400px;">
+<td style="background-color:#004e98;background-image:url('lingx/images/login/8qLJPA.png');background-size:100%;" align="center" valign="middle">
+<div style="width:1000px;height:600px;padding-top:50px;">
 
 <table width="100%" border="0" cellSpacing="0" cellPadding="0">
 <tr>
 <td>
 <ul>
-<li>模型驱动：基于数据库表直接生成数据的增删改查，非源代码生成。</li>
-<li>控件丰富：数据输入控件丰富，无需二次开发整合，一键配置。</li>
-<li>数据查询：重新定义数据查询方式，可动态配置、简化多重关连。</li>
-<li>基于配置：用简单的配置可完成系统80%的开发，快速便捷。</li>
-<li>权限管理：强大的、可动态配置数据权限及细粒度的功能权限。</li>
-<li>级联展示：列表级联、树型联级、最多支持三重级联。</li>
-<li>在线开发：WEB在线配置开发、在线预览、在线部署、立即使用。</li>
 </ul>
 </td>
 <td width="400" valign="middle">
@@ -181,7 +178,7 @@ padding-left:5px;
 </tr>
 <tr>
 <td height="50" colspan="2" align="center" valign="middle">
-<button onclick="login();" style="width:260px;height:40px;line-height:40px;background-color:#01316e;color:#fff;font-size:20px;cursor:pointer;" class="yj05">登  录</button>
+<button onclick="login();" style="width:260px;height:40px;line-height:40px;background-color:#004e98;color:#fff;font-size:20px;cursor:pointer;" class="yj05">登  录</button>
  </td>
 </tr>
 <tr>

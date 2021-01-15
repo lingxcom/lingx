@@ -12,7 +12,8 @@ private static synchronized boolean insertFunc(JdbcTemplate jdbc,String module, 
 			IEntity se =modelService.getEntity(module); //modelService.get(module);
 			String methodName = "";
 			if (chooser.defaultMethodContains(func)) {
-				methodName = func;
+				//methodName = func;
+				methodName = chooser.getMethod(func, se).getName();
 			} else {
 				List<IMethod> list = se.getMethods().getList();
 				for (IMethod m : list) {

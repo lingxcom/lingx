@@ -68,7 +68,7 @@ public class GetAction extends AbstractJsonAction {
 				return "{}";
 			}
 			modelService.setValueForDefaultValue(scriptMethod.getFields().getList(),context,context.getRequest());
-			modelService.roleFieldAndSetValue(scriptMethod.getFields().getList(), entityCode,  userBean);
+			modelService.roleFieldAndSetValue(scriptMethod.getFields().getList(), entityCode,scriptMethod.getCode(),  userBean);
 			modelService.setValueForRequest(scriptMethod.getFields().getList(),request);
 			modelService.removeDefaultValueTransformTag(scriptMethod.getFields().getList());
 			if(Utils.isNotNull(entityId))

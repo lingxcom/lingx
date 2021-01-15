@@ -113,6 +113,7 @@ public class ModelServiceImpl implements IModelService {
 	}
 	@Override
 	public IEntity getCacheEntity(String code) {
+		if(Utils.isNull(code))return null;
 		IEntity temp=ENTITY_CACHE.get(code);
 		try {
 			if(temp==null){
@@ -1019,7 +1020,7 @@ public class ModelServiceImpl implements IModelService {
 			}
 		}
 	}
-	public void roleFieldAndSetValue(List<IField> listFields,String ecode,UserBean userBean){
+	public void roleFieldAndSetValue(List<IField> listFields,String ecode,String mcode,UserBean userBean){
 		int roleNumber=this.jdbcTemplate.queryForInt("select count(*) from tlingx_role where id in(select role_id from tlingx_userrole where user_id=?)",userBean.getId());
 		int troleFieldNumber=0;
 		for(IField field:listFields){
@@ -1027,11 +1028,14 @@ public class ModelServiceImpl implements IModelService {
 				field.setInputType("hidden");
 				continue;
 			}*/
-			if(!field.getEnabled()){
+			if(!field.getEnabled()&&!"view".equals(mcode)){
 				field.setInputType("hidden");
 				continue;
 			}
-			
+			if(!field.getVisible()&&"view".equals(mcode)){
+				field.setInputType("hidden");
+				continue;
+			}
 			troleFieldNumber=this.jdbcTemplate.queryForInt("select count(*) from tlingx_rolefield where role_id in(select role_id from tlingx_userrole where user_id=?) and entitycode=? and fieldcode=?",userBean.getId(),ecode,field.getCode());
 			if(troleFieldNumber>=roleNumber){
 				field.setInputType("hidden");
@@ -1045,6 +1049,14 @@ public class ModelServiceImpl implements IModelService {
 		}
 	}
 	
+	public String getStringByList(List<String> list){
+		StringBuilder sb=new StringBuilder();
+		for(String str:list){
+			sb.append(str).append(",");
+		}
+		if(sb.length()>0)sb.deleteCharAt(sb.length()-1);
+		return sb.toString();
+	}
 	public void setValueForFields(List<IField> listFields,String ecode,String valueField,String eid,IContext context,IPerformer performer){
 		
 		//String sqlForId="select * from %s where id='%s'";
@@ -1077,9 +1089,9 @@ public class ModelServiceImpl implements IModelService {
 				if(Utils.isNull(field.getRefEntity())||!field.getEscape()){
 					field.setValue(map.get(field.getCode()));
 				}else{
-					String sql="select * from %s where %s=?";
+					String sql="select %s,%s from %s where %s=?"; //提取的数据太多，改只两个字段 2021-01-15
 
-					String sql2="select * from %s where %s in (%s)";
+					String sql2="select %s,%s from %s where %s in (%s)";//提取的数据太多，改只两个字段2021-01-15
 					if("tlingx_optionitem".equals(field.getRefEntity())){
 						sql+=" and option_id in(select id from tlingx_option where code='"+field.getInputOptions()+"')";
 						sql2+=" and option_id in(select id from tlingx_option where code='"+field.getInputOptions()+"')";
@@ -1093,7 +1105,7 @@ public class ModelServiceImpl implements IModelService {
 						String realValue=map.get(field.getCode())==null?field.getValue().toString():map.get(field.getCode()).toString();
 						if(realValue.indexOf(",")==-1){//一个值
 							IEntity temp=getCacheEntity(field.getRefEntity());
-						 m=this.jdbcTemplate.queryForMap(String.format(sql,temp.getTableName(),value),map.get(field.getCode()));
+						 m=this.jdbcTemplate.queryForMap(String.format(sql,getStringByList(text),value,temp.getTableName(),value),map.get(field.getCode()));
 
 							StringBuilder sb=new StringBuilder();
 							for(String s:text){
@@ -1109,7 +1121,7 @@ public class ModelServiceImpl implements IModelService {
 						}else{//多个值
 							//System.out.println(String.format(sql2, field.getRefEntity(),value,realValue));
 							IEntity temp=getCacheEntity(field.getRefEntity());
-							List<Map<String,Object>> list=this.jdbcTemplate.queryForList(String.format(sql2, temp.getTableName(),value,formatValue(realValue)));
+							List<Map<String,Object>> list=this.jdbcTemplate.queryForList(String.format(sql2,getStringByList(text),value, temp.getTableName(),value,formatValue(realValue)));
 							StringBuilder texts=new StringBuilder();
 							StringBuilder values=new StringBuilder();
 							for(Map<String,Object> obj:list){
@@ -1261,9 +1273,9 @@ public   void setValueForFields(List<IField> listFields,IPerformer performer){
 				if(Utils.isNull(field.getRefEntity())){
 					
 				}else{
-					String sql="select * from %s where %s=?";
+					String sql="select %s,%s from %s where %s=?";
 
-					String sql2="select * from %s where %s in (%s)";
+					String sql2="select %s,%s from %s where %s in (%s)";
 					if("tlingx_optionitem".equals(field.getRefEntity())){
 						sql+=" and option_id in(select id from tlingx_option where code='"+field.getInputOptions()+"')";
 						sql2+=" and option_id in(select id from tlingx_option where code='"+field.getInputOptions()+"')";
@@ -1277,7 +1289,7 @@ public   void setValueForFields(List<IField> listFields,IPerformer performer){
 						String realValue=field.getValue().toString();
 						if(realValue.indexOf(",")==-1){//一个值
 							IEntity temp=getCacheEntity(field.getRefEntity());
-						 m=this.jdbcTemplate.queryForMap(String.format(sql,temp.getTableName(),value),realValue);
+						 m=this.jdbcTemplate.queryForMap(String.format(sql,this.getStringByList(text),value,temp.getTableName(),value),realValue);
 
 							StringBuilder sb=new StringBuilder();
 							for(String s:text){
@@ -1291,7 +1303,7 @@ public   void setValueForFields(List<IField> listFields,IPerformer performer){
 							m.put("exists", true);
 						}else{//多个值
 							//System.out.println(String.format(sql2, field.getRefEntity(),value,realValue));
-							List<Map<String,Object>> list=this.jdbcTemplate.queryForList(String.format(sql2, field.getRefEntity(),value,formatValue(realValue)));
+							List<Map<String,Object>> list=this.jdbcTemplate.queryForList(String.format(sql2,this.getStringByList(text),value, field.getRefEntity(),value,formatValue(realValue)));
 							StringBuilder texts=new StringBuilder();
 							StringBuilder values=new StringBuilder();
 							for(Map<String,Object> obj:list){
@@ -1386,8 +1398,6 @@ public   void setValueForFields(List<IField> listFields,IPerformer performer){
 	}
 	@Override
 	public boolean updateLingx(String filePath,String appid) {
-		System.out.println(appid);
-		System.out.println(filePath);
 		IEntity entity=UpdateServiceImpl.readFile(filePath);
 		this.save(entity);
 		String name=entity.getName(),code=entity.getCode();

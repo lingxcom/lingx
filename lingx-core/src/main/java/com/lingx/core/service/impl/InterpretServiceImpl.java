@@ -91,8 +91,8 @@ public class InterpretServiceImpl implements IInterpretService {
 		String vField=null;
 		StringBuilder params=null;
 		String tableName=null;
-		String sql = "select * from %s where %s='%s' %s";
-		String insql = "select * from %s where %s in(%s) %s";
+		String sql = "select %s,%s from %s where %s='%s' %s";
+		String insql = "select %s,%s from %s where %s in(%s) %s";
 		List<String> listField=null;
 
 		for(IField f:fields){
@@ -125,12 +125,12 @@ public class InterpretServiceImpl implements IInterpretService {
 				try {
 					if (m.get(field.getCode()).toString().indexOf(",") != -1){
 						listMap =this.jdbcTemplate.queryForList(
-								String.format(insql, tableName, vField,toArrayString(m.get(field.getCode())), params));
+								String.format(insql,this.modelService.getStringByList(listField),vField, tableName, vField,toArrayString(m.get(field.getCode())), params));
 						
 					}else{
-						log.debug("Interpret Single:"+String.format(sql, tableName, vField,m.get(field.getCode()), params));
+						log.debug("Interpret Single:"+String.format(sql,this.modelService.getStringByList(listField),vField, tableName, vField,m.get(field.getCode()), params));
 						listMap = this.jdbcTemplate.queryForList(
-								String.format(sql, tableName, vField,m.get(field.getCode()), params));
+								String.format(sql,this.modelService.getStringByList(listField),vField, tableName, vField,m.get(field.getCode()), params));
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

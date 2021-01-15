@@ -80,7 +80,7 @@ public interface IModelService {
 	public  void setValueForDefaultValue(List<IField> listFields,IContext context,IHttpRequest request);
 	public  void setValueForRequest(List<IField> listFields,IHttpRequest request);
 	public void removeDefaultValueTransformTag(List<IField> listFields);
-	public void roleFieldAndSetValue(List<IField> listFields,String ecode,UserBean userBean);
+	public void roleFieldAndSetValue(List<IField> listFields,String ecode,String mcode,UserBean userBean);
 	public   void setValueForFields(List<IField> listFields,String ecode,String valueField,String eid,IContext context,IPerformer performer);
 	public   void setValueForFields(List<IField> listFields,IPerformer performer);
 	
@@ -88,7 +88,7 @@ public interface IModelService {
 	
 	public String getEntityOrderField(IEntity entity);
 	public String getEntityOrderType(IEntity entity);
-	
+	public String getStringByList(List<String> list);
 	public boolean updateLingx(String filePath,String appid);
 	
 }

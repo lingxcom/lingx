@@ -78,7 +78,8 @@ Ext.onReady(function(){
 	            fieldLabel: '<span style="color:red;">*</span>隶属应用',
 	            emptyText: '隶属应用',
 	            name: 'app',
-	            xtype:'dialogoption',
+	            xtype:'hidden',
+	            value:"${SESSION_USER.app.id}",
 	        	etype:"tlingx_app"
 	        },{
             	id:'idtype',

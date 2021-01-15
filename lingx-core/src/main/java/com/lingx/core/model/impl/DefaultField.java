@@ -66,7 +66,7 @@ public class DefaultField extends AbstractModel implements IField{
 	private String inputOptions;//输入控件的参数
 	@FieldModelConfig(sort="9",name="引用类型",inputType="string",editor="new Ext.form.field.ComboBox({displayField: 'text',valueField: 'value',store: new Ext.data.Store({proxy:{ model:'Option',type:'ajax',url:'e?e=tlingx_option&m=items&lgxsn=1&code=YYLX',reader:{type:'json'}},autoLoad:true})}) ")//,{\"text\":\"无\",\"value\":\"\"},
 	private String comboType;//1为输入，2为显示
-	@FieldModelConfig(sort="A",name="指向对象模型",inputType="string",editor="new Ext.form.field.ComboBox({displayField: 'name',valueField: 'code',store: new Ext.data.Store({proxy:{ model:'Entity',type:'ajax',url:'lingx/model/editor/handler.jsp?c=getEntityListForRef',reader:{type:'json'}},autoLoad:true})}) ")//e?e=tlingx_entity&m=combo&is_ref=1&lgxsn=1
+	@FieldModelConfig(sort="A",name="指向实体模型",inputType="string",editor="new Ext.form.field.ComboBox({displayField: 'name',valueField: 'code',store: new Ext.data.Store({proxy:{ model:'Entity',type:'ajax',url:'lingx/model/editor/handler.jsp?c=getEntityListForRef',reader:{type:'json'}},autoLoad:true})}) ")//e?e=tlingx_entity&m=combo&is_ref=1&lgxsn=1
 	private String refEntity;//指向哪个实体【数据库表】
 	
 	@FieldModelConfig(sort="B",name="是否可用",inputType="string")

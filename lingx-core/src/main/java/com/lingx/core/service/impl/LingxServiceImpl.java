@@ -105,7 +105,7 @@ public class LingxServiceImpl implements ILingxService ,ApplicationContextAware{
 		{
 
 			this.modelService.setValueForDefaultValue(method.getFields().getList(),context,context.getRequest());
-			this.modelService.roleFieldAndSetValue(method.getFields().getList(), entityCode,  context.getUserBean());
+			this.modelService.roleFieldAndSetValue(method.getFields().getList(), entityCode,method.getCode(),  context.getUserBean());
 			this.modelService.setValueForRequest(method.getFields().getList(),context.getRequest());
 			String entityId=params.get("id");
 			if(Utils.isNotNull(entityId)){
