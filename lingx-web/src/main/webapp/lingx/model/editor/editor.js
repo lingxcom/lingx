@@ -94,12 +94,17 @@
                 	                   
                 	                   {text:'新建克隆模型',handler:function(e){
                 	                	   openWindow("新建克隆模型","lingx/model/editor/create/clone.jsp?code="+currentEntityCode);
-                	                   }}]
+                	                   }},{
+                	                	   text:'新建Excel模型',handler:function(e){
+                    	                	   openWindow("新建Excel模型","lingx/model/editor/create/excel_step1.jsp?code="+currentEntityCode);
+                    	                   }
+                	                	   
+                	                   }]
                 	            
                 	            })
                 	        },{
                 	            xtype: 'button', // 默认的工具栏类型
-                	            text: '删除',
+                	            text: '删除模型',
                 	            iconCls:'Delete',
                 	            handler:function(){
                 	            	if(!confirm("删除["+currentEntityCode+"]的模型与权限，确定删除吗？"))return;
@@ -224,14 +229,14 @@
 						 }
 						 ,
 						 '-',
-						 {	text:"提交",
+						 {	text:"远程提交",
 							 iconCls:"Transmitblue",
 							 handler:function(){
-								 openWindow2("提交模型","lingx/model/editor/submit_editor.jsp?code="+currentEntityCode);
+								 openWindow2("远程提交","lingx/model/editor/submit_editor.jsp?code="+currentEntityCode);
 							 }
 							 },
 							 
-						 {	text:"刷新",
+						 {	text:"刷新界面",
 							 iconCls:"Reload",
 							 handler:function(){
 								 window.location.reload();
@@ -282,14 +287,14 @@
 								 openWindow("上传模型","e?e=tlingx_tools&m=updateLingx");
 							 }
 						 },'-',{
-							 text:"导入",
+							 text:"导入模型",
 							 handler:function(){
-								 openWindow("导入","lingx/model/update/download_step2.jsp");
+								 openWindow("导入模型","lingx/model/update/download_step2.jsp");
 							 }
 						 },{
-							 text:"导出",
+							 text:"导出模型",
 							 handler:function(){
-								 openWindowFull("导出","e?e=tlingx_tools&m=package");
+								 openWindowFull("导出模型","e?e=tlingx_tools&m=package");
 							 }
 						 }]
             	            })

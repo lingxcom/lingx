@@ -65,6 +65,8 @@ public class ReportServiceImpl implements IReportService {
 		String title=entity.getName();
 		List<String> keys=new ArrayList<String>();
 		Map<String,String> map=new HashMap<String,String>();
+		keys.add("id");
+		map.put("id", "id");
 		for(IField field:entity.getFields().getList()){
 			if(field.getVisible()){
 				keys.add(field.getCode());

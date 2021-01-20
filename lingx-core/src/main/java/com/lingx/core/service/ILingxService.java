@@ -158,4 +158,10 @@ public interface ILingxService {
 	 */
 	public void delMiddleTableRecord(Object userId, Object orgId,String middleTable,String orgField,String userField,String treeTable) ;
 			
+	/**
+	 * 快速获取执行时返回错误消息，不会关闭当前操作窗口
+	 * @param msg
+	 * @return
+	 */
+	public Map<String,Object> getErrorProcessResult(String msg);
 }

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.lingx.core.exception.LingxChooseException;
@@ -19,6 +20,8 @@ import com.lingx.core.service.IModelService;
  */
 @Component(value="lingxChooseService")
 public class ChooseServiceImpl implements IChooseService {
+	@Value("#{configs['lingx.get_method_defalut_field']}")
+	private String get_method_defalut_field="import";//例外取模型属性，因为xml有可能配置属性
 	@Resource
 	private IModelService modelService;
 	@Resource
@@ -33,6 +36,7 @@ public class ChooseServiceImpl implements IChooseService {
 		IMethod method=this.modelService.getMethod(code, entity);
 		if(method==null){
 			method=this.defaultMethodSets.get(code);
+			if(get_method_defalut_field.indexOf(code)==-1)//
 			method.getFields().setList(entity.getFields().getList());
 		}
 		return method;

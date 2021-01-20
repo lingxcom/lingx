@@ -55,4 +55,14 @@ public interface IHttpRequest {
 	 * @return
 	 */
 	Set<String> getParameterNames();
+	/**
+	 * 获取请求方IP
+	 * @return
+	 */
+	String getRequestIP();
+	/**
+	 * 获取项目根路径
+	 * @return
+	 */
+	String getLocalPath();
 }

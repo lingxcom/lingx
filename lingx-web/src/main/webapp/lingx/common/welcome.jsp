@@ -134,7 +134,7 @@ var intervalProcess2=setInterval("reload()",60*1000);
 <div class="panel panel-default div1">
   <div class="panel-heading">技术资料</div>
   <table class="panel-body table ">
-  <tr><td>官方网站：<a href="http://www.lingx.com" target="_blank">http://www.lingx.com</a></td><td>技术文档：<a href="http://docs.lingx.com" target="_blank">http://docs.lingx.com</a></td></tr>
+  <tr><td>官方网站：<a href="https://www.lingx.com" target="_blank">https://www.lingx.com</a></td><td>技术文档：<a href="http://docs.lingx.com" target="_blank">http://docs.lingx.com</a></td></tr>
   <tr><td>视频教程：<a href="https://space.bilibili.com/482658194" target="_blank">https://space.bilibili.com/482658194</a></td><td>源码地址：<a href="https://github.com/lingxcom/lingx" target="_blank">https://github.com/lingxcom/lingx</a></td></tr>
 </table>
 </div>

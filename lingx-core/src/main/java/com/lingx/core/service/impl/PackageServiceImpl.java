@@ -198,7 +198,7 @@ public class PackageServiceImpl implements IPackageService {
 			for(String temp:bean.getFileList()){
 				if(Utils.isNull(temp))continue;
 				if(alreadyFile.contains(temp))continue;
-				log.info("copy file:"+temp);
+				//log.info("copy file:"+temp);
 				File source=new File(this.basePath+temp);
 				if(source.isFile()){
 					try {
@@ -221,7 +221,7 @@ public class PackageServiceImpl implements IPackageService {
 			if(bean.isSjmx()){
 				for(String temp:bean.getModelList()){
 					if(Utils.isNull(temp))continue;
-					log.info("copy model:"+temp);
+					//log.info("copy model:"+temp);
 					IEntity e=this.modelService.get(temp);
 					ModelIO.writeDisk(this.basePath+this.zipPath+"/"+temp+".lingx", e);
 					
@@ -236,7 +236,7 @@ public class PackageServiceImpl implements IPackageService {
 				if(Utils.isNotNull(bean.getOptionJSON())){
 					config.put("optionJSON", bean.getOptionJSON());
 				}else{
-					log.info("copy option:"+bean.getAppid());
+					//log.info("copy option:"+bean.getAppid());
 					String optionJSON=getOptionJSON(this.jdbcTemplate,bean.getAppid());
 					config.put("optionJSON", optionJSON);
 				}

@@ -8,6 +8,7 @@ public class RuntimeUtils {
 	private static long stime=0;
 	
 	public static void reset(){
+	
 		stime=System.currentTimeMillis();
 	}
 	

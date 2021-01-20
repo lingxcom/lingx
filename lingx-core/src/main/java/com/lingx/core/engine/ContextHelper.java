@@ -59,6 +59,16 @@ public final class ContextHelper {
 				public Object getAttribute(String key) {
 					return attrs.get(key);
 				}
+
+				@Override
+				public String getRequestIP() {
+					return attrs.get(IContext.CLIENT_IP).toString();
+				}
+
+				@Override
+				public String getLocalPath() {
+					return attrs.get(IContext.LOCAL_PATH).toString();
+				}
 				
 			};
 			public IHttpRequest getRequest() {

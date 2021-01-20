@@ -39,7 +39,12 @@ $(function(){
 		table.append(tr);
 	} */
 	
+	$(window).bind("resize",function(){
+		$("#div").height($(window).height());
+	})
 });
+
+
 
 function add(){
 	var tr=$("<tr/>");
@@ -86,12 +91,13 @@ function lingxSubmit(){
 
 <style type="text/css">
 body{
-padding:5px;
+padding:0px;
 }
 tr{height:24px;text-align:center;}
 </style>
 </head>
 <body>
+<div id="div" style="padding:0px;width:100%;height:400px;overflow:auto;">
 <table width="100%">
 <tr><td colspan="4" align="center"><span  class="tdname" style="font-size:14px;" ></span> </td> </tr>
 <tr><td><span style="color:#999">说明：在建立树形模型时属性名“树型上级”、“树型状态”、“树型图标”，对应fid、state、icon_cls。</span> </td></tr>
@@ -106,7 +112,7 @@ tr{height:24px;text-align:center;}
 	</td>
 </tr>
 </table>
-
+</div>
 </body>
 
 </html>

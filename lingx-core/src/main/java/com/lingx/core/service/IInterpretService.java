@@ -14,8 +14,11 @@ import com.lingx.core.model.IField;
  * 类说明 
  */
 public interface IInterpretService {
+	public Object inputFormat(Object value,IField field, IContext context,
+			IPerformer performer);
 	public Map<String, String> inputFormat(Map<String, String> map,List<IField> fields, IEntity entity, IContext context,
 			IPerformer performer);
+	
 	public void outputFormat(List<Map<String,Object>> list,List<IField> fields,IEntity entity, IContext context,IPerformer performer);
 	public void outputFormat(Map<String, Object> m,List<IField> fields, IEntity entity, IContext context,IPerformer performer);
 	public Object outputFormat(IField field, IContext context,IPerformer performer);

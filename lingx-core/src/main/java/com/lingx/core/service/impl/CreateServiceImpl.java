@@ -53,7 +53,7 @@ public class CreateServiceImpl implements ICreateService {
 			}else if("金额".equals(val)){
 				type="decimal(10,2)";
 			}else{
-				type="varchar(2000)";
+				type="varchar(500)";
 			}
 			switch(key){
 			case "树型上级":
@@ -66,7 +66,7 @@ public class CreateServiceImpl implements ICreateService {
 				break;
 			case "树型图标":
 				pinyin="icon_cls";
-				type="varchar(64)";
+				type="varchar(32)";
 				break;
 			case "创建时间":
 				pinyin="create_time";
@@ -83,6 +83,10 @@ public class CreateServiceImpl implements ICreateService {
 			case "隶属用户":
 				pinyin="user_id";
 				type="char(36)";
+				break;
+			case "顺序":
+				pinyin="orderindex";
+				type="int(11)";
 				break;
 			}
 			Map<String,Object> m=new HashMap<String,Object>();

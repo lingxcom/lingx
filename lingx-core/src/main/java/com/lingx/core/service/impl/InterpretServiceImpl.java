@@ -42,6 +42,26 @@ public class InterpretServiceImpl implements IInterpretService {
 	private II18NService i18n;
 	
 	private List<Map<String,Object>> comboData;
+	public Object inputFormat(Object value,IField field, IContext context,
+			IPerformer performer) {
+		List<IInterpreter> inters=field.getInterpreters().getList();
+
+		if(inters.size()>0){
+			for(IInterpreter inte:inters){
+				if(!IInterpreter.TYPE_EXPRESSION.equals(inte.getType())){
+					inte=getInterpreterTemplate(inte.getType());
+				}
+				try {
+					//System.out.println(value);
+					value=inte.input(value, context, performer);
+					//System.out.println(value);
+				} catch (LingxScriptException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return value;
+	}
 	@Override
 	public Map<String, String> inputFormat(Map<String, String> map,List<IField> fields, IEntity entity, IContext context,
 			IPerformer performer) {

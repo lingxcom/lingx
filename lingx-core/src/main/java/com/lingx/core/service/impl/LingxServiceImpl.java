@@ -3,13 +3,13 @@ package com.lingx.core.service.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.BeansException;
@@ -475,5 +475,12 @@ public class LingxServiceImpl implements ILingxService ,ApplicationContextAware{
 			//e.printStackTrace();
 			return "";
 		}
+	}
+	@Override
+	public Map<String, Object> getErrorProcessResult(String msg) {
+		Map<String, Object> ret=new HashMap<>();
+		ret.put("code", -1);
+		ret.put("message", msg);
+		return ret;
 	}
 }
