@@ -32,7 +32,7 @@ if(request_params["_refId_"]){
 	params["_refId_"]=request_params["_refId_"];
 }
 </script>
-<script type="text/javascript" src="lingx/js/template/edit.js"></script>
+<script type="text/javascript" src="lingx/js/template/edit.js?1"></script>
 </head>
 <body>
 </body>

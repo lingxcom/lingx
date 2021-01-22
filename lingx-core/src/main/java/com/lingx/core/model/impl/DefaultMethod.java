@@ -37,9 +37,9 @@ public class DefaultMethod  extends AbstractModel implements IMethod{
 		this.fields=new DefaultNode<IField>("属性");
 		this.executors=new DefaultNode<IExecutor>("执行器");
 	}
-	@FieldModelConfig(sort="11",name="方法代码",inputType="string")
+	@FieldModelConfig(sort="11",name="操作代码",inputType="string")
 	private String code;
-	@FieldModelConfig(sort="22",name="方法名称",inputType="string")
+	@FieldModelConfig(sort="22",name="操作名称",inputType="string")
 	private String name;
 	@FieldModelConfig(sort="3",name="是否验证",inputType="string")
 	private Boolean validation;

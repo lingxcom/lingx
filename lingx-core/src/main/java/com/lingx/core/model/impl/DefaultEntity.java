@@ -32,7 +32,7 @@ public class DefaultEntity extends AbstractModel implements IEntity{
 		configs.getList().add(new RuleConfig());
 		this.setConfigs(configs);
 		this.setFields(new DefaultNode<IField>("属性"));
-		this.setMethods(new DefaultNode<IMethod>("方法"));
+		this.setMethods(new DefaultNode<IMethod>("操作"));
 	}
 	
 	@FieldModelConfig(sort="1",name="模型代码",inputType="string")

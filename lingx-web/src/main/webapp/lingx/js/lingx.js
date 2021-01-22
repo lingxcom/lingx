@@ -396,7 +396,8 @@ $(function(){
 });
 
 function blockContextmen(){
-if(window.event){
+
+if(window.event&&window.event.path[0].tagName!="INPUT"&&window.event.path[0].tagName!="TEXTAREA"){
 window.event.returnValue=false;
 }
 }

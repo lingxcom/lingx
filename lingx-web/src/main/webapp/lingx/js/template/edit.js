@@ -163,6 +163,9 @@ Ext.onReady(function(){
 					}
 				}
 				
+				if(obj.xtype=='numberfield'){
+					obj.hideTrigger=true;
+				}
 				items.push(obj);
 			
 		}

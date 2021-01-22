@@ -26,10 +26,15 @@
 function login(){
 	encodePassword();
 	cookieSet();
+	var btn=$(".yj05");
+	btn.text("登  录  中");
+	btn.attr("disabled","disabled");
 	$.post("d",{c:"login",userid:$("#userid").val(),password:$("#password").val(),verifycode:$("#code").val()},function(json){
 		if(json.code==1){
 			window.location.href=json.page;
 		}else{
+			btn.text("登  录");
+			btn.removeAttr("disabled");
 			alert(json.message);
 			$("#yzm")[0].src='verifyCodeImage?random='+Math.random();
 		}

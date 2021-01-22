@@ -19,6 +19,6 @@ if(lanuageJS==null){
 
 <script type="text/javascript" src="js/jquery.js"></script>
 <link rel="stylesheet" type="text/css" href="lingx/js/resources/css/lingx.css">
-<script type="text/javascript" src="lingx/js/lingx.js"></script>
+<script type="text/javascript" src="lingx/js/lingx.js?1"></script>
 <script type="text/javascript" src="lingx/js/commonApi.js"></script>
 <script type="text/javascript" src="lingx/js/lingx-ext.js"></script>
