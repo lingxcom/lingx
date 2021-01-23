@@ -95,7 +95,19 @@ width:320px;
 </tr>
 <!--  -->
 <tr>
-<td>5.TOKEN登陆 </td>
+<td>5.防止暴力破解密码</td>
+<td><input type="checkbox" onchange="saveConfig('lingx.login.islock',this)" <%="true".equals(lingx.getConfigValue("lingx.login.islock", "false"))?"checked":"" %>/></td>
+<td>密码错误输入次数过多时自动锁定账号5分钟 </td>
+</tr>
+<!--  -->
+<tr>
+<td>6.密码错误输入次数: </td>
+<td><input class="ipt" id="islock_max" value="<%=lingx.getConfigValue("lingx.login.lock.max", 10)%>"/> <input type="button" onclick="saveConfig2('lingx.login.lock.max','islock_max')" value="保存"> </td>
+<td>第5点为true时生效</td>
+</tr>
+<!--  -->
+<tr>
+<td>7.TOKEN登陆 </td>
 <td><input type="checkbox" onchange="saveConfig('lingx.login.user.token',this)" <%="true".equals(lingx.getConfigValue("lingx.login.user.token", "false"))?"checked":"" %>/></td>
 <td>通过TOKEN单点登录,URL参数名lingx_user_token对应tlingx_user.token</td>
 </tr>

@@ -177,6 +177,7 @@ Ext.onReady(function(){
 			
 			for(var i=0;i<json.fields.list.length;i++){
 				var field=json.fields.list[i];
+				if(params[field.code])continue;//当外部传参进来就不需要这个查询字段了
 				if((","+json.GridConfig.queryField+",").indexOf(","+field.code+",")>=0){
 					searchFieldCache.push(field.code);
 					tool.push(field.name+":");
@@ -197,7 +198,7 @@ Ext.onReady(function(){
 		    	            store:store,
 								displayField:"text",
 								valueField:"value",
-		    	            width:100,listeners:{
+		    	            width:80,listeners:{
 	    	                	specialkey: function(field, e){
 	    	                		if(e.getKey()== e.ENTER){
 	    	                			search();
@@ -212,7 +213,7 @@ Ext.onReady(function(){
 							xtype    : 'textfield',
 		    	            name     : field.code,
 		    	            emptyText: field.name,
-		    	            width:100,listeners:{
+		    	            width:80,listeners:{
 	    	                	specialkey: function(field, e){
 	    	                		if(e.getKey()== e.ENTER){
 	    	                			search();
@@ -250,7 +251,8 @@ Ext.onReady(function(){
 			var tool=[];
 			for(var i=0;i<json.queryParams.length;i++){
 				var obj=json.queryParams[i];
-				var w=100;
+				if(params[obj.code])continue;//当外部传参进来就不需要这个查询字段了
+				var w=80;
 				var store=new Ext.data.Store({proxy: ({ model:'TextValueModel',type:'ajax',url:obj.url,reader:{type:'json'}}),
 					autoLoad:false});
 				searchFieldCache.push(obj.code);
@@ -275,9 +277,9 @@ Ext.onReady(function(){
 
 					};
 				if(obj.xtype=="datetimefield"){
-					options111.width=180;
+					options111.width=140;
 				}else if(obj.xtype=="datefield"){
-					options111.width=120;
+					options111.width=90;
 					options111.format="Y-m-d";
 					options111.altFormats='Y-m-d';
 				}

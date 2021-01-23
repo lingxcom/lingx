@@ -41,6 +41,7 @@ import com.lingx.core.utils.LingxUtils;
 import com.lingx.core.utils.Utils;
 
 public class DefaultAction implements IAction,ISessionAware {
+	
 	/**
 	 * 无效登陆5次，锁定账号
 	 */
@@ -116,6 +117,8 @@ public class DefaultAction implements IAction,ISessionAware {
 		Map<String,Object> res=new HashMap<String,Object>();
 		String userid=context.getRequest().getParameter("userid");
 		String password=context.getRequest().getParameter("password");
+		boolean isLock="true".equals(this.lingxService.getConfigValue("lingx.login.islock", "false"));
+		int loginMax=this.lingxService.getConfigValue("lingx.login.lock.max", 10);
 		context.getRequest().setAttribute("userid", userid);
 		if (Utils.isNull(userid) || Utils.isNull(password)) {
 			res.put("code", -1);
@@ -166,19 +169,22 @@ public class DefaultAction implements IAction,ISessionAware {
 				SpringContext.getApplicationContext().publishEvent(new LoginEvent(this,userBean));
 				return res;
 			}else{
-				if(LOGIN_FAIL_COUNT.getIfPresent(userid)==null){
+				if(isLock&&LOGIN_FAIL_COUNT.getIfPresent(userid)==null){
 					res.put("code", -1);
-					res.put("message", i18n.text("登陆失败，账号或密码无效第1次,5次后锁定账号",session));
+					res.put("message", i18n.text("登陆失败，账号或密码无效第1次,"+loginMax+"次后锁定账号",session));
 					LOGIN_FAIL_COUNT.put(userid, 1);
-				}else{
+				}else if(isLock){
 					int count=LOGIN_FAIL_COUNT.getIfPresent(userid);
 					count++;
 					res.put("code", -1);
-					res.put("message", i18n.text("登陆失败，账号或密码无效第"+count+"次,5次后锁定账号",session));
+					res.put("message", i18n.text("登陆失败，账号或密码无效第"+count+"次,"+loginMax+"次后锁定账号",session));
 					LOGIN_FAIL_COUNT.put(userid, count);
-					if(count>=5){
+					if(count>=loginMax){
 						LOCK_ACCOUNT.put(userid, 1);
 					}
+				}else{
+					res.put("code", -1);
+					res.put("message", i18n.text("登陆失败，账号或密码无效",session));
 				}
 				
 				

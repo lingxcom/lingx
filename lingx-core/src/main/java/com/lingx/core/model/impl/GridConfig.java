@@ -14,13 +14,15 @@ public class GridConfig  extends AbstractModel implements IConfig {
 	private static final long serialVersionUID = 8500058144499092483L;
 
 
-	@FieldModelConfig(sort="3",name="主键字段")
+	@FieldModelConfig(sort="3",name="主键字段",editor="hidden")
 	private String idField="id";
-	@FieldModelConfig(sort="4",name="序号")
+	@FieldModelConfig(sort="40",name="序号")
 	private Boolean rownumbers=true;
-	@FieldModelConfig(sort="5",name="checkOnSelect")
+	@FieldModelConfig(sort="41",name="序号宽度")
+	private Integer rownumberWidth=26;
+	@FieldModelConfig(sort="5",name="checkOnSelect",editor="hidden")
 	private Boolean checkOnSelect=true;
-	@FieldModelConfig(sort="6",name="selectOnCheck")
+	@FieldModelConfig(sort="6",name="selectOnCheck",editor="hidden")
 	private Boolean selectOnCheck=true;
 	@FieldModelConfig(sort="8",name="页码")
 	private Integer pageNumber=1;
@@ -30,13 +32,13 @@ public class GridConfig  extends AbstractModel implements IConfig {
 	private String sortName="id";
 	@FieldModelConfig(sort="B",name="排序方式")
 	private String sortOrder="desc";
-	@FieldModelConfig(sort="C",name="远程排序")
+	@FieldModelConfig(sort="C",name="远程排序",editor="hidden")
 	private Boolean remoteSort=true;
 	@FieldModelConfig(sort="E",name="自动加载")
 	private Boolean autoLoad=true;
 	@FieldModelConfig(sort="F",name="边框")
 	private Boolean broder=false;
-	@FieldModelConfig(sort="G",name="displayInfo")
+	@FieldModelConfig(sort="G",name="displayInfo",editor="hidden")
 	private Boolean displayInfo=true;
 	@FieldModelConfig(sort="I",name="查询字段",inputType="string")
 	private String queryField;
@@ -98,6 +100,14 @@ public class GridConfig  extends AbstractModel implements IConfig {
 
 	public void setRownumbers(Boolean rownumbers) {
 		this.rownumbers = rownumbers;
+	}
+
+	public Integer getRownumberWidth() {
+		return rownumberWidth;
+	}
+
+	public void setRownumberWidth(Integer rownumberWidth) {
+		this.rownumberWidth = rownumberWidth;
 	}
 
 	public Boolean getCheckOnSelect() {

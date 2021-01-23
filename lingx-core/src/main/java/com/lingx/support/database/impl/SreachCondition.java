@@ -38,7 +38,13 @@ public class SreachCondition implements ICondition {
 				String pvalue=context.getRequest().getParameter(pparam);
 				if(pvalue==null||"_".equals(pvalue))continue;
 				pvalue=pvalue.trim();
-				if(pvalue.charAt(0)=='_'){pvalue=(pvalue.substring(1));}
+				if(pvalue.charAt(0)=='_'){
+					pvalue=(pvalue.substring(1));
+				}else{
+					//前缀没有下划线_的是字段对应真值，不采用配置里边的sql语句 2021-01-23
+					sb.append(" and ").append(pparam).append("='").append(pvalue).append("' ");
+					continue;
+				}
 				
 				if(mapJSON.get("sql")!=null){
 					sb.append(" and ").append(formatString(mapJSON.get("sql").toString(),pparam, pvalue));
