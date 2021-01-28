@@ -1,6 +1,6 @@
 # 灵犀 - 开源的轻量级模型驱动在线开发系统
 
-![](http://www.lingx.com/logo.png)
+![image](http://www.lingx.com/logo.png)
  
 官方网站：https://www.lingx.com
 
