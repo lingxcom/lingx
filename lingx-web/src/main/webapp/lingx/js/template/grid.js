@@ -258,7 +258,7 @@ Ext.onReady(function(){
 			for(var i=0;i<json.queryParams.length;i++){
 				var obj=json.queryParams[i];
 				if(params[obj.code])continue;//当外部传参进来就不需要这个查询字段了
-				var w=80;
+				var w=100;
 				var store=new Ext.data.Store({proxy: ({ model:'TextValueModel',type:'ajax',url:obj.url,reader:{type:'json'}}),
 					autoLoad:false});
 				searchFieldCache.push(obj.code);
@@ -283,9 +283,9 @@ Ext.onReady(function(){
 
 					};
 				if(obj.xtype=="datetimefield"){
-					options111.width=140;
+					options111.width=150;
 				}else if(obj.xtype=="datefield"){
-					options111.width=90;
+					options111.width=100;
 					options111.format="Y-m-d";
 					options111.altFormats='Y-m-d';
 				}
@@ -412,6 +412,7 @@ Ext.onReady(function(){
 	    	        listeners:{
 	    	        	itemdblclick:function(view,record,item,index,event,obj){
 	    	        		var dblclickMethod=json.GridConfig.dblclickMethod||"view";
+	    	        		if("none"==dblclickMethod)return;
 	    	        		var id=record.data.id;
 	    	        		Lingx.post("d",{c:"method_script",e:entityCode,m:dblclickMethod,id:id},function(json2){
 	    						if(json2.ret){

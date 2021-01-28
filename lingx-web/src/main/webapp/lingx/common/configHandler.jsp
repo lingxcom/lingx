@@ -21,6 +21,11 @@ if("saveAppName".equals(cmd)){
 	String indexpage=request.getParameter("indexpage");
 	jdbc.update("update tlingx_app set indexpage=? where id=?",indexpage,id);
 	out.println(JSON.toJSONString(ret));
+}else if("saveLogo".equals(cmd)){
+	String id=request.getParameter("id");
+	String logo=request.getParameter("logo");
+	jdbc.update("update tlingx_app set logo=? where id=?",logo,id);
+	out.println(JSON.toJSONString(ret));
 }else if("lingxConfig".equals(cmd)){
 	String paramName=request.getParameter("paramName");
 	String paramValue=request.getParameter("paramValue");

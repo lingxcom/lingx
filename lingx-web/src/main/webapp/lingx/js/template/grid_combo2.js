@@ -223,7 +223,7 @@ Ext.onReady(function(){
 							valueField:"value",
 								displayField:"text",
 								valueField:"value",
-		    	            width:80,listeners:{
+		    	            width:100,listeners:{
 	    	                	specialkey: function(field, e){
 	    	                		if(e.getKey()== e.ENTER){
 	    	                			search();
@@ -238,7 +238,7 @@ Ext.onReady(function(){
 							xtype    : 'textfield',
 		    	            name     : field.code,
 		    	            emptyText: field.name,
-		    	            width:80,listeners:{
+		    	            width:100,listeners:{
 	    	                	specialkey: function(field, e){
 	    	                		if(e.getKey()== e.ENTER){
 	    	                			search();
@@ -276,7 +276,7 @@ Ext.onReady(function(){
 			var tool=[];
 			for(var i=0;i<json.queryParams.length;i++){
 				var obj=json.queryParams[i];
-				var w=80;
+				var w=100;
 				var store=new Ext.data.Store({proxy: ({ model:'TextValueModel',type:'ajax',url:obj.url,reader:{type:'json'}}),
 					autoLoad:false});
 				searchFieldCache.push(obj.code);
@@ -301,9 +301,9 @@ Ext.onReady(function(){
 
 					};
 				if(obj.xtype=="datetimefield"){
-					options111.width=140;
+					options111.width=150;
 				}else if(obj.xtype=="datefield"){
-					options111.width=90;
+					options111.width=100;
 					options111.format="Y-m-d";
 					options111.altFormats='Y-m-d';
 				}
@@ -417,7 +417,7 @@ Ext.onReady(function(){
 	    	        }],
 	    	        listeners:{
 	    	        	itemdblclick:function(view,record,item,index,event,obj){
-	    	        		openViewWindow(entityCode,json.name,record.data.id);
+	    	        		//openViewWindow(entityCode,json.name,record.data.id);
 	    	        	},
 	    	        	select:function(el,record, index, eOpts ){
 	    	        		addItem(record.data);

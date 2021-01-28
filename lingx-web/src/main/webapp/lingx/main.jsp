@@ -248,9 +248,9 @@ setInterval("keepSession()", 5*60*1000); //隔5分钟访问一次
 <div id="vp">
 <!-- 头部工具栏 -->
 <div style="background-color:#004e98;height:50px;line-height:50px;position:fixed;top:0px;width:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;" onclick="removeMenu()">
-<div style="width:50px;height:50px;float:left;">
+<div style="width:50px;height:50px;float:left;padding:5px;">
 <%if(Utils.isNotNull(userBean.getApp().getLogo()) ){ %>
-<img width="50" height="50" src="${SESSION_USER.app.logo }">
+<img width="40" height="40" src="${SESSION_USER.app.logo }">
 <%} %>
 </div>
 

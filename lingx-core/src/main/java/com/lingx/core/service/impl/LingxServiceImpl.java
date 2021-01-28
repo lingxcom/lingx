@@ -477,9 +477,15 @@ public class LingxServiceImpl implements ILingxService ,ApplicationContextAware{
 		}
 	}
 	@Override
-	public Map<String, Object> getErrorProcessResult(String msg) {
+	public Map<String, Object> retErr(String msg) {
+		
+		return this.ret(-1, msg);
+	}
+	
+	@Override
+	public Map<String, Object> ret(int code,String msg) {
 		Map<String, Object> ret=new HashMap<>();
-		ret.put("code", -1);
+		ret.put("code", code);
 		ret.put("message", msg);
 		return ret;
 	}

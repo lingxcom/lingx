@@ -163,5 +163,15 @@ public interface ILingxService {
 	 * @param msg
 	 * @return
 	 */
-	public Map<String,Object> getErrorProcessResult(String msg);
+	public Map<String,Object> retErr(String msg);
+	/**
+	 * 在执行器中返回执行结果
+	 * code为1：提示、刷新、关窗
+	 * code为2：提示、关窗
+	 * code为-1时:提示
+	 * @param code
+	 * @param msg
+	 * @return
+	 */
+	public Map<String,Object> ret(int code,String msg);
 }

@@ -37,6 +37,12 @@ function saveIndexpage(){
 		lgxInfo(json.message);
 	},"json");
 }
+function saveAppLogo(){
+	var logo=$("#logo").val();
+	$.post(handlerJsp,{c:"saveLogo",id:"${app.id}",logo:logo},function(json){
+		lgxInfo(json.message);
+	},"json");
+}
 function saveConfig(key,el){
 	$.post(handlerJsp,{c:"lingxConfig",paramName:key,paramValue:el.checked},function(json){
 		lgxInfo(json.message);
@@ -73,6 +79,12 @@ width:320px;
 <td>1.系统名称: </td>
 <td><input class="ipt" id="appname" value="${app.name }"/> <input type="button" onclick="saveAppName()" value="保存"> </td>
 <td>用来显示头部的系统名称</td>
+</tr>
+<!-- -->
+<tr>
+<td>1.系统Logo: </td>
+<td><input class="ipt" id="logo" value="${app.logo }"/> <input type="button" onclick="saveAppLogo()" value="保存"> </td>
+<td>用来显示头部的Logo图标</td>
 </tr>
 <!-- -->
 <tr>

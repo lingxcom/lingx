@@ -342,6 +342,9 @@ function callbackFormSubmit(form, action) {
 	        	getFromWindow(fromPageId).reloadGrid();
         	}
         	closeWindow();
+        }else if(action.result.code==2){
+        	//不刷新，例如大型树形结构数据，刷新很麻烦2021-01-25
+        	closeWindow();
         }else{
         	var json=action.result;
         		if(json.messages){
@@ -396,8 +399,8 @@ $(function(){
 });
 
 function blockContextmen(){
-
-if(window.event&&window.event.path[0].tagName!="INPUT"&&window.event.path[0].tagName!="TEXTAREA"){
+console.log(window.event);
+if(window.event&&window.event.target.tagName!="INPUT"&&window.event.target.tagName!="TEXTAREA"){
 window.event.returnValue=false;
 }
 }

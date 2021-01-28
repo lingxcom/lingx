@@ -68,7 +68,7 @@ public class ImportExecutor extends AbstractModel implements IExecutor {
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			return this.lingxService.getErrorProcessResult(e.getLocalizedMessage());
+			return this.lingxService.retErr(e.getLocalizedMessage());
 		}
 		
 		
