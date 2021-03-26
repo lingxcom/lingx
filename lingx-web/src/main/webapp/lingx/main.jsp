@@ -42,7 +42,7 @@
 .li_1{
 cursor:pointer;
     color: #fff;
-    font-size: 14px;
+    font-size: 16px;
     white-space: nowrap;
     overflow: hidden;
     -webkit-transition: all .2s ease-out 0s;
@@ -103,7 +103,7 @@ width:170px;
 height:100%;
 color:#333333;
 background-color:#fff;
-border-right:1px solid #004e98;
+border-right:1px solid #4088c8;
 }
 
 .closeBtn{
@@ -158,7 +158,7 @@ Ext.create('Ext.Viewport', {
 var tabs = Ext.widget('tabpanel', {
     renderTo: 'workArea',
     activeTab: 0,
-    width:getApi().getWidth()-55,
+    width:getApi().getWidth()-65,
     height:getApi().getHeight()-55,
     id: 'tabpanel',
     bodyStyle:"background:#fff;",
@@ -174,7 +174,7 @@ var tabs = Ext.widget('tabpanel', {
 });
 
 $(window).bind("resize",function(){
-	Ext.getCmp("tabpanel").setWidth(getApi().getWidth()-55);
+	Ext.getCmp("tabpanel").setWidth(getApi().getWidth()-65);
 	Ext.getCmp("tabpanel").setHeight(getApi().getHeight()-55);
 });
 });
@@ -247,14 +247,14 @@ setInterval("keepSession()", 5*60*1000); //隔5分钟访问一次
 
 <div id="vp">
 <!-- 头部工具栏 -->
-<div style="background-color:#004e98;height:50px;line-height:50px;position:fixed;top:0px;width:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;" onclick="removeMenu()">
-<div style="width:50px;height:50px;float:left;padding:5px;">
+<div style="background-color:#4088c8;height:60px;line-height:50px;position:fixed;top:0px;width:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;" onclick="removeMenu()">
+<div style="width:60px;height:50px;float:left;padding-top:5px;padding-left:10px;">
 <%if(Utils.isNotNull(userBean.getApp().getLogo()) ){ %>
 <img width="40" height="40" src="${SESSION_USER.app.logo }">
 <%} %>
 </div>
 
-<div style="color:#fff;font-size:14px;height:50px;line-height:50px;float:left;">${SESSION_USER.app.name }</div>
+<div style="color:#fff;font-size:16px;font-weight:bold ;height:50px;line-height:50px;float:left;">${SESSION_USER.app.name }</div>
 
 <div style="color:#fff;font-size:14px;height:50px;line-height:50px;margin-left:50px;position:fixed;top:0px;right:10px;">
 
@@ -266,7 +266,7 @@ setInterval("keepSession()", 5*60*1000); //隔5分钟访问一次
 </div>
 </div>
 <!-- 左侧菜单栏 -->
-<div id="menu" style="background-color:#004e98;height:100%;position:fixed;top:50px;left:0px;width:50px;;z-index:9999;" onclick="removeMenu()">
+<div id="menu" style="background-color:#4088c8;height:100%;position:fixed;top:50px;left:0px;width:60px;;z-index:9999;" onclick="removeMenu()">
 <div class="div_1">
 <ul class="ul_1" onclick="return false;" style="margin-top:10px;">
 
@@ -274,7 +274,7 @@ setInterval("keepSession()", 5*60*1000); //隔5分钟访问一次
 </div>
 </div>
 <!-- 工作区 -->
-<div id="workArea" style="background-color:#dbe6f4;height:100%;position:fixed;top:50px;left:50px;width:100%;padding-top:5px;padding-left:5px;" onclick="removeMenu()">
+<div id="workArea" style="background-color:#dbe6f4;height:100%;position:fixed;top:50px;left:60px;width:100%;padding-top:5px;padding-left:5px;" onclick="removeMenu()">
 
 </div>
 </div>
