@@ -19,7 +19,7 @@
 <title>${SESSION_USER.app.name }</title>
 <%@ include file="/lingx/include/include_JavaScriptAndCss.jsp"%> 
 <link rel="stylesheet" type="text/css" href="lingx/js/resources/css/style.css">
-<script type="text/javascript" src="lingx/js/rootApi.js?123"></script>
+<script type="text/javascript" src="lingx/js/rootApi.js?123456"></script>
 <script type="text/javascript" src="js/jquery.js"></script>
 <style type="text/css">
 .div_1{
