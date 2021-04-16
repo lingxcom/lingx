@@ -8,7 +8,7 @@
 
 视频教程：https://space.bilibili.com/482658194
 
-成品示例：https://www.longyaniot.com
+成品示例：https://gps.lingx.com
 
 账号:admin,密码:123456
 
