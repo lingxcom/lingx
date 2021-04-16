@@ -206,7 +206,7 @@ public class WorkflowServiceImpl implements IWorkflowService{
 			
 			for(String targetTaskId:array ){//下一个任务，如果是单个就看要不要自动处理
 				if(Utils.isNull(targetTaskId))continue;
-				taskType=this.jdbcTemplate.queryForInt("select t.type from tlingx_wf_define_task t ,tlingx_wf_instance_task a where t.id=a.task_id and a.id=?",targetTaskId);
+				taskType=this.lingxService.queryForInt("select t.type from tlingx_wf_define_task t ,tlingx_wf_instance_task a where t.id=a.task_id and a.id=?",targetTaskId);
 				if(taskType==2||taskType==4){//自动处理
 					//this.taskService.execute(targetTaskId, context, performer);//因为在this.taskService.submit()有执行脚本，所以这里就不执行了
 					if(array.length==1){
@@ -269,12 +269,12 @@ public class WorkflowServiceImpl implements IWorkflowService{
 		return ret;
 	}
 	private boolean isOwn(String taskId,String userId){
-		return this.jdbcTemplate.queryForInt("select count(*) from tlingx_wf_instance_task where id=? and user_id=?",taskId,userId)==1;
+		return this.lingxService.queryForInt("select count(*) from tlingx_wf_instance_task where id=? and user_id=?",taskId,userId)==1;
 	}
 	
 	private String getDefineTaskIdByType(int type,String defineId){
 		String temp=null;
-		if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_wf_define_task where define_id=? and type=?",defineId,type)==1){
+		if(this.lingxService.queryForInt("select count(*) from tlingx_wf_define_task where define_id=? and type=?",defineId,type)==1){
 			temp=this.jdbcTemplate.queryForObject("select id from tlingx_wf_define_task where define_id=? and type=?", String.class,defineId,type);
 		}
 		return temp;
@@ -600,7 +600,7 @@ public class WorkflowServiceImpl implements IWorkflowService{
 		for(String temp:array){
 			if(Utils.isNull(temp))continue;
 			total++;
-			ret=this.jdbcTemplate.queryForInt("select ret_code from tlingx_wf_instance_task where id=? ",temp);
+			ret=this.lingxService.queryForInt("select ret_code from tlingx_wf_instance_task where id=? ",temp);
 			if(ret==1||ret==3){//已阅算是同意
 				yes++;
 			}else{
@@ -634,7 +634,7 @@ public class WorkflowServiceImpl implements IWorkflowService{
 			if(Utils.isNull(temp))continue;
 			total++;
 			try {
-				ret=this.jdbcTemplate.queryForInt("select ret_code from tlingx_wf_instance_task where id=?",temp);
+				ret=this.lingxService.queryForInt("select ret_code from tlingx_wf_instance_task where id=?",temp);
 			} catch (DataAccessException e) {
 				continue;//有些会签还没处理，取不到意见
 			}
@@ -714,7 +714,7 @@ public class WorkflowServiceImpl implements IWorkflowService{
 		int c1=0,c2=0;
 		for(String userId:array){
 			if(Utils.isNull(userId))continue;
-			if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_wf_instance_task where instance_id=? and user_id=? and status=5",instance.get("id"),userId)==0){
+			if(this.lingxService.queryForInt("select count(*) from tlingx_wf_instance_task where instance_id=? and user_id=? and status=5",instance.get("id"),userId)==0){
 				 c1=c1+this.jdbcTemplate.update("insert into tlingx_wf_instance_task(id,name,instance_id,task_id,user_id,status,stime,etime,create_time,modify_time) values(uuid(),?,?,?,?,?,?,?,?,?)",
 					"抄送任务",instance.get("id"),"",userId,5,time,time,time,time);
 			}else{

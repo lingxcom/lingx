@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
@@ -100,7 +101,7 @@ public class DefaultAction implements IAction,ISessionAware {
 			session.invalidate();
 			return this.pageService.getPage(Page.PAGE_LOGIN);
 		}else if("getNewMessageCount".equals(cmd)){
-			int msg_count=jdbcTemplate.queryForInt("select count(*) from tlingx_message where to_user_id=? and status=1",context.getUserBean().getId());
+			int msg_count=lingxService.queryForInt("select count(*) from tlingx_message where to_user_id=? and status=1",context.getUserBean().getId());
 			Map<String,Object> ret=new HashMap<String,Object>();
 			ret.put("code", 1);
 			ret.put("message", "SUCCESS");
@@ -204,7 +205,7 @@ public class DefaultAction implements IAction,ISessionAware {
 		String menuLinkFunc = " and a.type<>3 and ( a.type<>2 or (a.type=2 and ( func_id in (select func_id from tlingx_userfunc where user_id='"+userid+"') or func_id in(select func_id from tlingx_rolefunc where role_id in(select role_id from tlingx_userrole where user_id='"+userid+"'))))) ";
 
 		List<Map<String, Object>> menu = jdbcTemplate
-				.queryForList("select t.id,t.name as text,t.short_name,t.iconcls as iconCls from tlingx_menu t,tlingx_func a where t.func_id=a.id and t.fid=? and t.status=1 and (t.id in(select menu_id from tlingx_usermenu where user_id='"+userid+"') or t.id in(select menu_id from tlingx_rolemenu where role_id in(select role_id from tlingx_userrole where user_id='"
+				.queryForList("select t.id,t.name as text,t.short_name,t.iconcls as iconCls,t.type from tlingx_menu t,tlingx_func a where t.func_id=a.id and t.fid=? and t.status=1 and (t.id in(select menu_id from tlingx_usermenu where user_id='"+userid+"') or t.id in(select menu_id from tlingx_rolemenu where role_id in(select role_id from tlingx_userrole where user_id='"
 						+ userid + "'))) "+menuLinkFunc+" order by t.orderindex asc",userBean.getApp().getMenuRootId());
 		for (Map<String, Object> map : menu) {
 			String id = map.get("id").toString();
@@ -241,6 +242,7 @@ public class DefaultAction implements IAction,ISessionAware {
 			Map<String, Object> temp = new HashMap<String, Object>();
 			String id = map.get("id").toString();
 			temp.put("itemId",map.get("id"));
+			temp.put("type",map.get("type"));
 			temp.put("text", i18n.text(map.get("name").toString(),context.getUserBean().getI18n()));
 			temp.put(
 					"handler",
@@ -323,4 +325,6 @@ public class DefaultAction implements IAction,ISessionAware {
 	public void setPageService(IPageService pageService) {
 		this.pageService = pageService;
 	}
+	
+	
 }

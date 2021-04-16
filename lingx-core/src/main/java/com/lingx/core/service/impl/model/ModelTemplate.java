@@ -58,7 +58,7 @@ public class ModelTemplate {
 		DefaultNode<IField> fieldNode=new DefaultNode<IField>("属性");
 		fieldNode.setList(fields);
 		
-		DefaultNode<IMethod> methodNode=new DefaultNode<IMethod>("方法");
+		DefaultNode<IMethod> methodNode=new DefaultNode<IMethod>("操作");
 		methodNode.setList(methods);
 		
 		entity.setConfigs(configNode);
@@ -134,6 +134,7 @@ public class ModelTemplate {
 		m3.setName("删除");
 		m3.setIconCls("Delete");
 		m3.setAuthor(author);
+		m3.setRightmenu(true);
 		m3.setValidation(false);
 		//m3.setRetType("jsp");
 		m3.setFields(getFieldNode(resetFields(fields,true)));

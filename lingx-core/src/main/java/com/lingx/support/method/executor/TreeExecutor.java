@@ -20,10 +20,12 @@ import com.lingx.core.model.IEntity;
 import com.lingx.core.model.IExecutor;
 import com.lingx.core.model.IScript;
 import com.lingx.core.model.impl.AbstractModel;
+import com.lingx.core.service.ILingxService;
 import com.lingx.core.service.IModelService;
 import com.lingx.core.service.IQueryService;
 import com.lingx.core.service.impl.LingxServiceImpl;
 import com.lingx.core.utils.LingxUtils;
+import com.lingx.core.utils.Utils;
 
 /** 
  * @author www.lingx.com
@@ -35,16 +37,18 @@ public class TreeExecutor extends AbstractModel implements IExecutor {
 	private static final long serialVersionUID = 7485731095480944923L;
 	@Resource
 	private IModelService modelService;
-
+	@Resource
+	private ILingxService lingxService;
 	private JdbcTemplate jdbcTemplate;
 	private IQueryService queryService;
 	@Override
 	public Object execute(IContext context, IPerformer performer)
 			throws LingxScriptException {
 		boolean isTreeRoot=false;//因为树型数据做了特殊处理，所以做个标志，根节点默认展开
-		List<Map<String, Object>> list;
+		List<Map<String, Object>> list=null;
 		String id = context.getRequest().getParameter("node");
 		String checkbox=context.getRequest().getParameter("checkbox");
+		String isGridSearch=context.getRequest().getParameter("isGridSearch");
 		if (id == null)
 			return null;
 		IEntity scriptEntity = (IEntity) context.getEntity();
@@ -53,10 +57,13 @@ public class TreeExecutor extends AbstractModel implements IExecutor {
 		String valueField = modelService.getValueField(scriptEntity);
 		StringBuilder subCondition = new StringBuilder();
 		subCondition.append(this.queryService.getQueryString(context, performer));
-		if(!LingxServiceImpl.SN)return new HashMap<String,Object>();
-		if(jdbcTemplate.queryForInt(LingxUtils.sqlInjection(String.format("select count(*) from %s where fid='%s' %s  ",tableName, id,subCondition)))==0||"0".equals(id)){
+		if(Utils.isNotNull(isGridSearch)) {//查询时不受FID影响
+			list = jdbcTemplate.queryForList(LingxUtils.sqlInjection(String
+					.format("select * from %s where 1=1 %s ",tableName,subCondition)));
+		}else {
+		if(lingxService.queryForInt(LingxUtils.sqlInjection(String.format("select count(*) from %s where fid='%s' %s  ",tableName, id,subCondition)))==0||"0".equals(id)){
 			isTreeRoot=true;
-			if("0".equals(id)&&jdbcTemplate.queryForInt(LingxUtils.sqlInjection(String.format("select count(*) from %s where fid='%s' %s  ",tableName, id,subCondition)))>0){
+			if("0".equals(id)&&lingxService.queryForInt(LingxUtils.sqlInjection(String.format("select count(*) from %s where fid='%s' %s  ",tableName, id,subCondition)))>0){
 				//无需智能取ID
 				list = jdbcTemplate.queryForList(LingxUtils.sqlInjection(String
 						.format("select * from %s where fid='%s' %s ",tableName, id,subCondition)));
@@ -78,13 +85,13 @@ public class TreeExecutor extends AbstractModel implements IExecutor {
 			list = jdbcTemplate.queryForList(LingxUtils.sqlInjection(String
 					.format("select * from %s where fid='%s' %s ",tableName, id,subCondition)));
 		}
-		
+		}
 
 		SpringContext.getApplicationContext().publishEvent(new TreeExecutorEvent(this,LingxUtils.sqlInjection(String.format("select * from %s where 1=1 %s ",tableName, subCondition)),context,performer));
 		//context.getSession().put(Constants.SESSION_LAST_QUERY_SQL, LingxUtils.sqlInjection(String.format("select * from %s where 1=1 %s ",tableName, subCondition)));
 		if (list != null) {
 			for (Map<String, Object> map : list) {
-				if (jdbcTemplate.queryForInt(LingxUtils.sqlInjection(String.format("select count(*) from %s where fid='%s' %s", tableName,map.get("id"),subCondition))) > 0) {
+				if (lingxService.queryForInt(LingxUtils.sqlInjection(String.format("select count(*) from %s where fid='%s' %s", tableName,map.get("id"),subCondition))) > 0) {
 					map.put("leaf", false);
 				}else{
 					map.put("leaf", true);
@@ -129,7 +136,7 @@ public class TreeExecutor extends AbstractModel implements IExecutor {
 				tmp=context.getUserBean().getApp().getFuncRootId();
 			}
 
-			int c= this.jdbcTemplate.queryForInt(LingxUtils.sqlInjection(String.format("select count(*) from %s where id='%s' %s ",tableName, tmp,condition)));
+			int c= this.lingxService.queryForInt(LingxUtils.sqlInjection(String.format("select count(*) from %s where id='%s' %s ",tableName, tmp,condition)));
 			//System.out.println("c:"+c);
 			if(c>0)
 			return tmp;

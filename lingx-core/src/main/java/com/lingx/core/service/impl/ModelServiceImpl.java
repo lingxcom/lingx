@@ -51,6 +51,7 @@ import com.lingx.core.service.IDefaultValueService;
 import com.lingx.core.service.IFuncService;
 import com.lingx.core.service.II18NService;
 import com.lingx.core.service.IInterpretService;
+import com.lingx.core.service.ILingxService;
 import com.lingx.core.service.IModelService;
 import com.lingx.core.service.impl.model.ModelIO;
 import com.lingx.core.service.impl.model.ModelTemplate;
@@ -82,6 +83,8 @@ public class ModelServiceImpl implements IModelService {
 	private IFuncService funcService;
 	@Resource
 	private II18NService i18n;
+	@Resource
+	private ILingxService lingxService;
 	private static Map<String,IEntity> ENTITY_CACHE = Collections .synchronizedMap(new HashMap<String,IEntity>());
 	
 	public void saveModelToDisk(){
@@ -823,14 +826,14 @@ public class ModelServiceImpl implements IModelService {
 
 		List<Map<String,Object>> toolbar=new ArrayList<Map<String,Object>>();
 		List<Map<String,Object>> rightmenu=new ArrayList<Map<String,Object>>();
-		int roleNumber=this.jdbcTemplate.queryForInt("select count(*) from tlingx_role where id in(select role_id from tlingx_userrole where user_id=?)",userBean.getId());
+		int roleNumber=this.lingxService.queryForInt("select count(*) from tlingx_role where id in(select role_id from tlingx_userrole where user_id=?)",userBean.getId());
 		int troleFieldNumber=0;
 		String ename=entity.getName();
 		entity.setName(this.i18n.text(ename, userBean.getI18n()));
 		//log.info("role number of current user:"+roleNumber);
 		for(IField field:entity.getFields().getList()){
 			if(!field.getVisible())continue;
-			troleFieldNumber=this.jdbcTemplate.queryForInt("select count(*) from tlingx_rolefield where role_id in(select role_id from tlingx_userrole where user_id=?) and entitycode=? and fieldcode=?",userBean.getId(),entity.getCode(),field.getCode());
+			troleFieldNumber=this.lingxService.queryForInt("select count(*) from tlingx_rolefield where role_id in(select role_id from tlingx_userrole where user_id=?) and entitycode=? and fieldcode=?",userBean.getId(),entity.getCode(),field.getCode());
 			if(troleFieldNumber>=roleNumber)continue;
 			field.setName(i18n.text(field.getName(),userBean.getI18n()));
 			Map<String,Object> m=new HashMap<String,Object>();
@@ -870,9 +873,9 @@ public class ModelServiceImpl implements IModelService {
 				
 				//c.put("renderer", new Function("function(value, p, record){	var temp='';	if(!value)return temp;	temp='<a target=\"_blank\" href=\"'+value+'\" ><img height=\"60\" src=\"'+value+'\" /></a>'; 	return temp;}"));
 			}
-			if(LingxServiceImpl.SN){
+			
 			model.add(m);
-			columns.add(c);}
+			columns.add(c);
 		}
 		List<IMethod> methodList=new ArrayList<IMethod>();
 		methodList.addAll(entity.getMethods().getList());
@@ -887,7 +890,6 @@ public class ModelServiceImpl implements IModelService {
 				m.put("code", method.getCode());
 				if(!method.getEnabled())m.put("disabled", true); //disabled
 				m.put("handler",new Function("function(){methodWindow(this,"+JSON.toJSONString(entity, SerializerFeature.DisableCircularReferenceDetect)+","+JSON.toJSONString(method, SerializerFeature.DisableCircularReferenceDetect)+")}"));
-				if(LingxServiceImpl.SN)
 				toolbar.add(m);
 			}
 			if(method.getRightmenu()!=null&&method.getRightmenu()){
@@ -897,7 +899,6 @@ public class ModelServiceImpl implements IModelService {
 				m2.put("code", method.getCode());
 				if(!method.getEnabled())m2.put("disabled", true); //disabled
 				m2.put("handler",new Function("function(){methodWindow(this,"+JSON.toJSONString(entity, SerializerFeature.DisableCircularReferenceDetect)+","+JSON.toJSONString(method, SerializerFeature.DisableCircularReferenceDetect)+")}"));
-				if(LingxServiceImpl.SN)
 				rightmenu.add(m2);
 			}
 			
@@ -1021,7 +1022,7 @@ public class ModelServiceImpl implements IModelService {
 		}
 	}
 	public void roleFieldAndSetValue(List<IField> listFields,String ecode,String mcode,UserBean userBean){
-		int roleNumber=this.jdbcTemplate.queryForInt("select count(*) from tlingx_role where id in(select role_id from tlingx_userrole where user_id=?)",userBean.getId());
+		int roleNumber=this.lingxService.queryForInt("select count(*) from tlingx_role where id in(select role_id from tlingx_userrole where user_id=?)",userBean.getId());
 		int troleFieldNumber=0;
 		for(IField field:listFields){
 			/*if(!field.getVisible()){
@@ -1036,7 +1037,7 @@ public class ModelServiceImpl implements IModelService {
 				field.setInputType("hidden");
 				continue;
 			}
-			troleFieldNumber=this.jdbcTemplate.queryForInt("select count(*) from tlingx_rolefield where role_id in(select role_id from tlingx_userrole where user_id=?) and entitycode=? and fieldcode=?",userBean.getId(),ecode,field.getCode());
+			troleFieldNumber=this.lingxService.queryForInt("select count(*) from tlingx_rolefield where role_id in(select role_id from tlingx_userrole where user_id=?) and entitycode=? and fieldcode=?",userBean.getId(),ecode,field.getCode());
 			if(troleFieldNumber>=roleNumber){
 				field.setInputType("hidden");
 					try {
@@ -1350,7 +1351,7 @@ public   void setValueForFields(List<IField> listFields,IPerformer performer){
 	public boolean createQueryEntity(String code, String name,String author,String app) {
 		IEntity entity=ModelTemplate.createQueryEntity(code, name, author);
 		this.save(entity);
-		if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_entity where code=?",code)==0)
+		if(this.lingxService.queryForInt("select count(*) from tlingx_entity where code=?",code)==0)
 		this.jdbcTemplate.update("insert into tlingx_entity(id,name,code,type,status,app_id,create_time)values(uuid(),?,?,1,1,?,?)",name,code,app,Utils.getTime());
 		return true;
 	}
@@ -1401,10 +1402,36 @@ public   void setValueForFields(List<IField> listFields,IPerformer performer){
 		IEntity entity=UpdateServiceImpl.readFile(filePath);
 		this.save(entity);
 		String name=entity.getName(),code=entity.getCode();
-		if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_entity where code=?",code)==0){
+		if(this.lingxService.queryForInt("select count(*) from tlingx_entity where code=?",code)==0){
 			this.jdbcTemplate.update("insert into tlingx_entity(id,name,code,type,status,app_id,create_time)values(uuid(),?,?,1,1,?,?)",name,code,appid,Utils.getTime());
 		}/**/
 		return true;
+	}
+	@Override
+	public void setFormClass(String ecode, String id, String type) {
+		IEntity entity=this.getEntity(ecode);
+		IModel model=this.getById(entity, id);
+		String array[]=type.split("-");
+		if(model instanceof IField) {
+			IField f=(IField)model;
+			f.setFormClass("col-xs-"+array[0]);
+			f.setFormClass1("col-xs-"+array[1]);
+			f.setFormClass2("col-xs-"+array[2]);
+		}else if(model instanceof IMethod) {
+			IMethod m=(IMethod)model;
+			for(IField f :m.getFields().getList()) {
+				f.setFormClass("col-xs-"+array[0]);
+				f.setFormClass1("col-xs-"+array[1]);
+				f.setFormClass2("col-xs-"+array[2]);
+			}
+		}else if(model instanceof IEntity){
+			for(IField f :entity.getFields().getList()) {
+				f.setFormClass("col-xs-"+array[0]);
+				f.setFormClass1("col-xs-"+array[1]);
+				f.setFormClass2("col-xs-"+array[2]);
+			}
+		}
+		this.save(entity);
 	}
 
 	

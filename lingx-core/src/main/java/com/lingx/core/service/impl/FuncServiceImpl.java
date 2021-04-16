@@ -61,18 +61,18 @@ public class FuncServiceImpl implements IFuncService {
 	private boolean get(String userId,String entityCode,String methodCode){
 		String sql = "select type from tlingx_func where module=? and func=?";
 		boolean isAuth=false;
-		if(this.jdbcTemplate.queryForInt("select count(1) from tlingx_func where module=? and func=?", entityCode, methodCode)==0)return false;
+		if(this.lingxService.queryForInt("select count(1) from tlingx_func where module=? and func=?", entityCode, methodCode)==0)return false;
 		try {
-			int c = this.jdbcTemplate.queryForInt(sql, entityCode, methodCode );
+			int c = this.lingxService.queryForInt(sql, entityCode, methodCode );
 			switch (c) {
 			case 1:// 公开
 				isAuth = true;
 				break;
 			case 2:// 私有
 				sql = "select count(*) from tlingx_user t,tlingx_userrole a,tlingx_rolefunc b,tlingx_func c where t.id=a.user_id and a.role_id=b.role_id and b.func_id=c.id and c.module=? and c.func=? and t.id=?";
-				c = this.jdbcTemplate.queryForInt(sql, entityCode, methodCode,userId );
+				c = this.lingxService.queryForInt(sql, entityCode, methodCode,userId );
 				sql = "select count(*) from tlingx_userfunc t,tlingx_func a where t.user_id=? and t.func_id=a.id and a.module=? and a.func=? ";
-				c=c+this.jdbcTemplate.queryForInt(sql, userId, entityCode, methodCode );
+				c=c+this.lingxService.queryForInt(sql, userId, entityCode, methodCode );
 				isAuth=c >= 1;
 				break;
 			case 3:// 禁用

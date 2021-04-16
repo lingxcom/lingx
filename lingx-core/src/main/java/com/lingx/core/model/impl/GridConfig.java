@@ -27,7 +27,7 @@ public class GridConfig  extends AbstractModel implements IConfig {
 	@FieldModelConfig(sort="8",name="页码")
 	private Integer pageNumber=1;
 	@FieldModelConfig(sort="9",name="行数")
-	private Integer pageSize=20;
+	private Integer pageSize=50;
 	@FieldModelConfig(sort="A",name="排序字段")
 	private String sortName="id";
 	@FieldModelConfig(sort="B",name="排序方式")

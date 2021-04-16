@@ -70,7 +70,7 @@ public class ConfigServiceImpl implements IConfigService {
 			return configs.get(key);
 		} else {
 			String time=Utils.getTime();
-			if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_config where config_key=?",key)==0){
+			if(this.lingxService.queryForInt("select count(*) from tlingx_config where config_key=?",key)==0){
 				this.jdbcTemplate.update("insert into tlingx_config(id,name,config_key,config_value,status,create_time,modify_time,remark,app_id) values(?,?,?,?,?,?,?,?,?)"
 						,lingxService.uuid(),"未设置",key,defaultValue,1,time,time,"自动生成",appid);
 			}

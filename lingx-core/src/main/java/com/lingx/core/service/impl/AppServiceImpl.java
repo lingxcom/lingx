@@ -49,7 +49,7 @@ public class AppServiceImpl implements IAppService {
 		String time=Utils.getTime();
 		String pinyin=this.lingxService.uuid();//this.lingxService.getPinyin(name);
 		String appId=this.lingxService.uuid();
-		int appSN=this.jdbcTemplate.queryForInt("select nextval('APP_SN')");
+		int appSN=this.lingxService.queryForInt("select nextval('APP_SN')");
 		String sql="insert into tlingx_app(id,sn,name,logo,company,tel,email,indexpage,viewmodel,status,org_root_id,role_root_id,func_root_id,menu_root_id) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		String orgRootId[]=this.createOrg(name, pinyin, appSN);
 		String roleRootId[]=this.createRole(name, pinyin, appSN);
@@ -113,7 +113,7 @@ public class AppServiceImpl implements IAppService {
 	}
 	
 	private void deleteSubTree(Object id,String tableName){
-		if(this.jdbcTemplate.queryForInt("select count(*) from "+tableName+" where fid=?",id)==0){
+		if(this.lingxService.queryForInt("select count(*) from "+tableName+" where fid=?",id)==0){
 			this.jdbcTemplate.update("delete from "+tableName+" where id=?",id);
 		}else{
 			List<Map<String,Object>> list=this.jdbcTemplate.queryForList("select id from "+tableName+" where fid=?",id);

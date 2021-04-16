@@ -22,6 +22,7 @@ import com.lingx.core.model.IEntity;
 import com.lingx.core.model.bean.ItemBean;
 import com.lingx.core.model.bean.OptionBean;
 import com.lingx.core.service.IConfigService;
+import com.lingx.core.service.ILingxService;
 import com.lingx.core.service.IModelService;
 import com.lingx.core.service.IUpdateService;
 import com.lingx.core.service.IUserService;
@@ -50,6 +51,8 @@ public class UpdateServiceImpl implements IUpdateService {
 	private IUserService userService;
 	@Resource
 	private IConfigService configService;
+	@Resource
+	private ILingxService lingxService;
 	//@PostConstruct
 	public void init(){
 		log.info("IUpdateService IMPL init ...");
@@ -189,13 +192,13 @@ public class UpdateServiceImpl implements IUpdateService {
 		for(OptionBean bean:list){
 			log.info("update option:"+bean.getCode());
 			try {
-				if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_option where code=?",bean.getCode())==0)
+				if(this.lingxService.queryForInt("select count(*) from tlingx_option where code=?",bean.getCode())==0)
 				this.jdbcTemplate.update("insert into tlingx_option(id,name,code,app_id) values(uuid(),?,?,?)",bean.getName(),bean.getCode(),bean.getAppid());
 				
 				String id=this.jdbcTemplate.queryForObject("select id from tlingx_option where code=?",String.class,bean.getCode());
 				for(ItemBean bean2:bean.getItems()){
 					if(Utils.isNull(bean2.getValue()))continue;
-					if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_optionitem where option_id=? and value=? and name=?",id,bean2.getValue(),bean2.getName())==0)
+					if(this.lingxService.queryForInt("select count(*) from tlingx_optionitem where option_id=? and value=? and name=?",id,bean2.getValue(),bean2.getName())==0)
 					this.jdbcTemplate.update("insert into tlingx_optionitem(id,name,value,option_id,orderindex,enabled) values(uuid(),?,?,?,?,?)",bean2.getName(),bean2.getValue(),id,bean2.getOrderindex(),bean2.getEnabled());
 					else 
 						this.jdbcTemplate.update("update tlingx_optionitem set name=?,orderindex=?,enabled=? where option_id=? and value=?",bean2.getName(),bean2.getOrderindex(),bean2.getEnabled(),id,bean2.getValue());
@@ -210,7 +213,7 @@ public class UpdateServiceImpl implements IUpdateService {
 	}
 
 	private void removeSurplusItem(String optionId,String value){
-		while(this.jdbcTemplate.queryForInt("select count(*) from tlingx_optionitem where option_id=? and value=?",optionId,value)>1){
+		while(this.lingxService.queryForInt("select count(*) from tlingx_optionitem where option_id=? and value=?",optionId,value)>1){
 			String id=this.jdbcTemplate.queryForObject("select id from tlingx_optionitem where option_id=? and value=? limit 1", String.class,optionId,value);
 			this.jdbcTemplate.update("delete from tlingx_optionitem where id=?",id);
 		}
@@ -223,7 +226,7 @@ public class UpdateServiceImpl implements IUpdateService {
 		String sql="insert into tlingx_menu(id,name,short_name,type,iconcls,fid,orderindex,status,state,func_id,remark) values(?,?,?,?,?,?,?,?,?,?,?)";
 		for(Map<String,Object> map:list){
 			log.info("update menu:"+map.get("name"));
-			if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_menu where id=?",map.get("id"))==0){
+			if(this.lingxService.queryForInt("select count(*) from tlingx_menu where id=?",map.get("id"))==0){
 				this.jdbcTemplate.update(sql,map.get("id"),map.get("name"),map.get("short_name"),map.get("type"),map.get("iconcls"),map.get("fid"),
 						map.get("orderindex"),map.get("status"),map.get("state"),map.get("func_id"),map.get("remark"));
 			}
@@ -236,7 +239,7 @@ public class UpdateServiceImpl implements IUpdateService {
 		String sql="insert into tlingx_func(id,name,module,func,type,fid)values(?,?,?,?,?,?)";
 		for(Map<String,Object> map:list){
 			log.info("update func:"+map.get("name"));
-			if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_func where id=?",map.get("id"))==0){
+			if(this.lingxService.queryForInt("select count(*) from tlingx_func where id=?",map.get("id"))==0){
 				this.jdbcTemplate.update(sql,map.get("id"),map.get("name"),map.get("module"),map.get("func"),map.get("type"),map.get("fid"));
 			}
 		}
@@ -249,7 +252,7 @@ public class UpdateServiceImpl implements IUpdateService {
 		List<Map<String,Object>> list=(List<Map<String,Object>>)JSON.parse(json);
 		for(Map<String,Object> map:list){
 			log.info("update entity:"+map.get("code"));
-			if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_entity where code=?",map.get("code"))==0){
+			if(this.lingxService.queryForInt("select count(*) from tlingx_entity where code=?",map.get("code"))==0){
 				this.jdbcTemplate.update(sql,map.get("name"),map.get("code"),map.get("type"),map.get("status"),map.get("app_id"),Utils.getTime());
 			}
 		}

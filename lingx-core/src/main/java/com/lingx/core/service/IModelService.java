@@ -90,5 +90,12 @@ public interface IModelService {
 	public String getEntityOrderType(IEntity entity);
 	public String getStringByList(List<String> list);
 	public boolean updateLingx(String filePath,String appid);
+	/**
+	 * 表单分栏设置2021-03-27
+	 * @param ecode
+	 * @param id
+	 * @param type
+	 */
+	public void setFormClass(String ecode,String id,String type);
 	
 }

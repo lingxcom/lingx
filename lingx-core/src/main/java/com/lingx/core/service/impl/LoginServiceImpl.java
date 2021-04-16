@@ -35,7 +35,7 @@ public class LoginServiceImpl implements ILoginService {
 		boolean b=false;
 		int count = -1;
 		String sql = "select * from tlingx_user where account=?";// ,pass.replace(" ",
-		count = jdbcTemplate.queryForInt("select count(*) from tlingx_user where account=?",userid);
+		count = lingxService.queryForInt("select count(*) from tlingx_user where account=?",userid);
 		if (count == 0) {
 			return b;
 		}

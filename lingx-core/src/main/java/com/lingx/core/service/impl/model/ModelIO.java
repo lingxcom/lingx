@@ -74,7 +74,7 @@ public class ModelIO {
 		final LobHandler lobHandler = new DefaultLobHandler();
 
 		final ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-		if(jdbcTemplate.queryForInt(sql_count,code)==0)return null;
+		if(jdbcTemplate.queryForObject(sql_count,Integer.class,code)==0)return null;
 		jdbcTemplate.query(sql_select,
 				new AbstractLobStreamingResultSetExtractor() {
 					protected void streamData(ResultSet rs)
@@ -130,7 +130,7 @@ public class ModelIO {
 		final ByteArrayInputStream byteIn = new ByteArrayInputStream(
 				byteOut.toByteArray());
 		//final ObjectInputStream in = new ObjectInputStream(byteIn);
-		if(jdbcTemplate.queryForInt(sql_count,code)!=0){
+		if(jdbcTemplate.queryForObject(sql_count,Integer.class,code)!=0){
 			jdbcTemplate.execute(sql_update,
 				new AbstractLobCreatingPreparedStatementCallback(lobHandler) {
 					protected void setValues(PreparedStatement pstmt,

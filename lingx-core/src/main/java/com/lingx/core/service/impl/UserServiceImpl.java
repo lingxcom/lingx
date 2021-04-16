@@ -62,8 +62,7 @@ public class UserServiceImpl implements IUserService {
 				"delete from tlingx_userorg where org_id=? and user_id=?",
 				orgId, userId);
 		if (!"0".equals(fid)
-				&& this.jdbcTemplate
-						.queryForInt(
+				&& this.lingxService.queryForInt(
 								"select count(*) from tlingx_userorg where user_id=? and org_id in ( select id from tlingx_org where fid=?)",
 								userId, fid) == 0) {
 			delUserOrg(userId, fid);
@@ -74,8 +73,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	private boolean isExistsUserOrg(Object userId, Object orgId) {
-		return this.jdbcTemplate
-				.queryForInt(
+		return this.lingxService.queryForInt(
 						"select count(*) from tlingx_userorg where user_id=? and org_id=?",
 						userId, orgId) != 0;
 	}
@@ -332,7 +330,7 @@ public class UserServiceImpl implements IUserService {
 	
 	private String getRoleDefaultPage(String userid){
 		String page="";
-		if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_role where id in(select role_id from tlingx_userrole where user_id=?)",userid)>0){
+		if(this.lingxService.queryForInt("select count(*) from tlingx_role where id in(select role_id from tlingx_userrole where user_id=?)",userid)>0){
 			page=this.jdbcTemplate.queryForObject("select indexpage from tlingx_role where id in(select role_id from tlingx_userrole where user_id=?) limit 1", String.class,userid);
 		}
 		

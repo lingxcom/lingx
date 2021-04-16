@@ -174,4 +174,6 @@ public interface ILingxService {
 	 * @return
 	 */
 	public Map<String,Object> ret(int code,String msg);
+	
+	public int queryForInt(String sql,Object... objects ) ;
 }

@@ -30,4 +30,8 @@ public interface IField extends IModel{
 	public void setInputType(String inputType);
 	public void setDefaultValue(String defaultValue);
 	public Boolean getIsEntityLink() ;
+	
+	public void setFormClass(String formClass);
+	public void setFormClass1(String formClass1);
+	public void setFormClass2(String formClass2);
 }

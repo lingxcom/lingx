@@ -39,6 +39,7 @@ public class DefaultField extends AbstractModel implements IField{
 		this.setDefaultValue("");
 		this.setWidth(null);
 		this.setIsEntityLink(true);
+		this.setFormClass("col-xs-10");
 		this.setInterpreters(new DefaultNode<IInterpreter>("解释器"));
 		this.setValidators(new DefaultNode<IValidator>("验证器"));
 	}
@@ -88,8 +89,15 @@ public class DefaultField extends AbstractModel implements IField{
 	private Boolean escape;
 	
 	//@JSONField(serialize=false)
-	@FieldModelConfig(sort="H",name="是否连接",inputType="string")
+	@FieldModelConfig(sort="H",name="是否连接1",inputType="string")
 	private Boolean isEntityLink;
+	
+	@FieldModelConfig(sort="I",name="表单栅格",inputType="string")
+	private String formClass;
+	@FieldModelConfig(sort="J",name="标签栅格",inputType="string")
+	private String formClass1;
+	@FieldModelConfig(sort="K",name="控件栅格",inputType="string")
+	private String formClass2;
 	
 	//@TreeNode
 	//private INode<IConfig> configs;
@@ -226,6 +234,27 @@ public class DefaultField extends AbstractModel implements IField{
 	}
 	public void setIsEntityLink(Boolean isEntityLink) {
 		this.isEntityLink = isEntityLink;
+	}
+	public String getFormClass() {
+		return formClass==null?"col-xs-10":formClass;
+	}
+	public void setFormClass(String formClass) {
+		this.formClass = formClass;
+	}
+	public String getFormClass1() {
+		return formClass1==null?"col-xs-4":formClass1;
+	}
+	public void setFormClass1(String formClass1) {
+		this.formClass1 = formClass1;
+	}
+	public String getFormClass2() {
+		return formClass2==null?"col-xs-8":formClass2;
+	}
+	public void setFormClass2(String formClass2) {
+		this.formClass2 = formClass2;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	
 }

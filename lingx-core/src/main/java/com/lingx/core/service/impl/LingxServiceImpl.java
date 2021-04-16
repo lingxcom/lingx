@@ -54,7 +54,6 @@ import com.lingx.core.utils.Utils;
 @Component(value="lingxService")
 public class LingxServiceImpl implements ILingxService ,ApplicationContextAware{
 
-	public static boolean SN=true;
 	public static final String countForeignKeySQL="select count(*) from %s where %s=?";
 	@Resource
 	private IModelService modelService;
@@ -159,7 +158,7 @@ public class LingxServiceImpl implements ILingxService ,ApplicationContextAware{
 		if(request.getSession().getAttribute(Constants.IS_SUPER_MAN)==null){
 			String sql="select count(*) from tlingx_userrole where user_id=? and role_id='6e0362e8-100e-11e5-b7ab-74d02b6b5f61'";
 			UserBean userBean=(UserBean)request.getSession().getAttribute(Constants.SESSION_USER);
-			if(this.jdbcTemplate.queryForInt(sql,userBean.getId())>0){
+			if(this.queryForInt(sql,userBean.getId())>0){
 				isSuperMan=true;
 				request.getSession().setAttribute(Constants.IS_SUPER_MAN,"true");
 			}else{
@@ -174,7 +173,7 @@ public class LingxServiceImpl implements ILingxService ,ApplicationContextAware{
 		}else{
 			isSuperMan="true".equals(request.getSession().getAttribute(Constants.IS_SUPER_MAN).toString());
 		}
-		if(!SN)isSuperMan=SN;
+		
 		return isSuperMan;
 	}
 	private List<CascaderBean> getCasCader(String temp){
@@ -211,12 +210,12 @@ public class LingxServiceImpl implements ILingxService ,ApplicationContextAware{
 				if(tempField==null)continue;
 				String field=tempField.getCode();
 				if(field!=null){
-					count+=this.jdbcTemplate.queryForInt(String.format(countForeignKeySQL, e.getTableName(),field),id);
+					count+=this.queryForInt(String.format(countForeignKeySQL, e.getTableName(),field),id);
 				}
 			}
 			
 			if("tree".equals(entity.getDisplayMode())){
-				count+=this.jdbcTemplate.queryForInt(String.format(countForeignKeySQL, entity.getTableName(),"fid"),id);
+				count+=this.queryForInt(String.format(countForeignKeySQL, entity.getTableName(),"fid"),id);
 			}
 			return count;
 		}else return 0;
@@ -447,8 +446,7 @@ public class LingxServiceImpl implements ILingxService ,ApplicationContextAware{
 				"delete from "+middleTable+" where "+orgField+"=? and "+userField+"=?",
 				orgId, userId);
 		if (!"0".equals(fid)
-				&& this.jdbcTemplate
-						.queryForInt(
+				&& this.queryForInt(
 								"select count(*) from "+middleTable+" where "+userField+"=? and "+orgField+" in ( select id from "+treeTable+" where fid=?)",
 								userId, fid) == 0) {
 			delMiddleTableRecord(userId, fid,middleTable,orgField,userField,treeTable);
@@ -459,8 +457,7 @@ public class LingxServiceImpl implements ILingxService ,ApplicationContextAware{
 	}
 
 	private boolean isExistsUserOrg(Object userId, Object orgId,String middleTable,String orgField,String userField,String treeTable) {
-		return this.jdbcTemplate
-				.queryForInt(
+		return this.queryForInt(
 						"select count(*) from "+middleTable+" where "+userField+"=? and "+orgField+"=?",
 						userId, orgId) != 0;
 	}
@@ -488,5 +485,9 @@ public class LingxServiceImpl implements ILingxService ,ApplicationContextAware{
 		ret.put("code", code);
 		ret.put("message", msg);
 		return ret;
+	}
+	@Override
+	public int queryForInt(String sql, Object... objects) {
+		return this.jdbcTemplate.queryForObject(sql, Integer.class,objects);
 	}
 }

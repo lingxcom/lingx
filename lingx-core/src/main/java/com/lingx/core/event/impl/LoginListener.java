@@ -19,7 +19,7 @@ public class LoginListener implements ApplicationListener<LoginEvent>  {
 	private JdbcTemplate jdbcTemplate;
 	@Override
 	public void onApplicationEvent(LoginEvent event) {
-		if(this.jdbcTemplate.queryForInt("select count(*) from tlingx_file_category where user_id=?",event.getUserBean().getId())==0){
+		if(this.jdbcTemplate.queryForObject("select count(*) from tlingx_file_category where user_id=?",Integer.class,event.getUserBean().getId())==0){
 			this.jdbcTemplate.update("insert into tlingx_file_category(name,count_num,user_id,fid) values(?,?,?,?)","常用文件",0,event.getUserBean().getId(),0);
 		}
 	}

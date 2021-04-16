@@ -37,7 +37,7 @@ public class CreateServiceImpl implements ICreateService {
 	private ILingxService lingxService;
 	@Override
 	public boolean create(String name, String options,String appid,UserBean userBean) {
-		int appSN=this.jdbcTemplate.queryForInt("select sn from tlingx_app where id=?",appid);
+		int appSN=this.lingxService.queryForInt("select sn from tlingx_app where id=?",appid);
 		String tableName="ta_"+Utils.getRandomNumber(4);
 		List<Map<String,String>> jsons=(List<Map<String,String>>)JSON.parse(options);
 		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
@@ -100,7 +100,7 @@ public class CreateServiceImpl implements ICreateService {
 		///
 		IEntity entity=modelService.createScriptEntity(tableName,name, userBean.getAccount() ,1,databaseService.getDatabaseName(), this.jdbcTemplate);
 		modelService.save(entity);
-		if(jdbcTemplate.queryForInt("select count(*) from tlingx_entity where code=?",tableName)==0){
+		if(lingxService.queryForInt("select count(*) from tlingx_entity where code=?",tableName)==0){
 			jdbcTemplate.update("insert into tlingx_entity(id,name,code,type,status,app_id,create_time)values(uuid(),?,?,1,1,?,?)",name,tableName,appid,Utils.getTime());
 		}
 		return true;

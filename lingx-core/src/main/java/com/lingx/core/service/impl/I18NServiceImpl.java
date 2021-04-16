@@ -24,7 +24,7 @@ import com.lingx.core.utils.Utils;
  * @version 创建时间：2016年9月6日 下午5:17:36 
  * 类说明 
  */
-@Component(value="I18N")
+@Component//(value="I18N")
 public class I18NServiceImpl implements II18NService {
 	/**
 	 * 默认语言

@@ -19,6 +19,7 @@ import com.lingx.core.model.IExecutor;
 import com.lingx.core.model.IScript;
 import com.lingx.core.model.impl.AbstractModel;
 import com.lingx.core.service.IInterpretService;
+import com.lingx.core.service.ILingxService;
 import com.lingx.core.service.IQueryService;
 import com.lingx.core.service.impl.LingxServiceImpl;
 import com.lingx.core.utils.LingxUtils;
@@ -32,6 +33,8 @@ public class GridExecutor extends AbstractModel implements IExecutor {
 	private IInterpretService interpretService;
 	@Resource
 	private JdbcTemplate jdbcTemplate;
+	@Resource
+	private ILingxService lingxService;
 	public GridExecutor(){
 		super();
 		this.setName("GridExecutor");
@@ -44,14 +47,13 @@ public class GridExecutor extends AbstractModel implements IExecutor {
 			//System.out.println("--------GridExecutor-----------");
 			//System.out.println(sql);
 			sql=LingxUtils.sqlInjection(sql);
-			if(!LingxServiceImpl.SN)return new HashMap<String,Object>();
 			//context.getSession().put(Constants.SESSION_LAST_QUERY_SQL, sql);
 			SpringContext.getApplicationContext().publishEvent(new GridExecutorEvent(this,sql,context,performer));
 			logger.debug(sql);
 			List<Map<String,Object>> list=jdbcTemplate.queryForList(sql);
 			this.interpretService.outputFormat(list, context.getEntity().getFields().getList(), context.getEntity(),context, performer);
 			map.put("rows", list);
-			map.put("total", jdbcTemplate.queryForInt(this.queryService.getCountSql(sql)));
+			map.put("total", lingxService.queryForInt(this.queryService.getCountSql(sql)));
 			
 		return map;
 	}

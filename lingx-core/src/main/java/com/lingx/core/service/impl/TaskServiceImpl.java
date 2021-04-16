@@ -323,7 +323,7 @@ public class TaskServiceImpl implements ITaskService {
 				for(String id:array){
 					if(Utils.isNull(id))continue;
 					total++;
-					if(this.jdbcTemplate.queryForInt("select status from tlingx_wf_instance_task where id=?",id)==3){
+					if(this.lingxService.queryForInt("select status from tlingx_wf_instance_task where id=?",id)==3){
 						compelete++;
 					}
 					
@@ -364,7 +364,7 @@ public class TaskServiceImpl implements ITaskService {
 				for(String id:array){
 					if(Utils.isNull(id))continue;
 					total++;
-					if(this.jdbcTemplate.queryForInt("select status from tlingx_wf_instance_task where id=?",id)==3){
+					if(this.lingxService.queryForInt("select status from tlingx_wf_instance_task where id=?",id)==3){
 						compelete++;
 					}
 					

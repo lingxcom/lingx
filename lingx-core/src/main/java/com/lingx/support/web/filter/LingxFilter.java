@@ -52,6 +52,7 @@ public class LingxFilter implements Filter{
 	private String encoding;
 
 	public void init(FilterConfig filterConfig) throws ServletException {
+		System.setProperty("druid.mysql.usePingMethod","false");
 		this.encoding="UTF-8";
 		actionMap=new HashMap<String,String>();
 		applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(filterConfig.getServletContext());
@@ -67,6 +68,14 @@ public class LingxFilter implements Filter{
 			return 0;
 		}
 		ILingxService lingxService=this.applicationContext.getBean(ILingxService.class);
+		if(request.getParameter("lingx_index_uri")!=null){
+			request.getSession().setAttribute("lingx_index_uri", request.getParameter("lingx_index_uri"));
+			if(request.getSession().getAttribute(Constants.SESSION_USER)!=null){
+				UserBean userBean=(UserBean)request.getSession().getAttribute(Constants.SESSION_USER);
+				userBean.getApp().setIndexPage(request.getParameter("lingx_index_uri"));
+			}
+		}
+		
 		if(request.getParameter("lingx_user_token")!=null&&request.getSession().getAttribute(Constants.SESSION_USER)==null){
 			//开启令牌登陆功能
 			if("true".equals(lingxService.getConfigValue("lingx.login.user.token", "false"))){
@@ -79,6 +88,10 @@ public class LingxFilter implements Filter{
 					}		
 							
 					UserBean userBean=this.userService.getUserBean(userid, ContextServiceImpl.getRequestClientIP(request),language);
+					if(request.getParameter("lingx_index_uri")!=null){
+						userBean.getApp().setIndexPage(request.getParameter("lingx_index_uri"));
+					}
+					
 					request.getSession().setAttribute(Constants.SESSION_USER, userBean);
 				} catch (Exception e) {
 					//e.printStackTrace();
@@ -86,6 +99,7 @@ public class LingxFilter implements Filter{
 			}
 			
 		}
+		
 		if(request.getParameter("lingx_weixin_id")!=null&&request.getSession().getAttribute(Constants.SESSION_USER)==null){
 			//开启微信绑定登陆功能
 			if("true".equals(lingxService.getConfigValue("lingx.login.sso.weixin", "false"))){
