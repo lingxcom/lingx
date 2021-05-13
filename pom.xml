@@ -2,12 +2,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.lingx</groupId>
   <artifactId>lingx</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
   <packaging>pom</packaging>
   <name>lingx</name>
   <modules>
   	<module>lingx-core</module>
   	<module>lingx-web</module>
+  	<module>lingx-web2021</module>
   </modules>
   
   <properties>

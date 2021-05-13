@@ -1,0 +1,36 @@
+CREATE  FUNCTION `currval`(seq_name VARCHAR(50)) RETURNS int(11)
+    DETERMINISTIC
+BEGIN  
+         DECLARE value INTEGER;  
+         SET value = 0;  
+         SELECT current_value INTO value  
+                   FROM tlingx_sequence  
+                   WHERE name = seq_name;  
+         RETURN value;  
+END
+
+
+
+
+
+CREATE  FUNCTION `nextval`(seq_name VARCHAR(50)) RETURNS int(11)
+    DETERMINISTIC
+BEGIN  
+         UPDATE tlingx_sequence  
+                   SET current_value = current_value + increment  
+                   WHERE name = seq_name;  
+         RETURN currval(seq_name);  
+END
+
+
+
+
+
+CREATE  FUNCTION `setval`(seq_name VARCHAR(50), value INTEGER) RETURNS int(11)
+    DETERMINISTIC
+BEGIN  
+         UPDATE tlingx_sequence  
+                   SET current_value = value  
+                   WHERE name = seq_name;  
+         RETURN currval(seq_name);  
+END

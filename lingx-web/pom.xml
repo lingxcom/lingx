@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.lingx</groupId>
     <artifactId>lingx</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
   </parent>
   <artifactId>lingx-web</artifactId>
   <packaging>war</packaging>

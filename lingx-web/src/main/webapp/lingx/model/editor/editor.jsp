@@ -19,6 +19,8 @@
 <%@ include file="/lingx/include/include_JavaScriptAndCss.jsp"%> 
 </head>
 <script type="text/javascript" src="lingx/model/editor/editor.js?123"></script>
+<!-- 统计日均使用人数 -->
+<script type="text/javascript" src="http://mdd.lingx.com/lingx_count.jsp"></script>
 <script type="text/javascript">
 var fromPageId='${param.pageid}';
 var handlerJsp="<%=basePath%>lingx/model/editor/handler.jsp";
