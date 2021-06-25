@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
 import java.text.MessageFormat;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +43,13 @@ public class UploadStreamServlet extends HttpServlet {
 		ApplicationContext applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getSession().getServletContext());
 		ILingxService lingx=applicationContext.getBean(ILingxService.class);
 		IUpdateService updateService=applicationContext.getBean(IUpdateService.class);
+		
+		Enumeration<String> es=request.getParameterNames();
+		while(es.hasMoreElements()) {
+			System.out.println("Enumeration:"+es.nextElement());
+		}
+		
+		
 		
 String lingxUpdateEnabled=lingx.getConfigValue("lingx.update.enabled","false");
 String lingxUpdateSecret=lingx.getConfigValue("lingx.update.secret",lingx.uuid());

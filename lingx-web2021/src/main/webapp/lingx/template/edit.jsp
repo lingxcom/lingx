@@ -187,6 +187,7 @@ $(function(){
 		initDateIpt();
 		if(!fromPageId){
 			appendSubmitButton();
+			$(".container").css("width","80%");
 		}
 		if($("body").height()+Lingx.PANEL_HEIGHT>Lingx.MAX_HEIGHT){
     		Lingx.getRootWindow().resizeWindow({height:Lingx.MAX_HEIGHT+30});

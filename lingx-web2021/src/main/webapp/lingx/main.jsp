@@ -116,11 +116,11 @@ Ext.onReady(function(){
     			region:'north',
                // margins: '5 5 5 5',
     			//height:100,
-    			height:72,
+    			height:60,
                 split: true,
     			border:false,
     			bodyStyle: 'background:#4088c8;',//89b9e1 images/obd/top.jpg 347cc6
-				html:'<div style="-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;position:absolute;padding-left:10px; left:0; top:0;color:#fefefe;font-size:24px;line-height:60px;height:60px;vertical-align:top;font:"Microsoft Yahei","Hiragino Sans GB","Helvetica Neue",Helvetica,tahoma,arial,"WenQuanYi Micro Hei",Verdana,sans-serif,"\5B8B\4F53"><div style="height:60px;float:left;">'+logoIMG+'</div><div style="line-height:60px;height:60px;float:left;font-size:20px">${SESSION_USER.app.name}</div></div>'// 
+				html:'<div style="-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;position:absolute;padding-left:10px; left:0; top:0;color:#fefefe;font-size:24px;line-height:60px;height:60px;vertical-align:top;font:"Microsoft Yahei","Hiragino Sans GB","Helvetica Neue",Helvetica,tahoma,arial,"WenQuanYi Micro Hei",Verdana,sans-serif,"\5B8B\4F53"><div style="height:60px;float:left;">'+logoIMG+'</div><div style="line-height:60px;height:60px;float:left;font-size:18px">${SESSION_USER.app.name}</div></div>'// 
 				
 				+'<div style="position:absolute; right:0; top:0;color:#b9d3e6;font-size:14px;line-height:24px;height:24px;">'
 				+'${select}'
